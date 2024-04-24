@@ -22,3 +22,19 @@ model User {
 
   @@map("users")
 }
+
+model Produto {
+  id            String  @id @default(uuid())
+  nome          String
+  categoria     Categoria
+  preco         Decimal
+  descricao     String
+  imagem        String
+}
+
+enum Categoria {
+  Lanche
+  Acompanhamento
+  Bebida
+  Sobremesa
+}
