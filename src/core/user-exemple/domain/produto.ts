@@ -1,9 +1,9 @@
 import { Decimal } from "@prisma/client/runtime/library"
 import { Entity } from "@shared/entities/entity"
 
-export class Pedido extends Entity<Pedido>{
+export class Produto extends Entity<Produto>{
   constructor(
-    props: Pedido,
+    props: Produto,
     id?: string,
   ) {
     super(props, id)
