@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/adapters/drivers/http/server.ts",
-    "doc": "node src/adapters/drivers/http/swagger.js"
+    "doc": "node src/adapters/drivers/http/swagger.js",
+    "migration": "npx prisma migrate dev --name"
   },
   "author": "",
   "license": "ISC",
