@@ -22,3 +22,13 @@ model User {
 
   @@map("users")
 }
+
+model Payment {
+  id       String @id @default(uuid())
+  order_id String
+
+  total_amount Decimal
+  created_at   DateTime @default(now())
+
+  @@map("payments")
+}
