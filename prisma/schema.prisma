@@ -23,6 +23,17 @@ model User {
   @@map("users")
 }
 
+
+model Payment {
+  id       String @id @default(uuid())
+  order_id String
+
+  total_amount Decimal
+  created_at   DateTime @default(now())
+
+  @@map("payments")
+}
+
 model Produto {
   id            String  @id @default(uuid())
   nome          String
@@ -42,3 +53,4 @@ enum Categoria {
 
   @@map("categories")
 }
+
