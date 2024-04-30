@@ -8,7 +8,7 @@ interface IRequest {
     descricao: string,
     imagem: string
 }
-interface IResponse extends Omit<Produto,'password'>{}
+interface IResponse extends Produto{}
 
 export class CreateProdutoService {
   constructor(
