@@ -1,8 +1,16 @@
 import { Entity } from "@shared/entities/entity"
 
-export class Produto extends Entity<Produto>{
+export interface IProduto {
+    nome: string,
+    categoria:Categoria,
+    preco: number,
+    descricao: string,
+    imagem: string
+  }
+
+export class Produto extends Entity<IProduto>{
     constructor(
-        props: Produto,
+        props: IProduto,
         id?: string,
     ) {
         super(props, id)
