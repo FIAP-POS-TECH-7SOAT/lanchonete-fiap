@@ -22,3 +22,13 @@ model User {
 
   @@map("users")
 }
+
+model Client {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @default("")
+  cpf           String   @unique
+  created_at    DateTime @default(now())
+
+  @@map("clients")
+}
