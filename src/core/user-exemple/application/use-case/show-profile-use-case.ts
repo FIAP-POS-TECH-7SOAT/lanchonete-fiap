@@ -17,23 +17,3 @@ export class ShowProfileService {
     return user;
   }
 }
-
-// import { Client } from "@application/user-exemple/domain/client";
-// import { IClientRepository } from "../ports/repositories/IClientRepository";
-
-// interface IRequestClient {
-//   cpf: string;
-// }
-
-// export class ShowClientProfileService {
-//   constructor(private clientRepository: IClientRepository) {}
-
-//   public async execute({ cpf }: IRequestClient): Promise<Client> {
-//     const client = await this.clientRepository.findByCpf(cpf);
-//     if (!client) {
-//       throw new AppError("Client not found");
-//     }
-
-//     return client;
-//   }
-// }

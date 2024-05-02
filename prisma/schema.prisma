@@ -28,6 +28,7 @@ model Client {
   name          String
   email         String   @default("")
   cpf           String   @unique
+  status        Boolean  @default(true)
   created_at    DateTime @default(now())
 
   @@map("clients")

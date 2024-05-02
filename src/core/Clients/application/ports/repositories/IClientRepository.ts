@@ -1,5 +1,5 @@
 import { Client } from "../../../domain/client";
-import { CreateClientDTO } from "./dtos/create-client-dto";
+import { CreateClientDTO } from "./dto/create-client-dto";
 
 export interface IClientRepository {
   findById(id: string): Promise<Client | null>;

@@ -1,4 +1,4 @@
-import { Client } from "@application/user-exemple/domain/client";
+import { Client } from "@application/Clients/domain/client";
 import { IClientRepository } from "../ports/repositories/IClientRepository";
 import { AppError } from "@shared/errors/AppError";
 
