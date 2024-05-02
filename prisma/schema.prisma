@@ -33,3 +33,34 @@ model Client {
 
   @@map("clients")
 }
+
+model Payment {
+  id       String @id @default(uuid())
+  order_id String
+
+  total_amount Decimal
+  created_at   DateTime @default(now())
+
+  @@map("payments")
+}
+
+model Produto {
+  id            String  @id @default(uuid())
+  nome          String
+  categoria     Categoria
+  preco         Decimal
+  descricao     String
+  imagem        String
+
+  @@map("products")
+}
+
+enum Categoria {
+  Lanche
+  Acompanhamento
+  Bebida
+  Sobremesa
+
+  @@map("categories")
+}
+

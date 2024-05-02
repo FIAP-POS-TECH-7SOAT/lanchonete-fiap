@@ -49,6 +49,58 @@
           }
         }
       }
+    },
+    "/payments/": {
+      "post": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Create a new payment",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Payment",
+            "in": "body",
+            "description": "Payment info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "total_amount": {
+                  "type": "number",
+                  "example": 140000
+                },
+                "order_id": {
+                  "type": "string",
+                  "example": "nb-order-id"
+                },
+                "card": {
+                  "type": "object",
+                  "properties": {
+                    "number": {
+                      "type": "string",
+                      "example": "123456789"
+                    },
+                    "exp": {
+                      "type": "string",
+                      "example": "12/2020"
+                    },
+                    "cvc": {
+                      "type": "number",
+                      "example": 121
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   }
 }
