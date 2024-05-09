@@ -101,6 +101,49 @@
           }
         }
       }
+    },
+    "/produtos/": {
+      "post": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Create a new Produto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Produto",
+            "in": "body",
+            "description": "Produto info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "X-Bacon"
+                },
+                "categoria": {
+                  "type": "string",
+                  "example": "Lanche"
+                },
+                "preco": {
+                  "type": "number",
+                  "example": 20.5
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   }
 }

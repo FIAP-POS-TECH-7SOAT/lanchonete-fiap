@@ -8,8 +8,9 @@ export class ProdutoMapping{
         return new Produto({nome, categoria: Categoria[categoria], descricao, preco: Number(preco), imagem }, id);
     }
 
-    static toPrisma(produto:Produto):Prisma.ProdutoUpdateInput{
+    static toPrisma(produto:Produto){
         return {
+            id: produto.id,
             nome: produto.nome, 
             categoria: produto.categoria.toString() as CategoriaPrisma,
             descricao: produto.descricao,

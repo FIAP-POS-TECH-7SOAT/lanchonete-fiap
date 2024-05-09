@@ -19,27 +19,26 @@ class ProdutosController {
             required: true,
             schema: {
               nome: 'X-Bacon',
-              categoria: 1,
-              preco: '20.5', 
+              categoria: 'Lanche',
+              preco: 20.5, 
               descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE', 
             }
         }
       */
-   
+      const categoriasChaves = Object.keys(Categoria) as [keyof typeof Categoria]
+      
       const checkInBodySchema = z.object({
           nome: z.string(),
-          categoria: z.nativeEnum(Categoria),
+          categoria: z.enum(categoriasChaves),
           preco:z.number(),
           descricao: z.string(),
       });
-
-      console.log('req.body',req.body);
   
       const { nome,categoria,preco,descricao } = checkInBodySchema.parse(req.body)
           
       const produto = await createProdutoService.execute({    
         nome,
-        categoria,
+        categoria:categoria as Categoria,
         preco,
         descricao,
       });

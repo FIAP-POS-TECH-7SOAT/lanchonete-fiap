@@ -3,6 +3,7 @@ import { CreateProdutoDTO } from "@application/produtos/application/ports/reposi
 import { UpdateProdutoDTO } from "@application/produtos/application/ports/repositories/dtos/update-produto-dto";
 import { Produto } from "@application/produtos/domain/produto";
 import { Categoria } from "@application/categorias/domain/categoria";
+import { Categoria as CategoriaPrisma } from "@prisma/client";
 
 import { prisma } from '@shared/lib/prisma'
 import { ProdutoMapping } from "./mapping/produto-mapping";
@@ -23,25 +24,31 @@ export default class ProdutoRepository implements IProdutoRepository {
     return ProdutoMapping.toDomain(produto);
   }
 
-  findByCategoria(categoria: Categoria): Promise<Produto |null>{
-    throw new Error("Method not implemented.");
+  async findByCategoria(categoria: Categoria): Promise<Produto |null>{
+    const produto = await prisma.produto.findFirst({
+      where: {
+        categoria: categoria.toString() as CategoriaPrisma
+      }
+    });
+
+    if (!produto){
+      return null;
+    }
+
+    return ProdutoMapping.toDomain(produto);
   }
+
   async create({nome, categoria, preco, descricao}: CreateProdutoDTO): Promise<Produto> {
     const produto = new Produto({
         nome,
         categoria,
         preco,
         descricao,
-        imagem //remover e talvez criar um entity de imagem.
+        imagem: "" //remover e talvez criar um entity de imagem.
       })
+      
       await prisma.produto.create({
-        data:{
-          id:produto.id,
-          nome:produto.nome,
-          Categoria:produto.categoria,
-          preco: produto.preco,
-          descricao: produto.descricao,
-        }
+        data: ProdutoMapping.toPrisma(produto)
       })
   
       return produto
