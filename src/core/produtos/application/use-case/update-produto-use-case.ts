@@ -3,31 +3,40 @@ import { IProdutoRepository } from '../ports/repositories/IProdutoRepository';
 import { Categoria } from "@application/categorias/domain/categoria";
 
 interface IRequest {
+    id: string;
     nome: string;
     categoria: Categoria;
     preco: number,
-    descricao: string
+    descricao: string,
+    imagem: string
 }
 interface IResponse extends Produto{}
 
-export class CreateProdutoService {
+export class UpdateProdutoService {
   constructor(
 
     private produtoRepository: IProdutoRepository,
   ) {}
 
   public async execute({
+    id,
     nome,
     categoria,
     preco,
-    descricao
+    descricao,
   }: IRequest): Promise<IResponse> {
-    const produto = await this.produtoRepository.create({
-      nome,
-      categoria,
-      preco,
-      descricao
-    });
+    const produto = await this.produtoRepository.findById(id);
+    
+    if (!produto){
+        throw Error("O produto não foi encontrado!");
+    }
+
+    produto.nome = nome || produto.nome;
+    produto.descricao = descricao || produto.descricao;
+    produto.preco = preco || produto.preco;
+    produto.categoria = categoria || produto.categoria;
+
+    await this.produtoRepository.update(produto);
 
     return produto;
   }

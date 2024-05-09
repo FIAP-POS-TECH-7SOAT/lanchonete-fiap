@@ -1,3 +1,4 @@
+import { Categoria } from "@application/categorias/domain/categoria"
 import { Entity } from "@shared/entities/entity"
 
 export interface IProduto {
@@ -21,6 +22,7 @@ public get id(): string {
     };
 
 //   (nome, categoria, preço, descrição e imagens)
+    //getters
     public get nome(): string {
     return this.props.nome
     };
@@ -39,4 +41,26 @@ public get id(): string {
     public get imagem(): string {
     return this.props.imagem
     };
+
+    //setters
+    public set nome(nome: string) {
+        this.props.nome = nome
+    };
+
+    public set categoria(categoria: Categoria){
+        this.props.categoria = categoria
+    };
+
+    public set preco(preco: number) {
+        this.props.preco = preco
+    }
+
+    public set descricao(descricao: string){
+        this.props.descricao = descricao
+    }
+
+    public set imagem(imagem: string){
+        this.props.imagem = imagem
+    }
+
 }

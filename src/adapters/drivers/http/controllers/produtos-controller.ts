@@ -1,6 +1,7 @@
 import { CreateProdutoService } from '@application/produtos/application/use-case/create-produto-use-case';
 import { Request, Response } from 'express';
 import ProdutoRepository from 'src/adapters/drivens/infra/repositories/ProdutoRepository';
+import { Categoria } from "@application/categorias/domain/categoria";
 
 import { z } from 'zod';
 
@@ -21,40 +22,34 @@ class ProdutosController {
               categoria: 1,
               preco: '20.5', 
               descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE', 
-              imagem: 'URL'
             }
         }
       */
    
       const checkInBodySchema = z.object({
           nome: z.string(),
-          categoria: z.enum([
-            Categoria.Lanche,
-            Categoria.Acompanhamento,
-            Categoria.Bebida,
-            Categoria.Sobremesa,
-          ]),
+          categoria: z.nativeEnum(Categoria),
           preco:z.number(),
           descricao: z.string(),
-          imagem: z.string(),
       });
 
       console.log('req.body',req.body);
   
-      const { nome,categoria,preco,descricao,imagem } = checkInBodySchema.parse(req.body)
+      const { nome,categoria,preco,descricao } = checkInBodySchema.parse(req.body)
           
       const produto = await createProdutoService.execute({    
         nome,
         categoria,
         preco,
         descricao,
-        imagem
       });
        
      return res.json(produto);
   }
   //-------------------------------------------------------------------------
-
+  async update(req: Request, res: Response): Promise<Response> {
+    throw new Error("Method not implemented.");
+  }
   //-------------------------------------------------------------------------
 }
 
