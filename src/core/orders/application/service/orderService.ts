@@ -12,7 +12,7 @@ export class OrderServiceImpl implements IOrderService {
   async get(id: string): Promise<Order | null> {
     return await this.orderRepository.get(id);
   }
-  async getAll(): Promise<Order | null> {
+  async getAll(): Promise<Order[] | null> {
     return await this.orderRepository.getAll();
   }
   async update(data: UpdateOrderDTO): Promise<Order | null> {

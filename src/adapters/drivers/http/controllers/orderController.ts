@@ -16,13 +16,13 @@ class OrderController {
            description: 'order info',
            required: true,
            schema: {
-             client: 'john doe',
-             products: [{
-              "Lanche":"Hamburguer",
-              "Acompanhamento":"Batata Frita",
-              "Bebida":"Suco de Laranja",
-              "Sobremesa":"Pudim"
-            }]
+             "client": "john doe",
+             "products": "[{
+              'Lanche':'Hamburguer',
+              'Acompanhamento':'Batata Frita',
+              'Bebida':'Suco de Laranja',
+              'Sobremesa':'Pudim'
+            }]"
            }
        }
      */
@@ -34,11 +34,9 @@ class OrderController {
 
     const { client, products } = checkInBodySchema.parse(req.body);
 
-    const parsedProducts = JSON.parse(products);
-
     const order = await orderService.create({
       client,
-      products: parsedProducts,
+      products,
     });
 
     return res.json(order);
@@ -122,26 +120,24 @@ class OrderController {
     return res.json(order);
   }
 
-  async update(req: Request, res: Response): Promise<Response> {
+  async update(req: Request, res: Response): Promise<Response | null> {
     const checkInBodySchema = z.object({
       id: z.string(),
       products: z.string(),
-      client: z.string(),
       status: z.string(),
+      client: z.string(),
     });
 
-    const { id, products, client, status } = checkInBodySchema.parse(req.body);
+    const { id, products, status, client } = checkInBodySchema.parse(req.body);
 
-    const parsedProducts = JSON.parse(products);
-
-    const order = await orderService.update({
+    const orderUpdated = await orderService.update({
       id: id,
-      products: parsedProducts,
-      client: client,
+      products: products,
       status: status,
+      client: client,
     });
 
-    return res.json(order);
+    return res.json(orderUpdated);
   }
 }
 

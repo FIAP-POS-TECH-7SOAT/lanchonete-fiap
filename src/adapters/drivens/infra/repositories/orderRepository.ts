@@ -30,7 +30,7 @@ export default class OrderRepository implements IOrderRepository {
 
   // prettier-ignore
   async update({id, client, products, status }: UpdateOrderDTO): Promise<Order | null> {
-    const order = prisma.order.update({
+    const order = await prisma.order.update({
       where: {
         id: id,
       },
@@ -41,7 +41,12 @@ export default class OrderRepository implements IOrderRepository {
       },
     });
 
-    return null
+    if (order){
+      return new Order(order)
+    }else{
+      return null
+    }
+
   }
 
   // prettier-ignore
