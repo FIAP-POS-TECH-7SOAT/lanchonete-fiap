@@ -4,6 +4,14 @@ export interface IClient {
   name: string;
   email: string;
   cpf: string;
+  status: boolean;
+  created_at: Date;
+}
+
+export interface CreateClientDTO {
+  name: string;
+  email: string;
+  cpf: string;
 }
 
 export class Client extends Entity<IClient> {
@@ -24,5 +32,13 @@ export class Client extends Entity<IClient> {
 
   public get cpf(): string {
     return this.props.cpf;
+  }
+
+  public get status(): boolean {
+    return this.props.status;
+  }
+
+  public get created_at(): Date {
+    return this.props.created_at;
   }
 }

@@ -55,6 +55,16 @@ model Produto {
   @@map("products")
 }
 
+model Order {
+  id            String   @id @default(uuid())
+  products      String
+  client        String
+  status        String   @default("Recebido")
+  created_at    DateTime @default(now())
+
+  @@map("orders")
+}
+
 enum Categoria {
   Lanche
   Acompanhamento
