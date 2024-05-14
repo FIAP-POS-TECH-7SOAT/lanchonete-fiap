@@ -8,12 +8,6 @@ export interface IClient {
   created_at: Date;
 }
 
-export interface CreateClientDTO {
-  name: string;
-  email: string;
-  cpf: string;
-}
-
 export class Client extends Entity<IClient> {
   constructor(props: IClient, id?: string) {
     super(props, id);

@@ -1,8 +1,6 @@
 import { IClientRepository } from "@application/clients/application/ports/repositories/ClientRepository";
-import {
-  CreateClientDTO,
-  Client,
-} from "@application/clients/domain/clientEntity";
+import { Client } from "@application/clients/domain/clientEntity";
+import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/clientDTO";
 
 import { prisma } from "@shared/lib/prisma";
 

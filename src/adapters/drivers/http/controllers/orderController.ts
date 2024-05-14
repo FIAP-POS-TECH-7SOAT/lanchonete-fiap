@@ -13,16 +13,33 @@ class OrderController {
        #swagger.summary = 'Create a new order'
        #swagger.parameters['Order'] = {
            in: 'body',
-           description: 'order info',
+           description: 'Order info',
            required: true,
            schema: {
-             "client": "john doe",
-             "products": "[{
-              'Lanche':'Hamburguer',
-              'Acompanhamento':'Batata Frita',
-              'Bebida':'Suco de Laranja',
-              'Sobremesa':'Pudim'
-            }]"
+             properties: {
+               client: { type: 'string' },
+               products: {
+                 type: 'array',
+                 items: {
+                   type: 'object',
+                   properties: {
+                     Lanche: { type: 'string' },
+                     Acompanhamento: { type: 'string' },
+                     Bebida: { type: 'string' },
+                     Sobremesa: { type: 'string' }
+                   }
+                 }
+               }
+             },
+             example: {
+               client: 'john doe',
+               products: [{
+                 Lanche: 'Hamburguer',
+                 Acompanhamento: 'Batata Frita',
+                 Bebida: 'Suco de Laranja',
+                 Sobremesa: 'Pudim'
+               }]
+             }
            }
        }
      */
@@ -44,38 +61,35 @@ class OrderController {
 
   async getAll(req: Request, res: Response): Promise<Response> {
     /*
-       #swagger.tags = ['Client']
-       #swagger.summary = 'Get client'
-       #swagger.parameters['Client'] = {
-           in: 'body',
-           description: 'Client info',
-           required: true,
-           schema: [
-            {
-             id: '975dbab0-3cee-4059-8529-2757924ca737',
-             products: [{
-              "Lanche":"Hamburguer",
-              "Acompanhamento":"Batata Frita",
-              "Bebida":"Suco de Laranja",
-              "Sobremesa":"Pudim"
-              }],
-             client: 'john doe',
-             status: 'Recebido',
-             created_at: '2024-05-11'
-           },
-           {
-             id: '975dbab0-3cee-4756-1879-2757924ca737'
-             products: [{
-              "Lanche":"Hamburguer",
-              "Acompanhamento":"Batata Frita",
-              "Bebida":"Suco de Laranja",
-              "Sobremesa":"Pudim"
-              }],
-             client: 'john pil',
-             status: 'Finalizado',
-             created_at: '2024-05-11'
+       #swagger.tags = ['Order']
+       #swagger.summary = 'Get all orders'
+       #swagger.parameters['Order'] = {
+           in: 'path',
+           description: 'Order info',
+           schema: {
+             type: 'array',
+             items: {
+               type: 'object',
+               properties: {
+                 id: { type: 'string' },
+                 client: { type: 'string' },
+                 products: {
+                   type: 'array',
+                   items: {
+                     type: 'object',
+                     properties: {
+                       Lanche: { type: 'string' },
+                       Acompanhamento: { type: 'string' },
+                       Bebida: { type: 'string' },
+                       Sobremesa: { type: 'string' }
+                     }
+                   }
+                 },
+                 status: { type: 'string' },
+                 created_at: { type: 'string' }
+               }
+             }
            }
-          ]
        }
      */
 
@@ -86,34 +100,20 @@ class OrderController {
 
   async get(req: Request, res: Response): Promise<Response> {
     /*
-       #swagger.tags = ['Client']
-       #swagger.summary = 'Get client'
-       #swagger.parameters['Client'] = {
-           in: 'body',
-           description: 'Client info',
+       #swagger.tags = ['Order']
+       #swagger.summary = 'Get order by ID'
+       #swagger.parameters['id'] = {
+           in: 'path',
+           description: 'Order ID',
            required: true,
-           schema: [
-           {
-             id: '975dbab0-3cee-4059-8529-2757924ca737',
-             products: [{
-              "Lanche":"Hamburguer",
-              "Acompanhamento":"Batata Frita",
-              "Bebida":"Suco de Laranja",
-              "Sobremesa":"Pudim"
-              }],
-             client: 'john doe',
-             status: 'Recebido',
-             created_at: '2024-05-11'
+           schema: {
+             type: 'string',
+             example: '975dbab0-3cee-4059-8529-2757924ca737'
            }
-          ]
        }
      */
 
-    const checkInBodySchema = z.object({
-      id: z.string(),
-    });
-
-    const { id } = checkInBodySchema.parse(req.body);
+    const { id } = req.params;
 
     const order = await orderService.get(id);
 
@@ -121,6 +121,46 @@ class OrderController {
   }
 
   async update(req: Request, res: Response): Promise<Response | null> {
+    /*
+       #swagger.tags = ['Order']
+       #swagger.summary = 'Update order'
+       #swagger.parameters['Order'] = {
+           in: 'body',
+           description: 'Order info',
+           required: true,
+           schema: {
+             properties: {
+               id: { type: 'string' },
+               client: { type: 'string' },
+               products: {
+                 type: 'array',
+                 items: {
+                   type: 'object',
+                   properties: {
+                     Lanche: { type: 'string' },
+                     Acompanhamento: { type: 'string' },
+                     Bebida: { type: 'string' },
+                     Sobremesa: { type: 'string' }
+                   }
+                 }
+               },
+               status: { type: 'string' }
+             },
+             example: {
+               id: '975dbab0-3cee-4059-8529-2757924ca737',
+               client: 'john doe',
+               products: [{
+                 Lanche: 'Hamburguer',
+                 Acompanhamento: 'Batata Frita',
+                 Bebida: 'Suco de Laranja',
+                 Sobremesa: 'Pudim'
+               }],
+               status: 'Recebido'
+             }
+           }
+       }
+     */
+
     const checkInBodySchema = z.object({
       id: z.string(),
       products: z.string(),

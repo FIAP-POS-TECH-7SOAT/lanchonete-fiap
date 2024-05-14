@@ -16,9 +16,16 @@ class ClientController {
            description: 'Client info',
            required: true,
            schema: {
-             name: 'john doe',
-             email: 'mail@mail.com',
-             cpf: '11122233345'
+             properties: {
+               name: { type: 'string' },
+               email: { type: 'string' },
+               cpf: { type: 'string' }
+             },
+             example: {
+               name: 'john doe',
+               email: 'mail@mail.com',
+               cpf: '11122233345'
+             }
            }
        }
      */
@@ -39,27 +46,19 @@ class ClientController {
   async getByCpf(req: Request, res: Response): Promise<Response> {
     /*
        #swagger.tags = ['Client']
-       #swagger.summary = 'Get client'
-       #swagger.parameters['Client'] = {
-           in: 'body',
-           description: 'Client info',
+       #swagger.summary = 'Get client by CPF'
+       #swagger.parameters['cpf'] = {
+           in: 'path',
+           description: 'Client CPF',
            required: true,
            schema: {
-             id: '975dbab0-3cee-4059-8529-2757924ca737'
-             name: 'john doe',
-             email: 'mail@mail.com',
-             cpf: '11122233345',
-             status: true,
-             created_at: '2024-05-11'
+             type: 'string',
+             example: '11122233345'
            }
        }
      */
 
-    const checkInBodySchema = z.object({
-      cpf: z.string(),
-    });
-
-    const { cpf } = checkInBodySchema.parse(req.body);
+    const { cpf } = req.params;
 
     const client = await clientService.findByCpf(cpf);
 
@@ -69,17 +68,14 @@ class ClientController {
   async getByEmail(req: Request, res: Response): Promise<Response> {
     /*
        #swagger.tags = ['Client']
-       #swagger.summary = 'Get client'
-       #swagger.parameters['Client'] = {
-           in: 'body',
-           description: 'Client info',
+       #swagger.summary = 'Get client by email'
+       #swagger.parameters['email'] = {
+           in: 'path',
+           description: 'Client email',
            required: true,
            schema: {
-             id: '975dbab0-3cee-4059-8529-2757924ca737'
-             name: 'john doe',
-             email: 'mail@mail.com',
-             cpf: '11122233345',
-             created_at: '2024-05-11'
+             type: 'string',
+             example: 'mail@mail.com'
            }
        }
      */
@@ -98,17 +94,14 @@ class ClientController {
   async getById(req: Request, res: Response): Promise<Response> {
     /*
        #swagger.tags = ['Client']
-       #swagger.summary = 'Get client'
-       #swagger.parameters['Client'] = {
-           in: 'body',
-           description: 'Client info',
+       #swagger.summary = 'Get client by ID'
+       #swagger.parameters['id'] = {
+           in: 'path',
+           description: 'Client ID',
            required: true,
            schema: {
-             id: '975dbab0-3cee-4059-8529-2757924ca737'
-             name: 'john doe',
-             email: 'mail@mail.com',
-             cpf: '11122233345',
-             created_at: '2024-05-11'
+             type: 'string',
+             example: '975dbab0-3cee-4059-8529-2757924ca737'
            }
        }
      */

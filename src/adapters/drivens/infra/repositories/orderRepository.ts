@@ -1,9 +1,7 @@
 import { IOrderRepository } from "@application/orders/application/ports/repositories/orderRepository";
-import {
-  Order,
-  CreateOrderDTO,
-  UpdateOrderDTO,
-} from "@application/orders/domain/orderEntity";
+import { Order } from "@application/orders/domain/orderEntity";
+//prettier-ignore
+import {CreateOrderDTO, UpdateOrderDTO } from "@application/orders/application/ports/repositories/dtos/orderDTO"
 
 import { prisma } from "@shared/lib/prisma";
 

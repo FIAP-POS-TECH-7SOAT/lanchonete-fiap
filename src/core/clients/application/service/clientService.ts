@@ -1,7 +1,5 @@
-import {
-  Client,
-  CreateClientDTO,
-} from "@application/clients/domain/clientEntity";
+import { Client } from "@application/clients/domain/clientEntity";
+import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/clientDTO";
 import { IClientRepository } from "../ports/repositories/ClientRepository";
 import { IClientService } from "@application/clients/application/service/IclientService";
 

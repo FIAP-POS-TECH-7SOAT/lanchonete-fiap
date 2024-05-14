@@ -1,4 +1,5 @@
-import { Client, CreateClientDTO } from "../../../domain/clientEntity";
+import { Client } from "../../../domain/clientEntity";
+import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/clientDTO";
 
 export interface IClientRepository {
   findById(id: string): Promise<Client | null>;

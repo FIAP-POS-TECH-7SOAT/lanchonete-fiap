@@ -7,18 +7,6 @@ export interface IOrder {
   created_at: Date;
 }
 
-export interface CreateOrderDTO {
-  products: string;
-  client: string;
-}
-
-export interface UpdateOrderDTO {
-  id: string;
-  products: string;
-  client: string;
-  status: string;
-}
-
 export class Order extends Entity<IOrder> {
   constructor(props: IOrder, id?: string) {
     super(props, id);

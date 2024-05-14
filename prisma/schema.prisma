@@ -24,7 +24,7 @@ model User {
 }
 
 model Client {
-  id            String   @id @default(uuid())
+  id            String   @id
   name          String
   email         String   @default("")
   cpf           String   @unique
@@ -56,7 +56,7 @@ model Produto {
 }
 
 model Order {
-  id            String   @id @default(uuid())
+  id            String   @id
   products      String
   client        String
   status        String   @default("Recebido")
