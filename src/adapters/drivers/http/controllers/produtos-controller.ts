@@ -1,4 +1,6 @@
 import { CreateProdutoService } from '@application/produtos/application/use-case/create-produto-use-case';
+import { FindProdutoService } from '@application/produtos/application/use-case/find-produto-use-case';
+
 import { Request, Response } from 'express';
 import ProdutoRepository from 'src/adapters/drivens/infra/repositories/ProdutoRepository';
 import { Categoria } from "@application/categorias/domain/categoria";
@@ -7,7 +9,8 @@ import { z } from 'zod';
 
 const produtoRepository = new ProdutoRepository();
 
-const createProdutoService = new CreateProdutoService(produtoRepository)
+const createProdutoService = new CreateProdutoService(produtoRepository);
+const findProdutoService = new FindProdutoService(produtoRepository);
 class ProdutosController {
   async create(req: Request, res: Response): Promise<Response> {
       /*
@@ -44,6 +47,30 @@ class ProdutosController {
       });
        
      return res.json(produto);
+  }
+  //-------------------------------------------------------------------------
+  async getById(req: Request, res: Response): Promise<Response>{
+      /*
+        #swagger.tags = ['Produtos']
+        #swagger.summary = 'Find new Produto by Id'
+        #swagger.parameters['Produto'] = {
+            in: 'path',
+            name: Id,
+            description: 'Numeric ID of the Produto to get',
+            required: true,
+            schema: {
+              type: integer,
+            }
+        }
+      */
+
+      const {id} = req.params;
+
+      const produto = await findProdutoService.execute({
+        id
+      });
+
+      return res.json(produto);
   }
   //-------------------------------------------------------------------------
   async update(req: Request, res: Response): Promise<Response> {
