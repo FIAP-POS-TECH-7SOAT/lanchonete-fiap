@@ -23,6 +23,16 @@ model User {
   @@map("users")
 }
 
+model Client {
+  id            String   @id
+  name          String
+  email         String   @default("")
+  cpf           String   @unique
+  status        Boolean  @default(true)
+  created_at    DateTime @default(now())
+
+  @@map("clients")
+}
 
 model Payment {
   id       String @id @default(uuid())
@@ -43,6 +53,16 @@ model Produto {
   imagem        String
 
   @@map("products")
+}
+
+model Order {
+  id            String   @id
+  products      String
+  client        String
+  status        String   @default("Recebido")
+  created_at    DateTime @default(now())
+
+  @@map("orders")
 }
 
 enum Categoria {
