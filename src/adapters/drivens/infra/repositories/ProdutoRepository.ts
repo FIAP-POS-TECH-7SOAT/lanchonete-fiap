@@ -7,6 +7,7 @@ import { Categoria as CategoriaPrisma } from "@prisma/client";
 
 import { prisma } from '@shared/lib/prisma'
 import { ProdutoMapping } from "./mapping/produto-mapping";
+import { produtosController } from "src/adapters/drivers/http/controllers/produtos-controller";
 
 
 export default class ProdutoRepository implements IProdutoRepository {
@@ -46,7 +47,8 @@ export default class ProdutoRepository implements IProdutoRepository {
         categoria,
         preco,
         descricao,
-        imagem: "" //remover e talvez criar um entity de imagem.
+        imagem: "", //remover e talvez criar um entity de imagem.
+        deleted: false
       })
       
       await prisma.produto.create({
@@ -64,6 +66,19 @@ export default class ProdutoRepository implements IProdutoRepository {
     })
 
     return produto
+  }
+  async delete(id: string): Promise<Produto | null> {
+    const produto = await prisma.produto.delete({
+      where: {
+        id
+      }
+    })
+
+    if (!produto){
+      return null;
+    }
+
+    return ProdutoMapping.toDomain(produto);
   }
 
 }

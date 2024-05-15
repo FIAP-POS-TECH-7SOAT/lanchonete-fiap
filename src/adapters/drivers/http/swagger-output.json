@@ -144,6 +144,32 @@
           }
         }
       }
+    },
+    "/produtos/id": {
+      "patch": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Update a Produto",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Produtos"
+        ],
+        "summary": "Find new Produto by Id",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   }
 }

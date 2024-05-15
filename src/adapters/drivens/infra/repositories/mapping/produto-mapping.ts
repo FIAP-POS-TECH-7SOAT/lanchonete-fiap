@@ -4,8 +4,8 @@ import { Produto as ProdutoPrisma, Categoria as CategoriaPrisma, Prisma } from "
 import { Decimal } from "@prisma/client/runtime/library";
 
 export class ProdutoMapping{
-    static toDomain({id, nome, descricao, categoria, imagem, preco}:ProdutoPrisma){
-        return new Produto({nome, categoria: Categoria[categoria], descricao, preco: Number(preco), imagem }, id);
+    static toDomain({id, nome, descricao, categoria, imagem, preco, deleted}:ProdutoPrisma){
+        return new Produto({nome, categoria: Categoria[categoria], descricao, preco: Number(preco), imagem, deleted }, id);
     }
 
     static toPrisma(produto:Produto){
@@ -15,7 +15,8 @@ export class ProdutoMapping{
             categoria: produto.categoria.toString() as CategoriaPrisma,
             descricao: produto.descricao,
             preco: new Decimal(produto.preco),
-            imagem: produto.imagem
+            imagem: produto.imagem,
+            deleted: produto.deleted
         }
     }
 } 

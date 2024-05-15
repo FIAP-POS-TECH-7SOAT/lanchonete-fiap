@@ -7,4 +7,5 @@ export interface IProdutoRepository {
   findManyByCategoria(categoria: Categoria): Promise<Produto[] |null>;
   create(data: CreateProdutoDTO): Promise<Produto>;
   update(data: Produto): Promise<Produto>;
+  delete(id: string): Promise<Produto |null>;
 }

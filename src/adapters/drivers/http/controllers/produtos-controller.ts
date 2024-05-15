@@ -8,6 +8,7 @@ import { Categoria } from "@application/categorias/domain/categoria";
 
 import { z } from 'zod';
 import { UpdateProdutoService } from '@application/produtos/application/use-case/update-produto-use-case';
+import { DeleteProdutoService } from '@application/produtos/application/use-case/delete-produto-use-case';
 
 const produtoRepository = new ProdutoRepository();
 
@@ -15,6 +16,7 @@ const findProdutoService = new FindProdutoService(produtoRepository);
 const findProdutosByCategoriaService = new FindProdutosByCategoriaService(produtoRepository);
 const createProdutoService = new CreateProdutoService(produtoRepository);
 const updateProdutoService = new UpdateProdutoService(produtoRepository);
+const deleteProdutoService = new DeleteProdutoService(produtoRepository);
 class ProdutosController {
   async create(req: Request, res: Response): Promise<Response> {
       /*
@@ -139,6 +141,29 @@ class ProdutosController {
     });
 
     return res.json(produto);
+  }
+  //-------------------------------------------------------------------------
+  async delete(req: Request, res: Response): Promise<Response> {
+      /*
+        #swagger.tags = ['Produtos']
+        #swagger.summary = 'Find new Produto by Id'
+        #swagger.parameters['Produto'] = {
+            in: 'path',
+            name: Id,
+            description: 'Numeric ID of the Produto to get',
+            required: true,
+            schema: {
+              type: integer,
+            }
+        }
+      */
+      const {id} = req.params;
+
+      const produto = await deleteProdutoService.execute({
+        id
+      });
+
+      return res.json(produto);
   }
   //-------------------------------------------------------------------------
 }

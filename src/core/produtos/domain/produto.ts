@@ -6,7 +6,8 @@ export interface IProduto {
     categoria:Categoria,
     preco: number,
     descricao: string,
-    imagem: string
+    imagem: string,
+    deleted: boolean
   }
 
 export class Produto extends Entity<IProduto>{
@@ -17,29 +18,32 @@ export class Produto extends Entity<IProduto>{
         super(props, id)
     }
 
-public get id(): string {
-    return this._id
+    //getters
+    public get id(): string {
+        return this._id
     };
 
-//   (nome, categoria, preço, descrição e imagens)
-    //getters
     public get nome(): string {
-    return this.props.nome
+        return this.props.nome
     };
     public get categoria(): Categoria {
-    return this.props.categoria
+        return this.props.categoria
     };
 
     public get preco(): number {
-    return this.props.preco
+        return this.props.preco
     };
 
     public get descricao(): string {
-    return this.props.descricao
+        return this.props.descricao
     };
 
     public get imagem(): string {
-    return this.props.imagem
+        return this.props.imagem
+    };
+
+    public get deleted(): boolean {
+        return this.props.deleted
     };
 
     //setters
@@ -63,4 +67,7 @@ public get id(): string {
         this.props.imagem = imagem
     }
 
+    public set deleted(deleted: boolean){
+        this.props.deleted = deleted
+    }
 }
