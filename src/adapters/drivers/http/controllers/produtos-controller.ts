@@ -20,7 +20,7 @@ const deleteProdutoService = new DeleteProdutoService(produtoRepository);
 class ProdutosController {
   async create(req: Request, res: Response): Promise<Response> {
       /*
-        #swagger.tags = ['Produtos']
+        #swagger.tags = ['Produto']
         #swagger.summary = 'Create a new Produto'
         #swagger.parameters['Produto'] = {
             in: 'body',
@@ -59,7 +59,7 @@ class ProdutosController {
       /*
         #swagger.tags = ['Produtos']
         #swagger.summary = 'Find new Produto by Id'
-        #swagger.parameters['Produto'] = {
+        #swagger.parameters['id'] = {
             in: 'path',
             name: Id,
             description: 'Numeric ID of the Produto to get',
@@ -81,19 +81,18 @@ class ProdutosController {
   //-------------------------------------------------------------------------
   async getManyByCategoria(req: Request, res: Response): Promise<Response>{
         /*
-        #swagger.tags = ['Produtos']
+        #swagger.tags = ['Produto']
         #swagger.summary = 'Find new Produto by Id'
         #swagger.parameters['Produto'] = {
-            in: 'path',
-            name: Categoria,
+            in: 'query',
+            name: 'Categoria',
             description: 'Categoria of the Produto's to get',
             required: true,
-            schema: {
-              type: Categoria,
-            }
+            enum: ['Lanche', 'Acompanhamento', 'Bebida', Sobremesa']
         }
-      */
-      const {categoria} = req.params;
+        */
+
+      const {categoria} = req.query;
 
       const produtos = await findProdutosByCategoriaService.execute({
         categoria:categoria as Categoria
@@ -104,7 +103,7 @@ class ProdutosController {
   //-------------------------------------------------------------------------
   async update(req: Request, res: Response): Promise<Response> {
       /*
-        #swagger.tags = ['Produtos']
+        #swagger.tags = ['Produto']
         #swagger.summary = 'Update a Produto'
         #swagger.parameters['Produto'] = {
             in: 'body',
@@ -145,12 +144,12 @@ class ProdutosController {
   //-------------------------------------------------------------------------
   async delete(req: Request, res: Response): Promise<Response> {
       /*
-        #swagger.tags = ['Produtos']
-        #swagger.summary = 'Find new Produto by Id'
-        #swagger.parameters['Produto'] = {
+        #swagger.tags = ['Produto']
+        #swagger.summary = 'mark the Produto as deleted'
+        #swagger.parameters['id'] = {
             in: 'path',
             name: Id,
-            description: 'Numeric ID of the Produto to get',
+            description: 'Numeric ID of the Produto to delete',
             required: true,
             schema: {
               type: integer,
