@@ -30,10 +30,11 @@ class ProdutosController {
               nome: 'X-Bacon',
               categoria: 'Lanche',
               preco: 20.5, 
-              descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE', 
+              descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
             }
         }
       */
+    
       const categoriasChaves = Object.keys(Categoria) as [keyof typeof Categoria]
       
       const checkInBodySchema = z.object({
@@ -57,16 +58,10 @@ class ProdutosController {
   //-------------------------------------------------------------------------
   async getById(req: Request, res: Response): Promise<Response>{
       /*
-        #swagger.tags = ['Produtos']
+        #swagger.tags = ['Produto']
         #swagger.summary = 'Find new Produto by Id'
         #swagger.parameters['id'] = {
-            in: 'path',
-            name: Id,
-            description: 'Numeric ID of the Produto to get',
-            required: true,
-            schema: {
-              type: integer,
-            }
+          description: 'Numeric ID of the Produto to get'
         }
       */
 
@@ -82,16 +77,14 @@ class ProdutosController {
   async getManyByCategoria(req: Request, res: Response): Promise<Response>{
         /*
         #swagger.tags = ['Produto']
-        #swagger.summary = 'Find new Produto by Id'
-        #swagger.parameters['Produto'] = {
+        #swagger.summary = 'Find new Produto by Categoria'
+        #swagger.parameters['categoria'] = {
             in: 'query',
-            name: 'Categoria',
-            description: 'Categoria of the Produto's to get',
+            description: 'Categoria of the Produtos to get',
             required: true,
-            enum: ['Lanche', 'Acompanhamento', 'Bebida', Sobremesa']
+            enum: ['Lanche', 'Acompanhamento', 'Bebida', 'Sobremesa']
         }
         */
-
       const {categoria} = req.query;
 
       const produtos = await findProdutosByCategoriaService.execute({
@@ -112,8 +105,8 @@ class ProdutosController {
             schema: {
               nome: 'X-Bacon',
               categoria: 'Lanche',
-              preco: 22 
-              descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE', 
+              preco: 22, 
+              descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
             }
         }
       */
@@ -147,13 +140,7 @@ class ProdutosController {
         #swagger.tags = ['Produto']
         #swagger.summary = 'mark the Produto as deleted'
         #swagger.parameters['id'] = {
-            in: 'path',
-            name: Id,
-            description: 'Numeric ID of the Produto to delete',
-            required: true,
-            schema: {
-              type: integer,
-            }
+            description: 'Numeric ID of the Produto to delete'
         }
       */
       const {id} = req.params;

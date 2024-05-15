@@ -41,7 +41,7 @@ model Produto {
   preco         Decimal
   descricao     String
   imagem        String
-  deleted       Boolean
+  deleted       Boolean @default(false)
 
   @@map("products")
 }
