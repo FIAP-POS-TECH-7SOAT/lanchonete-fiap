@@ -1,34 +1,28 @@
 import { Produto } from '@application/produtos/domain/produto';
 import { IProdutoRepository } from '../ports/repositories/IProdutoRepository';
+import { AppError } from '@shared/errors/AppError';
 import { Categoria } from "@application/categorias/domain/categoria";
 
 interface IRequest {
-    nome: string;
     categoria: Categoria;
-    preco: number,
-    descricao: string
 }
-interface IResponse extends Produto{}
+interface IResponse extends Array<Produto>{}
 
-export class CreateProdutoService {
+export class FindProdutosByCategoriaService {
   constructor(
 
     private produtoRepository: IProdutoRepository,
   ) {}
 
   public async execute({
-    nome,
-    categoria,
-    preco,
-    descricao
+    categoria
   }: IRequest): Promise<IResponse> {
-    const produto = await this.produtoRepository.create({
-      nome,
-      categoria,
-      preco,
-      descricao
-    });
+    const produtos = await this.produtoRepository.findManyByCategoria(categoria);
 
-    return produto;
+    if (!produtos) {
+      throw new AppError("Products not find by Categoria: " + categoria.toString());
+    }
+
+    return produtos;
   }
 }

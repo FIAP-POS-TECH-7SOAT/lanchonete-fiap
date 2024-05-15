@@ -3,31 +3,28 @@ import { IProdutoRepository } from '../ports/repositories/IProdutoRepository';
 import { Categoria } from "@application/categorias/domain/categoria";
 
 interface IRequest {
-    nome: string;
-    categoria: Categoria;
-    preco: number,
-    descricao: string
+    id: string;
 }
 interface IResponse extends Produto{}
 
-export class CreateProdutoService {
+export class DeleteProdutoService {
   constructor(
 
     private produtoRepository: IProdutoRepository,
   ) {}
 
   public async execute({
-    nome,
-    categoria,
-    preco,
-    descricao
+    id
   }: IRequest): Promise<IResponse> {
-    const produto = await this.produtoRepository.create({
-      nome,
-      categoria,
-      preco,
-      descricao
-    });
+    const produto = await this.produtoRepository.findById(id);
+    
+    if (!produto){
+        throw Error("O produto não foi encontrado!");
+    }
+
+    produto.deleted = true;
+
+    await this.produtoRepository.update(produto);
 
     return produto;
   }

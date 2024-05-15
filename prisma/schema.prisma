@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String   @id
   name          String
   email         String   @unique
   password_hash String
@@ -35,7 +35,7 @@ model Client {
 }
 
 model Payment {
-  id       String @id @default(uuid())
+  id       String @id
   order_id String
 
   total_amount Decimal
@@ -45,12 +45,13 @@ model Payment {
 }
 
 model Produto {
-  id            String  @id @default(uuid())
+  id            String  @id
   nome          String
   categoria     Categoria
   preco         Decimal
   descricao     String
   imagem        String
+  deleted       Boolean @default(false)
 
   @@map("products")
 }

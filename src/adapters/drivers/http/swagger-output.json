@@ -101,6 +101,175 @@
           }
         }
       }
+    },
+    "/produtos/": {
+      "post": {
+        "tags": [
+          "Produto"
+        ],
+        "summary": "Create a new Produto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Produto",
+            "in": "body",
+            "description": "Produto info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "X-Bacon"
+                },
+                "categoria": {
+                  "type": "string",
+                  "example": "Lanche"
+                },
+                "preco": {
+                  "type": "number",
+                  "example": 20.5
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Produto"
+        ],
+        "summary": "Find new Produto by Categoria",
+        "description": "",
+        "parameters": [
+          {
+            "name": "categoria",
+            "in": "query",
+            "description": "Categoria of the Produtos to get",
+            "required": true,
+            "enum": [
+              "Lanche",
+              "Acompanhamento",
+              "Bebida",
+              "Sobremesa"
+            ],
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/produtos/{id}": {
+      "put": {
+        "tags": [
+          "Produto"
+        ],
+        "summary": "Update a Produto",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Produto",
+            "in": "body",
+            "description": "Produto info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "type": "string",
+                  "example": "X-Bacon"
+                },
+                "categoria": {
+                  "type": "string",
+                  "example": "Lanche"
+                },
+                "preco": {
+                  "type": "number",
+                  "example": 22
+                },
+                "descricao": {
+                  "type": "string",
+                  "example": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Produto"
+        ],
+        "summary": "Find new Produto by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric ID of the Produto to get"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Produto"
+        ],
+        "summary": "mark the Produto as  ",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Numeric ID of the Produto to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   }
 }
