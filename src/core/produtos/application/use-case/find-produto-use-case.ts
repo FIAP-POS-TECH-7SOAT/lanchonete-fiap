@@ -1,6 +1,5 @@
 import { Produto } from '@application/produtos/domain/produto';
 import { IProdutoRepository } from '../ports/repositories/IProdutoRepository';
-import { Categoria } from "@application/categorias/domain/categoria";
 import { AppError } from '@shared/errors/AppError';
 
 interface IRequest {

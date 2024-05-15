@@ -24,18 +24,20 @@ export default class ProdutoRepository implements IProdutoRepository {
     return ProdutoMapping.toDomain(produto);
   }
 
-  async findByCategoria(categoria: Categoria): Promise<Produto |null>{
-    const produto = await prisma.produto.findFirst({
+  async findManyByCategoria(categoria: Categoria): Promise<Produto[] |null>{
+    const produtos = await prisma.produto.findMany({
       where: {
         categoria: categoria.toString() as CategoriaPrisma
       }
     });
 
-    if (!produto){
+    if (!produtos){
       return null;
     }
 
-    return ProdutoMapping.toDomain(produto);
+    //Deserialize produtos to domain list of Produto's
+    const domainProdutos = produtos.map(produto => ProdutoMapping.toDomain(produto));
+    return domainProdutos;
   }
 
   async create({nome, categoria, preco, descricao}: CreateProdutoDTO): Promise<Produto> {
