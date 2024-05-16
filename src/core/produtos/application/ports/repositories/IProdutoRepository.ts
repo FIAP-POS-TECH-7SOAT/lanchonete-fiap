@@ -4,7 +4,7 @@ import { CreateProdutoDTO } from "./dtos/create-produto-dto";
 
 export interface IProdutoRepository {
   findById(id: string): Promise<Produto |null>;
-  findManyByCategoria(categoria: Categoria): Promise<Produto[] |null>;
+  findManyByCategoria(categoria: Categoria): Promise<Produto[]>;
   create(data: CreateProdutoDTO): Promise<Produto>;
   update(data: Produto): Promise<Produto>;
   delete(id: string): Promise<Produto |null>;

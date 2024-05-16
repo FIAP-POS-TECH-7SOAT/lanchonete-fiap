@@ -7,57 +7,34 @@ import { prisma } from "@shared/lib/prisma";
 
 export default class OrderRepository implements IOrderRepository {
   async get(id: string): Promise<Order | null> {
-    const order = await prisma.order.findUnique({ where: { id: id } });
-
-    if (order) {
-      return new Order(order);
-    } else {
-      return null;
-    }
+    throw new Error("")
   }
 
   async getAll(): Promise<Order[] | null> {
-    const orders = await prisma.order.findMany();
-
-    if (orders.length === 0) {
-      return null;
-    } else {
-      return orders.map((order) => new Order(order));
-    }
+    throw new Error("")
   }
 
   // prettier-ignore
-  async update({id, client, products, status }: UpdateOrderDTO): Promise<Order | null> {
-    const order = await prisma.order.update({
-      where: {
-        id: id,
-      },
-      data: {
-        client,
-        products,
-        status,
-      },
-    });
-
-    if (order){
-      return new Order(order)
-    }else{
-      return null
-    }
+  async update({id, client_id, product, status }: UpdateOrderDTO): Promise<Order | null> {
+    throw new Error("")
 
   }
 
   // prettier-ignore
-  async create({ client, products }: CreateOrderDTO): Promise<Order> {
+  async create({ client_id, products }: CreateOrderDTO): Promise<Order> {
     const status = "Recebido"
     const created_at = new Date()
-    const order = new Order({ client, products, status, created_at });
+    const order = new Order({ client_id, products, status, created_at });
+    
+    const orders = products.map(item=>({
+      id:order.id,
+      client_id,
+      product_id:item.id,
+      amount:item.amount
 
-    await prisma.order.create({
-      data: {
-        client: order.client,
-        products: order.products
-      },
+    }))
+    await prisma.order.createMany({
+      data: orders
     });
 
     return order;

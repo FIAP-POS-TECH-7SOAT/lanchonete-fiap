@@ -31,6 +31,7 @@ model Client {
   status        Boolean  @default(true)
   created_at    DateTime @default(now())
 
+  orders        Order[]
   @@map("clients")
 }
 
@@ -57,20 +58,25 @@ model Produto {
 }
 
 model Order {
-  id            String   @id
-  products      String
-  client        String
+  
+  id            String 
+  client_id     String
+  product_id    String
+  amount        Int
   status        String   @default("Recebido")
   created_at    DateTime @default(now())
 
+  client Client   @relation(fields: [client_id], references: [id])
+  
+  @@id([id,client_id, product_id])
   @@map("orders")
 }
 
 enum Categoria {
-  Lanche
-  Acompanhamento
-  Bebida
-  Sobremesa
+  LANCHE
+  ACOMPANHAMENTO
+  BEBIDA
+  SOBREMESA
 
   @@map("categories")
 }

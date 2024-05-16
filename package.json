@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/adapters/drivers/http/server.ts",
-    "doc": "node src/adapters/drivers/http/swagger.js"
+    "doc": "node src/adapters/drivers/http/swagger.js",
+    "prisma:migrate":"prisma migrate",
+    "prisma:db":"prisma db push"
   },
   "author": "",
   "license": "ISC",

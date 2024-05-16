@@ -1,11 +1,14 @@
 export interface CreateOrderDTO {
-  products: string;
-  client: string;
+  products: {
+    id:string;
+    amount:number
+  }[];
+  client_id: string;
 }
 
 export interface UpdateOrderDTO {
   id: string;
-  products: string;
-  client: string;
+  product: string;
+  client_id: string;
   status: string;
 }

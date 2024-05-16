@@ -1,8 +1,14 @@
 import { Entity } from "@shared/entities/entity";
 
+interface IOrderProduct{
+  
+    id:string;
+    amount:number
+  
+}
 export interface IOrder {
-  products: string;
-  client: string;
+  products: IOrderProduct[];
+  client_id: string;
   status: string;
   created_at: Date;
 }
@@ -16,12 +22,12 @@ export class Order extends Entity<IOrder> {
     return this._id;
   }
 
-  public get products(): string {
+  public get products(): IOrderProduct[] {
     return this.props.products;
   }
 
-  public get client(): string {
-    return this.props.client;
+  public get client_id(): string {
+    return this.props.client_id;
   }
 
   public get status(): string {
