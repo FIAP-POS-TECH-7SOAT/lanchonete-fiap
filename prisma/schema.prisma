@@ -38,7 +38,7 @@ model Client {
 model Payment {
   id       String @id
   order_id String
-
+  code     String
   total_amount Decimal
   created_at   DateTime @default(now())
 
@@ -54,22 +54,34 @@ model Produto {
   imagem        String
   deleted       Boolean @default(false)
 
+  orders OrderProduto[]
+
   @@map("products")
 }
 
 model Order {
-  
-  id            String 
+  id            String @id
   client_id     String
-  product_id    String
-  amount        Int
   status        String   @default("Recebido")
   created_at    DateTime @default(now())
+  canceled_at   DateTime?
+
 
   client Client   @relation(fields: [client_id], references: [id])
-  
-  @@id([id,client_id, product_id])
+  products OrderProduto[]
   @@map("orders")
+}
+
+model OrderProduto {
+  id         String   @id @default(uuid())
+  order_id   String
+  produto_id String
+  amount     Int
+
+  produto    Produto  @relation(fields: [produto_id], references: [id])
+  order      Order    @relation(fields: [order_id], references: [id])
+  
+  @@index([produto_id, order_id], name: "unique_order_product")
 }
 
 enum Categoria {

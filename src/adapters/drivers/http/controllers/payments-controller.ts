@@ -1,6 +1,7 @@
 import { CreatePaymentService } from '@application/payment/application/use-case/process-payment';
 import { Request, Response } from 'express';
 import { FakePaymentGateway } from 'src/adapters/drivens/infra/providers/FakePaymentGateway';
+import { GenerateCodeProvider } from 'src/adapters/drivens/infra/providers/generation-unique-code';
 import PaymentRepository from 'src/adapters/drivens/infra/repositories/PaymentRepository';
 
 import { z } from 'zod';
@@ -9,9 +10,10 @@ import { z } from 'zod';
 
 const paymentRepository = new PaymentRepository();
 const fakePaymentGateway = new FakePaymentGateway();
+const generateCodeProvider = new GenerateCodeProvider();
 
 
-const createPaymentService = new CreatePaymentService(paymentRepository,fakePaymentGateway)
+const createPaymentService = new CreatePaymentService(paymentRepository,fakePaymentGateway,generateCodeProvider)
 class PaymentsController {
   async create(req: Request, res: Response): Promise<Response> {
     /*
@@ -41,9 +43,7 @@ class PaymentsController {
         exp: z.string(),
         cvc: z.number(),
        })
-     });
-  console.log('req.body',req.body);
-  
+     }); 
   
      const { order_id,total_amount,card} = checkInBodySchema.parse(req.body)
        

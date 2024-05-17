@@ -1,7 +1,6 @@
 import { Entity } from "@shared/entities/entity";
 
 interface IOrderProduct{
-  
     id:string;
     amount:number
   
@@ -11,6 +10,7 @@ export interface IOrder {
   client_id: string;
   status: string;
   created_at: Date;
+  canceled_at?: Date;
 }
 
 export class Order extends Entity<IOrder> {
@@ -36,5 +36,11 @@ export class Order extends Entity<IOrder> {
 
   public get created_at(): Date {
     return this.props.created_at;
+  }
+  public get canceled_at(): Date | null {
+    return this.props.canceled_at || null;
+  }
+  public set canceled_at(canceled_at:Date) {
+    this.props.canceled_at = canceled_at;
   }
 }

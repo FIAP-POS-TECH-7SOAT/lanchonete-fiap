@@ -7,7 +7,7 @@ import { prisma } from '@shared/lib/prisma'
 
 export default class PaymentRepository implements IPaymentRepository {
 
-  async create({order_id,total_amount}: CreatePaymentDTO): Promise<Payment> {
+  async create({order_id,total_amount,code}: CreatePaymentDTO): Promise<Payment> {
 
     const payment = new Payment({
       order_id,
@@ -17,7 +17,8 @@ export default class PaymentRepository implements IPaymentRepository {
       data:{
         id:payment.id,
         order_id:payment.order_id,
-        total_amount:payment.total_amount
+        total_amount:payment.total_amount,
+        code
       }
     })
 

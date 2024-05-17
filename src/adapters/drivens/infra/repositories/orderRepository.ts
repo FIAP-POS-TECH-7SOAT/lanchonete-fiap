@@ -1,42 +1,65 @@
 import { IOrderRepository } from "@application/orders/application/ports/repositories/orderRepository";
 import { Order } from "@application/orders/domain/orderEntity";
-//prettier-ignore
+
 import {CreateOrderDTO, UpdateOrderDTO } from "@application/orders/application/ports/repositories/dtos/orderDTO"
 
 import { prisma } from "@shared/lib/prisma";
+import { OrderMapping } from "./mapping/orders-mapping";
+
 
 export default class OrderRepository implements IOrderRepository {
-  async get(id: string): Promise<Order | null> {
-    throw new Error("")
+  
+  async findById(id: string): Promise<Order | null> {
+    const order = await prisma.order.findUnique({
+      where:{
+        id,
+      },
+      include:{
+        products:true
+      }
+    });
+    if(!order){
+      return null;
+    }
+    return OrderMapping.toDomain(order)
   }
 
-  async getAll(): Promise<Order[] | null> {
-    throw new Error("")
+  async getAll(): Promise<Order[]> {
+    const orders = await prisma.order.findMany({
+      include:{
+        products:true
+      }
+    });
+  
+    return orders.map(OrderMapping.toDomain);
+  
   }
 
-  // prettier-ignore
-  async update({id, client_id, product, status }: UpdateOrderDTO): Promise<Order | null> {
-    throw new Error("")
+  
+  async update(order: Order): Promise<Order> {
+    
+    await prisma.order.update({
+      where:{
+        id:order.id
+      },
+      data:OrderMapping.toPrisma(order)
+    })
+
+    return order;
 
   }
 
-  // prettier-ignore
+  
   async create({ client_id, products }: CreateOrderDTO): Promise<Order> {
     const status = "Recebido"
     const created_at = new Date()
     const order = new Order({ client_id, products, status, created_at });
     
-    const orders = products.map(item=>({
-      id:order.id,
-      client_id,
-      product_id:item.id,
-      amount:item.amount
-
-    }))
-    await prisma.order.createMany({
-      data: orders
-    });
-
+    
+    await prisma.order.create({
+      data:OrderMapping.toCreatePrisma(order)
+    })
     return order;
   }
 }
+

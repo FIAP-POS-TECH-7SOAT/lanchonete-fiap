@@ -1,7 +1,9 @@
-import { OrderServiceImpl } from "@application/orders/application/service/orderService";
+import { OrderServiceImpl } from "@application/orders/application/use-case/orderService";
+import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id";
 import { Request, Response } from "express";
-import OrderRepository from "src/adapters/drivens/infra/repositories/orderRepository";
+
 import { z } from "zod";
+import OrderRepository from "src/adapters/drivens/infra/repositories/orderRepository";
 
 const orderRepository = new OrderRepository();
 const orderService = new OrderServiceImpl(orderRepository);
@@ -109,34 +111,7 @@ class OrderController {
     /*
        #swagger.tags = ['Order']
        #swagger.summary = 'Get all orders'
-       #swagger.parameters['Order'] = {
-           in: 'path',
-           description: 'Order info',
-           schema: {
-             type: 'array',
-             items: {
-               type: 'object',
-               properties: {
-                 id: { type: 'string' },
-                 client: { type: 'string' },
-                 products: {
-                   type: 'array',
-                   items: {
-                     type: 'object',
-                     properties: {
-                       Lanche: { type: 'string' },
-                       Acompanhamento: { type: 'string' },
-                       Bebida: { type: 'string' },
-                       Sobremesa: { type: 'string' }
-                     }
-                   }
-                 },
-                 status: { type: 'string' },
-                 created_at: { type: 'string' }
-               }
-             }
-           }
-       }
+       
      */
 
     const orders = await orderService.getAll();
@@ -162,6 +137,23 @@ class OrderController {
     const { id } = req.params;
 
     const order = await orderService.get(id);
+
+    return res.json(order);
+  }
+  
+  async cancelOrder(req: Request, res: Response): Promise<Response> {
+    /*
+       #swagger.tags = ['Order']
+       #swagger.summary = 'Cancel order by ID'
+       #swagger.parameters['id'] = {
+           in: 'path',
+           description: 'Order ID',
+       }
+     */
+
+    const { id } = req.params;
+    const cancelOrderById = new CancelOrderById(orderRepository);
+    const order = await cancelOrderById.execute({id});
 
     return res.json(order);
   }

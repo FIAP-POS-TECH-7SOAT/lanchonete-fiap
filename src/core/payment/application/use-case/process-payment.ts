@@ -3,6 +3,7 @@ import { Payment } from '../../domain/payment';
 import { IPaymentGateway } from '../ports/providers/IPaymentGateway';
 import { AppError } from '@shared/errors/AppError';
 import { IPaymentRepository } from '../ports/repositories/IPaymentRepository';
+import { IGenerateCodeProvider } from '@application/user-exemple/application/ports/providers/IGenerateCodeProvider';
 
 
 
@@ -25,6 +26,7 @@ export class CreatePaymentService {
   constructor(
     private paymentRepository: IPaymentRepository,
     private paymentGateway: IPaymentGateway,
+    private generateCodeProvider: IGenerateCodeProvider,
   ) {}
 
   public async execute({
@@ -41,7 +43,8 @@ export class CreatePaymentService {
     if (!processPayment.success) {
       throw new AppError(processPayment.msg);
     }
-    const payment = await this.paymentRepository.create({order_id,total_amount})
+    const code = this.generateCodeProvider.generate();
+    const payment = await this.paymentRepository.create({order_id,total_amount,code})
 
     
     return payment;
