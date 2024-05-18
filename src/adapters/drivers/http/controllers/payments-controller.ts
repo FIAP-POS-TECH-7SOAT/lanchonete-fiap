@@ -1,19 +1,23 @@
-import { CreatePaymentService } from '@application/payment/application/use-case/process-payment';
+
+
+import { CreatePaymentService } from '@application/orders/application/use-case/process-payment';
 import { Request, Response } from 'express';
 import { FakePaymentGateway } from 'src/adapters/drivens/infra/providers/FakePaymentGateway';
 import { GenerateCodeProvider } from 'src/adapters/drivens/infra/providers/generation-unique-code';
 import PaymentRepository from 'src/adapters/drivens/infra/repositories/PaymentRepository';
+import OrderRepository from 'src/adapters/drivens/infra/repositories/orderRepository';
 
 import { z } from 'zod';
 
 
 
 const paymentRepository = new PaymentRepository();
+const orderRepository = new OrderRepository();
 const fakePaymentGateway = new FakePaymentGateway();
 const generateCodeProvider = new GenerateCodeProvider();
 
 
-const createPaymentService = new CreatePaymentService(paymentRepository,fakePaymentGateway,generateCodeProvider)
+const createPaymentService = new CreatePaymentService(paymentRepository,fakePaymentGateway,generateCodeProvider,orderRepository)
 class PaymentsController {
   async create(req: Request, res: Response): Promise<Response> {
     /*
@@ -47,9 +51,12 @@ class PaymentsController {
   
      const { order_id,total_amount,card} = checkInBodySchema.parse(req.body)
        
-     const payment = await createPaymentService.execute({card,order_id,total_amount});
+     const {payment,code} = await createPaymentService.execute({card,order_id,total_amount});
        
-     return res.json(payment);
+     return res.json({
+      payment,
+      code
+     });
   }
 }
 

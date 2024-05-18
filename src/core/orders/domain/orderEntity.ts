@@ -10,7 +10,7 @@ export interface IOrder {
   client_id: string;
   status: string;
   created_at: Date;
-  canceled_at?: Date;
+  canceled_at: Date | null;
 }
 
 export class Order extends Entity<IOrder> {
@@ -32,6 +32,9 @@ export class Order extends Entity<IOrder> {
 
   public get status(): string {
     return this.props.status;
+  }
+  public set status(status:string) {
+    this.props.status = status;
   }
 
   public get created_at(): Date {

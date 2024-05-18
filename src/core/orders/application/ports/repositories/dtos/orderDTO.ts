@@ -1,3 +1,5 @@
+import { Order } from "@application/orders/domain/orderEntity";
+
 export interface CreateOrderDTO {
   products: {
     id:string;
@@ -12,3 +14,14 @@ export interface UpdateOrderDTO {
   client_id: string;
   status: string;
 }
+
+export interface GetAllDTO {
+  filters:{
+    status:string[]
+  }
+}
+
+export interface GetAllResponseDTO extends Order {
+  waitTime:string
+}
+

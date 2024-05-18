@@ -8,8 +8,8 @@ type CompleteOrderPrima = OrderPrisma & {
  products:OrderProdutoPrisma[]
 }
 export class OrderMapping{
-    static toDomain({client_id,created_at,id,products,status}:CompleteOrderPrima){
-        return new Order({client_id,created_at,products,status}, id);
+    static toDomain({client_id,created_at,id,products,status,canceled_at}:CompleteOrderPrima){
+        return new Order({client_id,created_at,products,status,canceled_at:canceled_at}, id);
     }
 
     static toCreatePrisma(order:Order):Prisma.OrderCreateInput{
@@ -22,6 +22,7 @@ export class OrderMapping{
             },
             created_at:order.created_at,
             status:order.status,
+            canceled_at:order.canceled_at,
             products:{
               create:order.products.map(item=>({
                 amount:item.amount,

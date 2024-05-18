@@ -4,7 +4,7 @@ import { IPaymentGateway } from '../ports/providers/IPaymentGateway';
 import { AppError } from '@shared/errors/AppError';
 import { IPaymentRepository } from '../ports/repositories/IPaymentRepository';
 import { IGenerateCodeProvider } from '@application/user-exemple/application/ports/providers/IGenerateCodeProvider';
-
+import { IOrderRepository } from '../ports/repositories/orderRepository';
 
 
 interface IRequest {
@@ -18,7 +18,10 @@ interface IRequest {
 
   
 }
-interface IResponse extends Payment{}
+interface IResponse {
+  payment:Payment;
+  code:string
+}
 
 
 
@@ -27,6 +30,7 @@ export class CreatePaymentService {
     private paymentRepository: IPaymentRepository,
     private paymentGateway: IPaymentGateway,
     private generateCodeProvider: IGenerateCodeProvider,
+    private orderRepository: IOrderRepository
   ) {}
 
   public async execute({
@@ -34,6 +38,18 @@ export class CreatePaymentService {
    total_amount,
    card
   }: IRequest): Promise<IResponse> {
+    const order = await this.orderRepository.findById(order_id);
+    if(!order){
+      throw new AppError('Pedido não encontrado')
+    }
+        
+    if(!!order.canceled_at){
+      throw new AppError('Pedido cancelado')
+    }
+    const alreadyPaid = await this.paymentRepository.findByOrderId(order_id);
+    if(alreadyPaid){
+      throw new AppError('Pagamento já foi efetuado')
+    }
     const processPayment = await this.paymentGateway.processPayment({
       amount:total_amount,
       card
@@ -45,9 +61,14 @@ export class CreatePaymentService {
     }
     const code = this.generateCodeProvider.generate();
     const payment = await this.paymentRepository.create({order_id,total_amount,code})
-
     
-    return payment;
+    order.status = "Recebido";
+    await this.orderRepository.update(order);
+    
+    return {
+      payment,
+      code
+    };
   }
 }
 

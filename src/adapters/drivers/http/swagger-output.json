@@ -302,7 +302,7 @@
                       },
                       "amount": {
                         "type": "number",
-                        "example": 32
+                        "example": 2
                       }
                     }
                   }
@@ -325,128 +325,22 @@
         "description": "",
         "parameters": [
           {
-            "name": "Order",
-            "in": "path",
-            "description": "Order info",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "example": "array"
-                },
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "example": "object"
-                    },
-                    "properties": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "example": "string"
-                            }
-                          }
-                        },
-                        "client": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "example": "string"
-                            }
-                          }
-                        },
-                        "products": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "example": "array"
-                            },
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "type": {
-                                  "type": "string",
-                                  "example": "object"
-                                },
-                                "properties": {
-                                  "type": "object",
-                                  "properties": {
-                                    "Lanche": {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "example": "string"
-                                        }
-                                      }
-                                    },
-                                    "Acompanhamento": {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "example": "string"
-                                        }
-                                      }
-                                    },
-                                    "Bebida": {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "example": "string"
-                                        }
-                                      }
-                                    },
-                                    "Sobremesa": {
-                                      "type": "object",
-                                      "properties": {
-                                        "type": {
-                                          "type": "string",
-                                          "example": "string"
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "status": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "example": "string"
-                            }
-                          }
-                        },
-                        "created_at": {
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "example": "string"
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+            "name": "status",
+            "in": "query",
+            "description": "Possiveis filtros |Pagamento Pendente | Recebido | Em Preparacao | Pronto | Finalizado",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Pagamento Pendente",
+                "Recebido",
+                "Em Preparacao",
+                "Pronto",
+                "Finalizado"
+              ]
             },
-            "required": true
+            "schema": {
+              "type": "array"
+            }
           }
         ],
         "responses": {
@@ -639,6 +533,70 @@
               }
             },
             "description": "Order ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/orders/cancel/{id}": {
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Cancel order by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/orders/status/{id}": {
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Update order status by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status",
+            "enum": [
+              "Recebido",
+              "Em Preparação",
+              "Pronto",
+              "Finalizado"
+            ],
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

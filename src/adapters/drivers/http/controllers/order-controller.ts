@@ -112,9 +112,27 @@ class OrderController {
        #swagger.tags = ['Order']
        #swagger.summary = 'Get all orders'
        
-     */
-
-    const orders = await orderService.getAll();
+     
+        #swagger.parameters['obj'] = {
+        in: 'query',
+        description: "Possiveis filtros |Pagamento Pendente | Recebido | Em Preparacao | Pronto | Finalizado",
+        name: 'status',
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['Pagamento Pendente','Recebido', 'Em Preparacao', 'Pronto','Finalizado']
+        }
+      }
+    */
+    const checkInQueySchema = z.object({
+      status:  z.union([z.string(), z.array(z.string())]),
+    }); 
+    const { status } = checkInQueySchema.parse(req.query)
+    const myStatus = typeof status === 'string'? [status]:status
+    const orders = await orderService.getAll({
+      filters:{
+        status:myStatus.map(item=>item.trim())
+    }});
 
     return res.json(orders);
   }

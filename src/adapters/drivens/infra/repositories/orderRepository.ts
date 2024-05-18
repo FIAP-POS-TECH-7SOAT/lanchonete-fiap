@@ -1,7 +1,7 @@
 import { IOrderRepository } from "@application/orders/application/ports/repositories/orderRepository";
 import { Order } from "@application/orders/domain/orderEntity";
 
-import {CreateOrderDTO, UpdateOrderDTO } from "@application/orders/application/ports/repositories/dtos/orderDTO"
+import {CreateOrderDTO, GetAllDTO, UpdateOrderDTO } from "@application/orders/application/ports/repositories/dtos/orderDTO"
 
 import { prisma } from "@shared/lib/prisma";
 import { OrderMapping } from "./mapping/orders-mapping";
@@ -24,8 +24,16 @@ export default class OrderRepository implements IOrderRepository {
     return OrderMapping.toDomain(order)
   }
 
-  async getAll(): Promise<Order[]> {
+  async getAll({filters}:GetAllDTO): Promise<Order[]> {
     const orders = await prisma.order.findMany({
+      where:{
+        status:{
+          in:filters.status
+        },
+        canceled_at:{
+          equals:null
+        }
+      },
       include:{
         products:true
       }
@@ -53,7 +61,7 @@ export default class OrderRepository implements IOrderRepository {
   async create({ client_id, products }: CreateOrderDTO): Promise<Order> {
     const status = "Recebido"
     const created_at = new Date()
-    const order = new Order({ client_id, products, status, created_at });
+    const order = new Order({ client_id, products, status, created_at, canceled_at: null });
     
     
     await prisma.order.create({
