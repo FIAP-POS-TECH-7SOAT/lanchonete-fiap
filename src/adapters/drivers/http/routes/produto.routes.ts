@@ -13,6 +13,6 @@ produtosRoutes.get("/:id", produtosController.getById);
 produtosRoutes.get("/", produtosController.getManyByCategoria);
 produtosRoutes.delete("/:id", produtosController.delete);
 //prettier-ignore
-produtosRoutes.patch('/upload/', upload.single("image"),produtosController.uploadImage);
+produtosRoutes.patch('/upload/:id', upload.single("imagem"),produtosController.upload);
 
 export { produtosRoutes };

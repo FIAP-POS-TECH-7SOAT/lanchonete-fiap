@@ -1,6 +1,8 @@
 import { IProdutoRepository } from "@application/produtos/application/ports/repositories/IProdutoRepository";
 import { CreateProdutoDTO } from "@application/produtos/application/ports/repositories/dtos/create-produto-dto";
 import { UpdateProdutoDTO } from "@application/produtos/application/ports/repositories/dtos/update-produto-dto";
+import { UploadProdutoImagemDTO } from "@application/produtos/application/ports/repositories/dtos/upload-produto-imagem-dto";
+
 import { Produto } from "@application/produtos/domain/produto";
 import { Categoria } from "@application/categorias/domain/categoria";
 import { Categoria as CategoriaPrisma } from "@prisma/client";
@@ -82,4 +84,18 @@ export default class ProdutoRepository implements IProdutoRepository {
 
     return ProdutoMapping.toDomain(produto);
   }
+
+  async patchImagem({id, imagem}: UploadProdutoImagemDTO ): Promise<string> {
+    await prisma.produto.update({
+      where: {
+        id: id
+      },
+      data: {
+        imagem: imagem,
+      },
+    });
+
+    return imagem;
+  }
+
 }

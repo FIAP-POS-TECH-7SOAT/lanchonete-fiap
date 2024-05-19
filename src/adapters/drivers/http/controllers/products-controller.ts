@@ -9,6 +9,7 @@ import { Categoria } from "@application/categorias/domain/categoria";
 import { z } from "zod";
 import { UpdateProdutoService } from "@application/produtos/application/use-case/update-produto-use-case";
 import { DeleteProdutoService } from "@application/produtos/application/use-case/delete-produto-use-case";
+import { UploadProdutoImagemService } from "@application/produtos/application/use-case/upload-produto-imagem-use-case";
 
 const produtoRepository = new ProdutoRepository();
 
@@ -19,6 +20,7 @@ const findProdutosByCategoriaService = new FindProdutosByCategoriaService(
 const createProdutoService = new CreateProdutoService(produtoRepository);
 const updateProdutoService = new UpdateProdutoService(produtoRepository);
 const deleteProdutoService = new DeleteProdutoService(produtoRepository);
+const uploadProdutoImagemService = new UploadProdutoImagemService(produtoRepository)
 class ProdutosController {
   async create(req: Request, res: Response): Promise<Response> {
     /*
@@ -157,7 +159,7 @@ class ProdutosController {
     return res.json(produto);
   }
   //-------------------------------------------------------------------------
-  async uploadImage(req: Request, res: Response): Promise<Response> {
+  async upload(req: Request, res: Response): Promise<Response> {
     if (!req.file) {
       return res.status(400).send("Nenhum arquivo enviado");
     }
@@ -166,7 +168,7 @@ class ProdutosController {
       id: z.string(),
     });
 
-    const { id } = checkInBodySchema.parse(req.body);
+    const { id } = checkInBodySchema.parse(req.params);
 
     const product = await findProdutoService.execute({
       id,
@@ -175,31 +177,13 @@ class ProdutosController {
     const base64Image = req.file.buffer.toString("base64");
 
     //prettier-ignore
-    const response = await updateProdutoService.execute({
+    const response = await uploadProdutoImagemService.execute({
       id: id,
-      nome: product.nome,
-      categoria: categoryDictionary[product.categoria].record as Categoria,
-      preco: product.preco,
-      descricao: product.descricao,
-      imagem: base64Image,
+      imagem: base64Image
     });
 
     return res.json(product);
   }
 }
-
-interface CategoryDict {
-  record: string;
-}
-
-interface Dictionary<T> {
-  [key: string]: T;
-}
-const categoryDictionary: Dictionary<CategoryDict> = {
-  LANCHE: { record: "Lanche" },
-  ACOMPANHAMENTO: { record: "Acompanhamento" },
-  BEBIDA: { record: "Bebida" },
-  SOBREMESA: { record: "Sobremesa" },
-};
 
 export const produtosController = new ProdutosController();
