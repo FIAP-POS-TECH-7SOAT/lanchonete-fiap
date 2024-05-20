@@ -7,8 +7,6 @@ import { Categoria as CategoriaPrisma } from "@prisma/client";
 
 import { prisma } from '@shared/lib/prisma'
 import { ProdutoMapping } from "./mapping/produto-mapping";
-import { produtosController } from "src/adapters/drivers/http/controllers/produtos-controller";
-
 
 export default class ProdutoRepository implements IProdutoRepository {
   async findById(id: string): Promise<Produto | null> {
