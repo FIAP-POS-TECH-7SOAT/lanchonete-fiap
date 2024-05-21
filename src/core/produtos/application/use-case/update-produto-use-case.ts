@@ -3,9 +3,9 @@ import { IProdutoRepository } from '../ports/repositories/IProdutoRepository';
 import { Categoria } from "@application/categorias/domain/categoria";
 
 interface IRequest {
-    id: string;
-    nome: string;
-    categoria: Categoria;
+    id: string,
+    nome: string,
+    categoria: Categoria,
     preco: number,
     descricao: string,
     imagem: string

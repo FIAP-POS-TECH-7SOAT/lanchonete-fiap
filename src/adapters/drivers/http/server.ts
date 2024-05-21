@@ -6,7 +6,7 @@ import { routers } from './routes';
 import { AppError } from '@shared/errors/AppError';
 import { env } from '@shared/env';
 import swaggerUi from 'swagger-ui-express';
-
+import { resolve } from 'path';
 
 
 import swaggerFile from './swagger-output.json';
@@ -16,6 +16,7 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
+app.use("/files", express.static(resolve(__dirname, '..', '..', '..', 'shared', 'tmp', 'uploads')));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use(routers);

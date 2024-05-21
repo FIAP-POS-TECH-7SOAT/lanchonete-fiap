@@ -23,6 +23,8 @@ export class FindProdutosByCategoriaService {
       throw new AppError("Products not find by Categoria: " + categoria.toString());
     }
 
+    
+
     return produtos;
   }
 }
