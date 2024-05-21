@@ -1,5 +1,6 @@
 import { Categoria } from "@application/categorias/domain/categoria"
 import { Entity } from "@shared/entities/entity"
+import { env } from "@shared/env"
 
 export interface IProduto {
     nome: string,
@@ -39,7 +40,7 @@ export class Produto extends Entity<IProduto>{
     };
 
     public get imagem(): string {
-        return this.props.imagem
+        return env.APP_URL + "/files/" + this.props.imagem
     };
 
     public get deleted(): boolean {
