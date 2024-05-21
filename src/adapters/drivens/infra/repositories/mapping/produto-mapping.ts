@@ -12,7 +12,7 @@ export class ProdutoMapping{
         return {
             id: produto.id,
             nome: produto.nome, 
-            categoria: produto.categoria.toString() as CategoriaPrisma,
+            categoria: produto.categoria.toString().toUpperCase() as CategoriaPrisma,
             descricao: produto.descricao,
             preco: new Decimal(produto.preco),
             imagem: produto.imagem,

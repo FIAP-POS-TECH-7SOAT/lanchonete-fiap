@@ -1,65 +1,73 @@
 import { IOrderRepository } from "@application/orders/application/ports/repositories/orderRepository";
 import { Order } from "@application/orders/domain/orderEntity";
-//prettier-ignore
-import {CreateOrderDTO, UpdateOrderDTO } from "@application/orders/application/ports/repositories/dtos/orderDTO"
+
+import {CreateOrderDTO, GetAllDTO, UpdateOrderDTO } from "@application/orders/application/ports/repositories/dtos/orderDTO"
 
 import { prisma } from "@shared/lib/prisma";
+import { OrderMapping } from "./mapping/orders-mapping";
+
 
 export default class OrderRepository implements IOrderRepository {
-  async get(id: string): Promise<Order | null> {
-    const order = await prisma.order.findUnique({ where: { id: id } });
-
-    if (order) {
-      return new Order(order);
-    } else {
-      return null;
-    }
-  }
-
-  async getAll(): Promise<Order[] | null> {
-    const orders = await prisma.order.findMany();
-
-    if (orders.length === 0) {
-      return null;
-    } else {
-      return orders.map((order) => new Order(order));
-    }
-  }
-
-  // prettier-ignore
-  async update({id, client, products, status }: UpdateOrderDTO): Promise<Order | null> {
-    const order = await prisma.order.update({
-      where: {
-        id: id,
+  
+  async findById(id: string): Promise<Order | null> {
+    const order = await prisma.order.findUnique({
+      where:{
+        id,
       },
-      data: {
-        client,
-        products,
-        status,
-      },
+      include:{
+        products:true
+      }
     });
-
-    if (order){
-      return new Order(order)
-    }else{
-      return null
+    if(!order){
+      return null;
     }
+    return OrderMapping.toDomain(order)
+  }
+
+  async getAll({filters}:GetAllDTO): Promise<Order[]> {
+    const orders = await prisma.order.findMany({
+      where:{
+        status:{
+          in:filters.status
+        },
+        canceled_at:{
+          equals:null
+        }
+      },
+      include:{
+        products:true
+      }
+    });
+  
+    return orders.map(OrderMapping.toDomain);
+  
+  }
+
+  
+  async update(order: Order): Promise<Order> {
+    
+    await prisma.order.update({
+      where:{
+        id:order.id
+      },
+      data:OrderMapping.toPrisma(order)
+    })
+
+    return order;
 
   }
 
-  // prettier-ignore
-  async create({ client, products }: CreateOrderDTO): Promise<Order> {
+  
+  async create({ client_id, products }: CreateOrderDTO): Promise<Order> {
     const status = "Recebido"
     const created_at = new Date()
-    const order = new Order({ client, products, status, created_at });
-
+    const order = new Order({ client_id, products, status, created_at, canceled_at: null });
+    
+    
     await prisma.order.create({
-      data: {
-        client: order.client,
-        products: order.products
-      },
-    });
-
+      data:OrderMapping.toCreatePrisma(order)
+    })
     return order;
   }
 }
+

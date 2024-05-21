@@ -270,6 +270,452 @@
           }
         }
       }
+    },
+    "/orders/": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Create a new order",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Order",
+            "in": "body",
+            "description": "Order info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "client_id": {
+                  "type": "string",
+                  "example": "fd1e95e9-ab3e-462e-9b0c-246267ac2567"
+                },
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "fd1e95e9-ab3e-462e-9b0c-246267ac2567"
+                      },
+                      "amount": {
+                        "type": "number",
+                        "example": 2
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Get all orders",
+        "description": "",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Possiveis filtros |Pagamento Pendente | Recebido | Em Preparacao | Pronto | Finalizado",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Pagamento Pendente",
+                "Recebido",
+                "Em Preparacao",
+                "Pronto",
+                "Finalizado"
+              ]
+            },
+            "schema": {
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Update order",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Order",
+            "in": "body",
+            "description": "Order info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    },
+                    "client": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    },
+                    "products": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "array"
+                        },
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "example": "object"
+                            },
+                            "properties": {
+                              "type": "object",
+                              "properties": {
+                                "Lanche": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    }
+                                  }
+                                },
+                                "Acompanhamento": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    }
+                                  }
+                                },
+                                "Bebida": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    }
+                                  }
+                                },
+                                "Sobremesa": {
+                                  "type": "object",
+                                  "properties": {
+                                    "type": {
+                                      "type": "string",
+                                      "example": "string"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "975dbab0-3cee-4059-8529-2757924ca737"
+                    },
+                    "client": {
+                      "type": "string",
+                      "example": "john doe"
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "Lanche": {
+                            "type": "string",
+                            "example": "Hamburguer"
+                          },
+                          "Acompanhamento": {
+                            "type": "string",
+                            "example": "Batata Frita"
+                          },
+                          "Bebida": {
+                            "type": "string",
+                            "example": "Suco de Laranja"
+                          },
+                          "Sobremesa": {
+                            "type": "string",
+                            "example": "Pudim"
+                          }
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "string",
+                      "example": "Recebido"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Get order by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "975dbab0-3cee-4059-8529-2757924ca737"
+                }
+              }
+            },
+            "description": "Order ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/orders/cancel/{id}": {
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Cancel order by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/orders/status/{id}": {
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Update order status by ID",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Order ID"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Status",
+            "enum": [
+              "Recebido",
+              "Em Preparação",
+              "Pronto",
+              "Finalizado"
+            ],
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/clients/": {
+      "post": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Create a new client",
+        "description": "",
+        "parameters": [
+          {
+            "name": "Client",
+            "in": "body",
+            "description": "Client info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    },
+                    "email": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    },
+                    "cpf": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "john doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "mail@mail.com"
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "example": "11122233345"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/clients/bycpf/{cpf}": {
+      "get": {
+        "tags": [
+          "Client"
+        ],
+        "summary": "Get client by CPF",
+        "description": "",
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "example": {
+                  "type": "string",
+                  "example": "11122233345"
+                }
+              }
+            },
+            "description": "Client CPF"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   }
 }

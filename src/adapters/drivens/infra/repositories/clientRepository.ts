@@ -57,6 +57,7 @@ export default class ClientRepository implements IClientRepository {
         name: client.name,
         email: client.email,
         cpf: client.cpf,
+        id:client.id
       },
     });
 

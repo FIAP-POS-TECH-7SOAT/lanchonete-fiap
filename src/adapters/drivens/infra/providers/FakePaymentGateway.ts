@@ -1,6 +1,7 @@
-import { IPaymentGateway } from '@application/payment/application/ports/providers/IPaymentGateway';
-import { ProcessPaymentRequest } from '@application/payment/application/ports/providers/dtos/ProcessPaymentRequest';
-import { ProcessPaymentResponse} from '@application/payment/application/ports/providers/dtos/ProcessPaymentResponse';
+import { IPaymentGateway } from "@application/orders/application/ports/providers/IPaymentGateway";
+import { ProcessPaymentRequest } from "@application/orders/application/ports/providers/dtos/ProcessPaymentRequest";
+import { ProcessPaymentResponse } from "@application/orders/application/ports/providers/dtos/ProcessPaymentResponse";
+
 
 
 
