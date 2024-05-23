@@ -57,24 +57,6 @@ class OrderController {
            description: 'Order info',
            required: true,
            schema: {
-             properties: {
-               id: { type: 'string' },
-               client: { type: 'string' },
-               products: {
-                 type: 'array',
-                 items: {
-                   type: 'object',
-                   properties: {
-                     Lanche: { type: 'string' },
-                     Acompanhamento: { type: 'string' },
-                     Bebida: { type: 'string' },
-                     Sobremesa: { type: 'string' }
-                   }
-                 }
-               },
-               status: { type: 'string' }
-             },
-             example: {
                id: '975dbab0-3cee-4059-8529-2757924ca737',
                client: 'john doe',
                products: [{
@@ -84,7 +66,7 @@ class OrderController {
                  Sobremesa: 'Pudim'
                }],
                status: 'Recebido'
-             }
+             
            }
        }
      */
@@ -144,11 +126,7 @@ class OrderController {
        #swagger.parameters['id'] = {
            in: 'path',
            description: 'Order ID',
-           required: true,
-           schema: {
-             type: 'string',
-             example: '975dbab0-3cee-4059-8529-2757924ca737'
-           }
+           required: true
        }
      */
 

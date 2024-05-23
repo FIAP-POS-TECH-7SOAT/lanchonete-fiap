@@ -166,6 +166,22 @@ class ProdutosController {
   }
   //-------------------------------------------------------------------------
   async upload(req: Request, res: Response): Promise<Response> {
+
+       /*
+        #swagger.tags = ['Produto']
+        #swagger.summary = 'Upload products image'
+        #swagger.consumes = ['multipart/form-data']  
+        #swagger.parameters['id'] = {
+            in: 'path',
+            description: 'Product id'
+        }
+        #swagger.parameters['image'] = {
+          in: 'formData',
+          type: 'file',
+          required: 'true',
+          description: 'Products image',
+        }
+        */
     const checkInBodySchema = z.object({
       id: z.string(),
     });

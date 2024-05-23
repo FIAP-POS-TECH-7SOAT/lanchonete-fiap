@@ -16,16 +16,10 @@ class ClientController {
            description: 'Client info',
            required: true,
            schema: {
-             properties: {
-               name: { type: 'string' },
-               email: { type: 'string' },
-               cpf: { type: 'string' }
-             },
-             example: {
-               name: 'john doe',
-               email: 'mail@mail.com',
-               cpf: '11122233345'
-             }
+              name: 'john doe',
+              email: 'mail@mail.com',
+              cpf: '11122233345'
+             
            }
        }
      */
@@ -50,11 +44,7 @@ class ClientController {
        #swagger.parameters['cpf'] = {
            in: 'path',
            description: 'Client CPF',
-           required: true,
-           schema: {
-             type: 'string',
-             example: '11122233345'
-           }
+           required: true
        }
      */
 
@@ -71,12 +61,7 @@ class ClientController {
        #swagger.summary = 'Get client by email'
        #swagger.parameters['email'] = {
            in: 'path',
-           description: 'Client email',
-           required: true,
-           schema: {
-             type: 'string',
-             example: 'mail@mail.com'
-           }
+           description: 'Client email'
        }
      */
 
@@ -98,11 +83,7 @@ class ClientController {
        #swagger.parameters['id'] = {
            in: 'path',
            description: 'Client ID',
-           required: true,
-           schema: {
-             type: 'string',
-             example: '975dbab0-3cee-4059-8529-2757924ca737'
-           }
+           required: true
        }
      */
 

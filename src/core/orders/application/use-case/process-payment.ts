@@ -3,8 +3,9 @@ import { Payment } from '../../domain/payment';
 import { IPaymentGateway } from '../ports/providers/IPaymentGateway';
 import { AppError } from '@shared/errors/AppError';
 import { IPaymentRepository } from '../ports/repositories/IPaymentRepository';
-import { IGenerateCodeProvider } from '@application/user-exemple/application/ports/providers/IGenerateCodeProvider';
+
 import { IOrderRepository } from '../ports/repositories/orderRepository';
+import { IGenerateCodeProvider } from '../ports/providers/IGenerateCodeProvider';
 
 
 interface IRequest {

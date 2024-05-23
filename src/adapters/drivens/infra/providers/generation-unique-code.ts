@@ -1,4 +1,5 @@
-import { IGenerateCodeProvider } from '@application/user-exemple/application/ports/providers/IGenerateCodeProvider';
+import { IGenerateCodeProvider } from "@application/orders/application/ports/providers/IGenerateCodeProvider";
+
 
 
 
