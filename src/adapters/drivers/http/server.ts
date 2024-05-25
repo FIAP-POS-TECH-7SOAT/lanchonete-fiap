@@ -16,9 +16,11 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
-app.use("/files", express.static(resolve(__dirname, '..', '..', '..', 'shared', 'tmp', 'uploads')));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+if(env.NODE_ENV !== 'production'){
+  app.use("/files", express.static(resolve(__dirname, '..', '..', '..', 'shared', 'tmp', 'uploads')));
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
+}
 app.use(routers);
 
 
