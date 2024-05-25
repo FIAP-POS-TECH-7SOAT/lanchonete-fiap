@@ -45,16 +45,16 @@ model Payment {
   @@map("payments")
 }
 
-model Produto {
-  id            String  @id
-  nome          String
-  categoria     Categoria
-  preco         Decimal
-  descricao     String
-  imagem        String
-  deleted       Boolean @default(false)
+model Product {
+  id           String  @id
+  name         String
+  category     Category
+  price        Decimal
+  description  String
+  image        String
+  deleted      Boolean @default(false)
 
-  orders OrderProduto[]
+  orders OrderProduct[]
 
   @@map("products")
 }
@@ -68,23 +68,24 @@ model Order {
 
 
   client Client   @relation(fields: [client_id], references: [id])
-  products OrderProduto[]
+  products OrderProduct[]
   @@map("orders")
 }
 
-model OrderProduto {
+model OrderProduct {
   id         String   @id @default(uuid())
   order_id   String
-  produto_id String
+  product_id String
   amount     Int
 
-  produto    Produto  @relation(fields: [produto_id], references: [id])
+  product    Product  @relation(fields: [product_id], references: [id])
   order      Order    @relation(fields: [order_id], references: [id])
   
-  @@index([produto_id, order_id], name: "unique_order_product")
+  @@index([product_id, order_id], name: "unique_order_product")
+  @@map("order_product")
 }
 
-enum Categoria {
+enum Category {
   LANCHE
   ACOMPANHAMENTO
   BEBIDA

@@ -1,9 +1,9 @@
-import { OrderServiceImpl } from "@application/orders/application/use-case/orderService";
-import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id";
+import { OrderServiceImpl } from "@application/orders/application/use-case/order-use-case";
+import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id-use-case";
 import { Request, Response } from "express";
-
+import { OrderMapping } from "../mapping/order-mapping";
 import { z } from "zod";
-import OrderRepository from "src/adapters/drivens/infra/repositories/orderRepository";
+import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
 
 const orderRepository = new OrderRepository();
 const orderService = new OrderServiceImpl(orderRepository);
@@ -31,12 +31,14 @@ class OrderController {
        }
      */
 
-    const checkInBodySchema =   z.object({
+    const checkInBodySchema = z.object({
       client_id: z.string(),
-      products: z.array(z.object({
-        id:z.string(),
-        amount:z.number()
-      })),
+      products: z.array(
+        z.object({
+          id: z.string(),
+          amount: z.number(),
+        })
+      ),
     });
 
     const { client_id, products } = checkInBodySchema.parse(req.body);
@@ -46,7 +48,7 @@ class OrderController {
       products,
     });
 
-    return res.json(order);
+    return res.json(OrderMapping.toView(order));
   }
   async update(req: Request, res: Response): Promise<Response | null> {
     /*
@@ -78,7 +80,9 @@ class OrderController {
       client_id: z.string(),
     });
 
-    const { id, products, status, client_id } = checkInBodySchema.parse(req.body);
+    const { id, products, status, client_id } = checkInBodySchema.parse(
+      req.body
+    );
 
     // const orderUpdated = await orderService.update({
     //   id,
@@ -107,16 +111,17 @@ class OrderController {
       }
     */
     const checkInQueySchema = z.object({
-      status:  z.union([z.string(), z.array(z.string())]),
-    }); 
-    const { status } = checkInQueySchema.parse(req.query)
-    const myStatus = typeof status === 'string'? [status]:status
+      status: z.union([z.string(), z.array(z.string())]),
+    });
+    const { status } = checkInQueySchema.parse(req.query);
+    const myStatus = typeof status === "string" ? [status] : status;
     const orders = await orderService.getAll({
-      filters:{
-        status:myStatus.map(item=>item.trim())
-    }});
+      filters: {
+        status: myStatus.map((item) => item.trim()),
+      },
+    });
 
-    return res.json(orders);
+    return res.json(orders.map(OrderMapping.toView));
   }
 
   async get(req: Request, res: Response): Promise<Response> {
@@ -134,9 +139,13 @@ class OrderController {
 
     const order = await orderService.get(id);
 
-    return res.json(order);
+    if (!order) {
+      return res.json({});
+    }
+
+    return res.json(OrderMapping.toView(order));
   }
-  
+
   async cancelOrder(req: Request, res: Response): Promise<Response> {
     /*
        #swagger.tags = ['Order']
@@ -149,12 +158,10 @@ class OrderController {
 
     const { id } = req.params;
     const cancelOrderById = new CancelOrderById(orderRepository);
-    const order = await cancelOrderById.execute({id});
+    const order = await cancelOrderById.execute({ id });
 
-    return res.json(order);
+    return res.json(OrderMapping.toView(order));
   }
-
-  
 }
 
 export const orderController = new OrderController();

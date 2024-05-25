@@ -63,18 +63,18 @@
         }
       }
     },
-    "/produtos/": {
+    "/products/": {
       "post": {
         "tags": [
-          "Produto"
+          "Product"
         ],
-        "summary": "Create a new Produto",
+        "summary": "Create a new Product",
         "description": "",
         "parameters": [
           {
-            "name": "Produto",
+            "name": "Product",
             "in": "body",
-            "description": "Produto info",
+            "description": "Product info",
             "required": true,
             "schema": {
               "type": "object",
@@ -83,11 +83,11 @@
                   "type": "string",
                   "example": "X-Bacon"
                 },
-                "categoria": {
+                "category": {
                   "type": "string",
                   "example": "Lanche"
                 },
-                "preco": {
+                "price": {
                   "type": "number",
                   "example": 20.5
                 },
@@ -107,15 +107,15 @@
       },
       "get": {
         "tags": [
-          "Produto"
+          "Product"
         ],
-        "summary": "Find new Produto by Categoria",
+        "summary": "Find new Product by Category",
         "description": "",
         "parameters": [
           {
-            "name": "categoria",
+            "name": "category",
             "in": "query",
-            "description": "Categoria of the Produtos to get",
+            "description": "Category of the Products to get",
             "required": true,
             "enum": [
               "Lanche",
@@ -135,12 +135,12 @@
         }
       }
     },
-    "/produtos/{id}": {
+    "/products/{id}": {
       "put": {
         "tags": [
-          "Produto"
+          "Product"
         ],
-        "summary": "Update a Produto",
+        "summary": "Update a Product",
         "description": "",
         "parameters": [
           {
@@ -152,9 +152,9 @@
             }
           },
           {
-            "name": "Produto",
+            "name": "Product",
             "in": "body",
-            "description": "Produto info",
+            "description": "Product info",
             "required": true,
             "schema": {
               "type": "object",
@@ -163,11 +163,11 @@
                   "type": "string",
                   "example": "X-Bacon"
                 },
-                "categoria": {
+                "category": {
                   "type": "string",
                   "example": "Lanche"
                 },
-                "preco": {
+                "price": {
                   "type": "number",
                   "example": 22
                 },
@@ -187,9 +187,9 @@
       },
       "get": {
         "tags": [
-          "Produto"
+          "Product"
         ],
-        "summary": "Find new Produto by Id",
+        "summary": "Find new Product by Id",
         "description": "",
         "parameters": [
           {
@@ -199,7 +199,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Numeric ID of the Produto to get"
+            "description": "Numeric ID of the Product to get"
           }
         ],
         "responses": {
@@ -210,9 +210,9 @@
       },
       "delete": {
         "tags": [
-          "Produto"
+          "Product"
         ],
-        "summary": "mark the Produto as  ",
+        "summary": "mark the Product as  ",
         "description": "",
         "parameters": [
           {
@@ -222,7 +222,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Numeric ID of the Produto to delete"
+            "description": "Numeric ID of the Product to delete"
           }
         ],
         "responses": {
@@ -232,10 +232,10 @@
         }
       }
     },
-    "/produtos/upload/{id}": {
+    "/products/upload/{id}": {
       "patch": {
         "tags": [
-          "Produto"
+          "Product"
         ],
         "summary": "Upload products image",
         "description": "",
