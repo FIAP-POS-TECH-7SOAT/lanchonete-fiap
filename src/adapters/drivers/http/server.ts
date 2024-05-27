@@ -10,6 +10,7 @@ import { resolve } from 'path';
 
 
 import swaggerFile from './swagger-output.json';
+import { ZodError } from 'zod';
 
 
 const app = express();
@@ -30,6 +31,17 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
     return res.status(err.statusCode).json({
       status: 'error',
       message: err.message,
+    });
+  }
+  if(err instanceof ZodError){
+    const errors = err.format() as any;
+    delete errors._errors
+    const messages = Object.keys(errors).map(key=>({
+      [key]:errors[key]._errors
+    }))
+    return res.status(400).json({
+      status: 400,
+      messages
     });
   }
   console.error(err);

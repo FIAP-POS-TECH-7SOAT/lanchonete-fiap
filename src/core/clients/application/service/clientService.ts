@@ -2,6 +2,8 @@ import { Client } from "@application/clients/domain/clientEntity";
 import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/clientDTO";
 import { IClientRepository } from "../ports/repositories/ClientRepository";
 import { IClientService } from "@application/clients/application/service/IclientService";
+import { isValidCPF } from "@brazilian-utils/brazilian-utils";
+import { AppError } from "@shared/errors/AppError";
 
 export class ClientServiceImpl implements IClientService {
   constructor(private clientRepository: IClientRepository) {}
@@ -16,6 +18,9 @@ export class ClientServiceImpl implements IClientService {
     return await this.clientRepository.findByCpf(cpf);
   }
   async create(data: CreateClientDTO): Promise<Client> {
+    if(!isValidCPF(data.cpf)){
+      throw new AppError('CPF invalido')
+    }
     return await this.clientRepository.create(data);
   }
 }

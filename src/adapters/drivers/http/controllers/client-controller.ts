@@ -26,8 +26,8 @@ class ClientController {
 
     const checkInBodySchema = z.object({
       name: z.string(),
-      email: z.string(),
-      cpf: z.string(),
+      email: z.string().email(),
+      cpf: z.string().length(11),
     });
 
     const { name, email, cpf } = checkInBodySchema.parse(req.body);
