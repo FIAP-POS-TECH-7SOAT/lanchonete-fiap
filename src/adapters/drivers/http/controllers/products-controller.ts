@@ -125,24 +125,21 @@ class ProdutosController {
     const categoriasChaves = Object.keys(Categoria) as [keyof typeof Categoria];
 
     const checkInBodySchema = z.object({
-      id: z.string(),
       nome: z.string(),
       categoria: z.enum(categoriasChaves),
       preco: z.number(),
-      descricao: z.string(),
-      imagem: z.string(),
+      descricao: z.string()
     });
-
-    const { id, nome, categoria, preco, descricao, imagem } =
+    const {id} = req.params;
+    const { nome, categoria, preco, descricao } =
       checkInBodySchema.parse(req.body);
 
     const produto = await updateProdutoService.execute({
-      id: id,
+      id,
       nome: nome,
       categoria: categoria as Categoria,
       preco: preco,
-      descricao: descricao,
-      imagem: imagem,
+      descricao: descricao
     });
 
     return res.json(produto);
