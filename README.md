@@ -56,141 +56,139 @@ Este projeto visa construir uma API chamada lanchonete-fiap utilizando a linguag
 ## Árvore de diretórios:
 
 ```
-lanchonete-fiap
+.
+├── docker-compose.yml
 ├── Dockerfile
+├── example
+│   ├── adapters
+│   │   └── prismaPaymentRepository.ts
+│   ├── core
+│   │   ├── application
+│   │   │   └── paymentService.ts
+│   │   ├── paymentEntity.ts
+│   │   ├── paymentRepository.ts
+│   │   └── paymentService.ts
+│   └── uploadImage.ts
 ├── package.json
+├── package-lock.json
 ├── prisma
 │   └── schema.prisma
+├── README.md
 ├── src
 │   ├── adapters
 │   │   ├── drivens
 │   │   │   └── infra
-│   │   │   	├── providers
-│   │   │   	│   ├── BCryptHashProvider.ts
-│   │   │   	│   ├── FakeNotification.ts
-│   │   │   	│   ├── FakePaymentGateway.ts
-│   │   │   	│   ├── fakes
-│   │   │   	│   │   ├── FakeHashProvider.ts
-│   │   │   	│   │   ├── FakePaymentGateway.ts
-│   │   │   	│   │   └── generation-unique-code.ts
-│   │   │   	│   └── generation-unique-code.ts
-│   │   │   	└── repositories
-│   │   │       	├── clientRepository.ts
-│   │   │       	├── mapping
-│   │   │       	│   ├── orders-mapping.ts
-│   │   │       	│   └── produto-mapping.ts
-│   │   │       	├── orderRepository.ts
-│   │   │       	├── PaymentRepository.ts
-│   │   │       	├── ProdutoRepository.ts
-│   │   │       	└── UserRepository.ts
+│   │   │       ├── providers
+│   │   │       │   ├── fake-notification.ts
+│   │   │       │   ├── fake-payment-gateway.ts
+│   │   │       │   ├── fakes
+│   │   │       │   │   └── fake-payment-gateway.ts
+│   │   │       │   └── generation-unique-code.ts
+│   │   │       └── repositories
+│   │   │           ├── client-repository.ts
+│   │   │           ├── mapping
+│   │   │           │   ├── orders-mapping.ts
+│   │   │           │   └── product-mapping.ts
+│   │   │           ├── order-repository.ts
+│   │   │           ├── payment-repository.ts
+│   │   │           └── product-repository.ts
 │   │   └── drivers
-│   │   	└── http
-│   │       	├── controllers
-│   │       	│   ├── client-controller.ts
-│   │       	│   ├── order-controller.ts
-│   │       	│   ├── order-status-controller.ts
-│   │       	│   ├── payments-controller.ts
-│   │       	│   ├── products-controller.ts
-│   │       	│   └── users-controller.ts
-│   │       	├── mapping
-│   │       	│   └── produto-mapping.ts
-│   │       	├── routes
-│   │       	│   ├── clientRoutes.ts
-│   │       	│   ├── index.ts
-│   │       	│   ├── orderRoutes.ts
-│   │       	│   ├── order-status-routes.ts
-│   │       	│   ├── payment.routes.ts
-│   │       	│   ├── produto.routes.ts
-│   │       	│   └── users.routes.ts
-│   │       	├── server.ts
-│   │       	├── swagger.js
-│   │       	└── swagger-output.json
+│   │       └── http
+│   │           ├── controllers
+│   │           │   ├── client-controller.ts
+│   │           │   ├── order-controller.ts
+│   │           │   ├── order-status-controller.ts
+│   │           │   ├── payments-controller.ts
+│   │           │   └── products-controller.ts
+│   │           ├── mapping
+│   │           │   ├── client-mapping.ts
+│   │           │   ├── order-mapping.ts
+│   │           │   └── product-mapping.ts
+│   │           ├── routes
+│   │           │   ├── client-routes.ts
+│   │           │   ├── index.ts
+│   │           │   ├── order-routes.ts
+│   │           │   ├── order-status-routes.ts
+│   │           │   ├── payment-routes.ts
+│   │           │   └── product-routes.ts
+│   │           ├── server.ts
+│   │           ├── swagger.js
+│   │           └── swagger-output.json
 │   ├── core
-│   │   ├── categorias
+│   │   ├── categories
 │   │   │   └── domain
-│   │   │   	└── categoria.ts
+│   │   │       └── category.ts
 │   │   ├── clients
 │   │   │   ├── application
 │   │   │   │   ├── ports
+│   │   │   │   │   ├── providers
 │   │   │   │   │   └── repositories
-│   │   │   │   │   	├── ClientRepository.ts
-│   │   │   │   │   	└── dtos
-│   │   │   │   │       	└── clientDTO.ts
-│   │   │   │   └── service
-│   │   │   │   	├── clientService.ts
-│   │   │   │   	└── IclientService.ts
+│   │   │   │   │       ├── client-repository.ts
+│   │   │   │   │       └── dtos
+│   │   │   │   │           └── client-dto.ts
+│   │   │   │   └── use-case
+│   │   │   │       ├── client-use-case.ts
+│   │   │   │       └── Iclient-use-case.ts
 │   │   │   └── domain
-│   │   │   	└── clientEntity.ts
+│   │   │       └── client-entity.ts
 │   │   ├── orders
 │   │   │   ├── application
 │   │   │   │   ├── ports
 │   │   │   │   │   ├── providers
 │   │   │   │   │   │   ├── dtos
-│   │   │   │   │   │   │   ├── NotificationRequest.ts
-│   │   │   │   │   │   │   ├── ProcessPaymentRequest.ts
-│   │   │   │   │   │   │   └── ProcessPaymentResponse.ts
+│   │   │   │   │   │   │   ├── notification-request-dto.ts
+│   │   │   │   │   │   │   ├── process-payment-request-dto.ts
+│   │   │   │   │   │   │   └── process-payment-response-dto.ts
+│   │   │   │   │   │   ├── IGenerate-code-provider.ts
 │   │   │   │   │   │   ├── INotification.ts
-│   │   │   │   │   │   └── IPaymentGateway.ts
+│   │   │   │   │   │   └── IPayment-gateway.ts
 │   │   │   │   │   └── repositories
-│   │   │   │   │   	├── dtos
-│   │   │   │   │   	│   ├── create-payment-dto.ts
-│   │   │   │   │   	│   └── orderDTO.ts
-│   │   │   │   │   	├── IPaymentRepository.ts
-│   │   │   │   │   	└── orderRepository.ts
+│   │   │   │   │       ├── dtos
+│   │   │   │   │       │   ├── create-payment-dto.ts
+│   │   │   │   │       │   └── order-dto.ts
+│   │   │   │   │       ├── IPayment-repository.ts
+│   │   │   │   │       └── order-repository.ts
 │   │   │   │   └── use-case
-│   │   │   │   	├── cancel-order-by-id.ts
-│   │   │   │   	├── IorderService.ts
-│   │   │   │   	├── orderService.ts
-│   │   │   │   	├── process-payment.ts
-│   │   │   │   	└── update-order-status-by-id.ts
+│   │   │   │       ├── cancel-order-by-id-use-case.ts
+│   │   │   │       ├── IOrder-use-case.ts
+│   │   │   │       ├── order-use-case.ts
+│   │   │   │       ├── process-payment-use-case.ts
+│   │   │   │       └── update-order-status-by-id-use-case.ts
 │   │   │   └── domain
-│   │   │   	├── orderEntity.ts
-│   │   │   	└── payment.ts
-│   │   ├── produtos
+│   │   │       ├── order-entity.ts
+│   │   │       └── payment.ts
+│   │   ├── products
 │   │   │   ├── application
 │   │   │   │   ├── ports
-│   │   │   │   │   ├── providers
 │   │   │   │   │   └── repositories
-│   │   │   │   │   	├── dtos
-│   │   │   │   │   	│   ├── create-produto-dto.ts
-│   │   │   │   │   	│   ├── update-produto-dto.ts
-│   │   │   │   │   	│   └── upload-produto-imagem-dto.ts
-│   │   │   │   │   	└── IProdutoRepository.ts
+│   │   │   │   │       ├── dtos
+│   │   │   │   │       │   ├── create-product-dto.ts
+│   │   │   │   │       │   ├── update-product-dto.ts
+│   │   │   │   │       │   └── upload-product-imagem-dto.ts
+│   │   │   │   │       └── IProduct-repository.ts
 │   │   │   │   └── use-case
-│   │   │   │   	├── create-produto-use-case.ts
-│   │   │   │   	├── delete-produto-use-case.ts
-│   │   │   │   	├── find-produtos-by-categoria-use-case.ts
-│   │   │   │   	├── find-produto-use-case.ts
-│   │   │   │   	├── update-produto-use-case.ts
-│   │   │   │   	└── upload-produto-imagem-use-case.ts
+│   │   │   │       ├── create-product-use-case.ts
+│   │   │   │       ├── delete-product-use-case.ts
+│   │   │   │       ├── find-product-by-category-use-case.ts
+│   │   │   │       ├── find-product-use-case.ts
+│   │   │   │       ├── update-product-use-case.ts
+│   │   │   │       └── upload-product-image-use-case.ts
 │   │   │   └── domain
-│   │   │   	└── produto.ts
-│   │   └── user-exemple
-│   │   	├── application
-│   │   	│   ├── ports
-│   │   	│   │   ├── providers
-│   │   	│   │   │   ├── IGenerateCodeProvider.ts
-│   │   	│   │   │   └── IHashProvider.ts
-│   │   	│   │   └── repositories
-│   │   	│   │   	├── dtos
-│   │   	│   │   	│   └── create-user-dto.ts
-│   │   	│   │   	└── IUserRepository.ts
-│   │   	│   └── use-case
-│   │   	│   	├── create-user-use-case.ts
-│   │   	│   	└── show-profile-use-case.ts
-│   │   	└── domain
-│   │       	└── user.ts
+│   │   │       └── product.ts
+│   │   └── upload
 │   └── shared
-│   	├── entities
-│   	│   ├── entity.ts
-│   	│   └── optional.ts
-│   	├── env
-│   	│   └── index.ts
-│   	├── errors
-│   	│   └── AppError.ts
-│   	├── lib
-│   	│   └── prisma.ts
-│   	└── tmp
-│       	└── uploads
+│       ├── configs
+│       │   └── upload-file-config.ts
+│       ├── entities
+│       │   ├── entity.ts
+│       │   └── optional.ts
+│       ├── env
+│       │   └── index.ts
+│       ├── errors
+│       │   └── AppError.ts
+│       ├── lib
+│       │   └── prisma.ts
+│       └── tmp
+│           └── uploads
 └── tsconfig.json
 ```
