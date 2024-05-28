@@ -1,17 +1,12 @@
-import { OrderServiceImpl } from "@application/orders/application/use-case/orderService";
-import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id";
-import { UpdateOrderStatusById } from "@application/orders/application/use-case/update-order-status-by-id";
+import { UpdateOrderStatusById } from "@application/orders/application/use-case/update-order-status-by-id-use-case";
 import { Request, Response } from "express";
 
 import { z } from "zod";
-import OrderRepository from "src/adapters/drivens/infra/repositories/orderRepository";
+import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
 
 const orderRepository = new OrderRepository();
 
-
 class OrderStatusController {
-  
-  
   async update(req: Request, res: Response): Promise<Response> {
     /*
        #swagger.tags = ['Order']
@@ -30,20 +25,20 @@ class OrderStatusController {
   */
 
     const { id } = req.params;
-     
-
 
     const checkInQueySchema = z.object({
       status: z.string(),
-    }); 
-    const { status} = checkInQueySchema.parse(req.query)
- 
+    });
+    const { status } = checkInQueySchema.parse(req.query);
+
     const updateOrderStatusById = new UpdateOrderStatusById(orderRepository);
-    const order = await updateOrderStatusById.execute({id,status:status?.toString()});
+    const order = await updateOrderStatusById.execute({
+      id,
+      status: status?.toString(),
+    });
 
     return res.json(order);
   }
-  
 }
 
 export const orderStatusController = new OrderStatusController();

@@ -1,7 +1,8 @@
-import { ClientServiceImpl } from "@application/clients/application/service/clientService";
+import { ClientServiceImpl } from "@application/clients/application/use-case/client-use-case";
 import { Request, Response } from "express";
-import ClientRepository from "src/adapters/drivens/infra/repositories/clientRepository";
+import ClientRepository from "src/adapters/drivens/infra/repositories/client-repository";
 import { z } from "zod";
+import { ClientMapping } from "../mapping/client-mapping";
 
 const clientRepository = new ClientRepository();
 const clientService = new ClientServiceImpl(clientRepository);
@@ -26,15 +27,15 @@ class ClientController {
 
     const checkInBodySchema = z.object({
       name: z.string(),
-      email: z.string(),
-      cpf: z.string(),
+      email: z.string().email(),
+      cpf: z.string().length(11),
     });
 
     const { name, email, cpf } = checkInBodySchema.parse(req.body);
 
     const client = await clientService.create({ name, email, cpf });
 
-    return res.json(client);
+    return res.json(ClientMapping.toView(client));
   }
 
   async getByCpf(req: Request, res: Response): Promise<Response> {
@@ -52,7 +53,11 @@ class ClientController {
 
     const client = await clientService.findByCpf(cpf);
 
-    return res.json(client);
+    if (!client) {
+      return res.json(ClientMapping.toView);
+    }
+
+    return res.json(ClientMapping.toView(client));
   }
 
   async getByEmail(req: Request, res: Response): Promise<Response> {
@@ -73,7 +78,11 @@ class ClientController {
 
     const client = await clientService.findByEmail(email);
 
-    return res.json(client);
+    if (!client) {
+      return res.json(ClientMapping.toView);
+    }
+
+    return res.json(ClientMapping.toView(client));
   }
 
   async getById(req: Request, res: Response): Promise<Response> {
@@ -95,7 +104,11 @@ class ClientController {
 
     const client = await clientService.findById(id);
 
-    return res.json(client);
+    if (!client) {
+      return res.json(ClientMapping.toView);
+    }
+
+    return res.json(ClientMapping.toView(client));
   }
 }
 
