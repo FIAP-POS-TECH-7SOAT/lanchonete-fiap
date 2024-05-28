@@ -4,7 +4,7 @@ import { extname, resolve } from "path";
 
 const multerObj = {
     storage: multer.diskStorage({
-        destination: resolve(__dirname, '..','tmp', 'uploads'),
+        destination: resolve(__dirname, '..','..','..','shared','tmp', 'uploads'),
         filename: (
             req,
             file,

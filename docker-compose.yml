@@ -9,6 +9,8 @@ services:
       - "3333:3333"  # mapeia a porta 3333 do host para a porta 3333 do container
     environment:
       DATABASE_URL: postgres://user:password@postgres:5432/lanchonete-fiap-db
+      PORT: 3333
+      APP_URL: http://localhost:3333
     depends_on:
       - postgres
 
