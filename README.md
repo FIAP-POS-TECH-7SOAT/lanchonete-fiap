@@ -27,6 +27,11 @@ lanchonete-fiap é uma API em Typescript fazendo parte de um novo sistema de con
     
   ### Executando o projeto:
     npm run start:prod
+
+## Gerando ou Atualizando o arquivo do Swagger:
+    npm run doc
+
+## URL do Swagger: http://localhost:3333/api-docs/
     
 ## Gerando imagem Docker:
 
@@ -35,6 +40,9 @@ lanchonete-fiap é uma API em Typescript fazendo parte de um novo sistema de con
 
   ### Rodando o container:
     docker run -p <PORT>:<PORT> -e PORT=<PORT> -e DATABASE_URL=<URL_DATABASE> -e APP_URL="http://localhost:<PORT>/" -e NODE_ENV=dev lanchonete_fiap
+
+### Gerando docker-compose:
+    docker-compose up --build
 
 **Variáveis de ambiente:**
   - PORT - A porta em que o servidor irá rodar.
