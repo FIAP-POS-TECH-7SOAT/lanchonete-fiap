@@ -7,8 +7,7 @@ interface IRequest {
   name: string;
   category: Category;
   price: number;
-  description: string;
-  image: string;
+  description: string;  
 }
 interface IResponse extends Product {}
 
@@ -20,8 +19,7 @@ export class UpdateProductService {
     name,
     category,
     price,
-    description,
-    image,
+    description
   }: IRequest): Promise<IResponse> {
     const product = await this.productRepository.findById(id);
 
@@ -33,7 +31,6 @@ export class UpdateProductService {
     product.description = description || product.description;
     product.price = price || product.price;
     product.category = category || product.category;
-    product.image = image || product.image;
 
     await this.productRepository.update(product);
 
