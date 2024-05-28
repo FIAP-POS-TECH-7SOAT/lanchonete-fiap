@@ -1,23 +1,23 @@
+import { CreatePaymentService } from "src/core/orders/application/use-case/process-payment-use-case";
+import { Request, Response } from "express";
+import { FakePaymentGateway } from "src/adapters/drivens/infra/providers/fake-payment-gateway";
+import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
+import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
+import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
 
-
-import { CreatePaymentService } from '@application/orders/application/use-case/process-payment';
-import { Request, Response } from 'express';
-import { FakePaymentGateway } from 'src/adapters/drivens/infra/providers/FakePaymentGateway';
-import { GenerateCodeProvider } from 'src/adapters/drivens/infra/providers/generation-unique-code';
-import PaymentRepository from 'src/adapters/drivens/infra/repositories/PaymentRepository';
-import OrderRepository from 'src/adapters/drivens/infra/repositories/orderRepository';
-
-import { z } from 'zod';
-
-
+import { z } from "zod";
 
 const paymentRepository = new PaymentRepository();
 const orderRepository = new OrderRepository();
 const fakePaymentGateway = new FakePaymentGateway();
 const generateCodeProvider = new GenerateCodeProvider();
 
-
-const createPaymentService = new CreatePaymentService(paymentRepository,fakePaymentGateway,generateCodeProvider,orderRepository)
+const createPaymentService = new CreatePaymentService(
+  paymentRepository,
+  fakePaymentGateway,
+  generateCodeProvider,
+  orderRepository
+);
 class PaymentsController {
   async create(req: Request, res: Response): Promise<Response> {
     /*
@@ -38,29 +38,30 @@ class PaymentsController {
            }
        }
      */
-   
-     const checkInBodySchema = z.object({
-       order_id: z.string(),
-       total_amount: z.number(),
-       card:z.object({
+
+    const checkInBodySchema = z.object({
+      order_id: z.string(),
+      total_amount: z.number(),
+      card: z.object({
         number: z.string(),
         exp: z.string(),
         cvc: z.number(),
-       })
-     }); 
-  
-     const { order_id,total_amount,card} = checkInBodySchema.parse(req.body)
-       
-     const {payment,code} = await createPaymentService.execute({card,order_id,total_amount});
-       
-     return res.json({
+      }),
+    });
+
+    const { order_id, total_amount, card } = checkInBodySchema.parse(req.body);
+
+    const { payment, code } = await createPaymentService.execute({
+      card,
+      order_id,
+      total_amount,
+    });
+
+    return res.json({
       payment,
-      code
-     });
+      code,
+    });
   }
 }
 
-export const paymentsController = new PaymentsController()
-
-
-
+export const paymentsController = new PaymentsController();

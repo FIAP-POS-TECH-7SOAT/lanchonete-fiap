@@ -1,171 +1,175 @@
-import { CreateProdutoService } from "@application/produtos/application/use-case/create-produto-use-case";
-import { FindProdutoService } from "@application/produtos/application/use-case/find-produto-use-case";
-import { FindProdutosByCategoriaService } from "@application/produtos/application/use-case/find-produtos-by-categoria-use-case";
+import { CreateProductService } from "@application/products/application/use-case/create-product-use-case";
+import { FindProductService } from "@application/products/application/use-case/find-product-use-case";
+import { FindProductsByCategoryService } from "@application/products/application/use-case/find-product-by-category-use-case";
 
 import { Request, Response } from "express";
-import ProdutoRepository from "src/adapters/drivens/infra/repositories/ProdutoRepository";
-import { Categoria } from "@application/categorias/domain/categoria";
+import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
+import { Category } from "@application/categories/domain/category";
 
 import { z } from "zod";
-import { UpdateProdutoService } from "@application/produtos/application/use-case/update-produto-use-case";
-import { DeleteProdutoService } from "@application/produtos/application/use-case/delete-produto-use-case";
-import { UploadProdutoImagemService } from "@application/produtos/application/use-case/upload-produto-imagem-use-case";
-import { ProdutoMapping } from "../mapping/produto-mapping";
+import { UpdateProductService } from "@application/products/application/use-case/update-product-use-case";
+import { DeleteProductService } from "@application/products/application/use-case/delete-product-use-case";
+import { UploadProductImageService } from "@application/products/application/use-case/upload-product-image-use-case";
+import { ProductMapping } from "src/adapters/drivers/http/mapping/product-mapping";
 
-const produtoRepository = new ProdutoRepository();
+const productRepository = new ProductRepository();
 
-const findProdutoService = new FindProdutoService(produtoRepository);
-const findProdutosByCategoriaService = new FindProdutosByCategoriaService(
-  produtoRepository
+const findProductService = new FindProductService(productRepository);
+const findProductsByCategoryService = new FindProductsByCategoryService(
+  productRepository
 );
-const createProdutoService = new CreateProdutoService(produtoRepository);
-const updateProdutoService = new UpdateProdutoService(produtoRepository);
-const deleteProdutoService = new DeleteProdutoService(produtoRepository);
-const uploadProdutoImagemService = new UploadProdutoImagemService(produtoRepository)
+const createProductService = new CreateProductService(productRepository);
+const updateProductService = new UpdateProductService(productRepository);
+const deleteProductService = new DeleteProductService(productRepository);
+const uploadProductImageService = new UploadProductImageService(
+  productRepository
+);
 
 interface IFile {
-  filename: string
+  filename: string;
 }
 
-class ProdutosController {
+class ProductController {
   async create(req: Request, res: Response): Promise<Response> {
     /*
-        #swagger.tags = ['Produto']
-        #swagger.summary = 'Create a new Produto'
-        #swagger.parameters['Produto'] = {
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Create a new Product'
+        #swagger.parameters['Product'] = {
             in: 'body',
-            description: 'Produto info',
+            description: 'Product info',
             required: true,
             schema: {
-              nome: 'X-Bacon',
-              categoria: 'Lanche',
-              preco: 20.5, 
-              descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
+              name: 'X-Bacon',
+              category: 'Lanche',
+              price: 20.5, 
+              description: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
             }
         }
       */
 
-    const categoriasChaves = Object.keys(Categoria) as [keyof typeof Categoria];
+    const categoryKeys = Object.keys(Category) as [keyof typeof Category];
 
     const checkInBodySchema = z.object({
-      nome: z.string(),
-      categoria: z.enum(categoriasChaves),
-      preco: z.number(),
-      descricao: z.string(),
+      name: z.string(),
+      category: z.enum(categoryKeys),
+      price: z.number(),
+      description: z.string(),
     });
 
-    const { nome, categoria, preco, descricao } = checkInBodySchema.parse(
+    const { name, category, price, description } = checkInBodySchema.parse(
       req.body
     );
 
-    const produto = await createProdutoService.execute({
-      nome,
-      categoria: categoria as Categoria,
-      preco,
-      descricao,
+    const product = await createProductService.execute({
+      name,
+      category: category as Category,
+      price,
+      description,
     });
 
-    return res.json(produto);
+    return res.json(product);
   }
   //-------------------------------------------------------------------------
   async getById(req: Request, res: Response): Promise<Response> {
     /*
-        #swagger.tags = ['Produto']
-        #swagger.summary = 'Find new Produto by Id'
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Find new Product by Id'
         #swagger.parameters['id'] = {
-          description: 'Numeric ID of the Produto to get'
+          description: 'Numeric ID of the Product to get'
         }
       */
 
     const { id } = req.params;
 
-    const produto = await findProdutoService.execute({
+    const product = await findProductService.execute({
       id,
     });
 
-    return res.json(ProdutoMapping.toView(produto));
+    return res.json(ProductMapping.toView(product));
   }
   //-------------------------------------------------------------------------
-  async getManyByCategoria(req: Request, res: Response): Promise<Response> {
+  async getManyByCategory(req: Request, res: Response): Promise<Response> {
     /*
-        #swagger.tags = ['Produto']
-        #swagger.summary = 'Find new Produto by Categoria'
-        #swagger.parameters['categoria'] = {
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Find new Product by Category'
+        #swagger.parameters['category'] = {
             in: 'query',
-            description: 'Categoria of the Produtos to get',
+            description: 'Category of the Products to get',
             required: true,
             enum: ['Lanche', 'Acompanhamento', 'Bebida', 'Sobremesa']
         }
         */
-    const { categoria } = req.query;
+    const { category } = req.query;
 
-    const produtos = await findProdutosByCategoriaService.execute({
-      categoria: categoria as Categoria,
+    const products = await findProductsByCategoryService.execute({
+      category: category as Category,
     });
 
-    return res.json(produtos.map(ProdutoMapping.toView));
+    return res.json(products.map(ProductMapping.toView));
   }
   //-------------------------------------------------------------------------
   async update(req: Request, res: Response): Promise<Response> {
     /*
-        #swagger.tags = ['Produto']
-        #swagger.summary = 'Update a Produto'
-        #swagger.parameters['Produto'] = {
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Update a Product'
+        #swagger.parameters['Product'] = {
             in: 'body',
-            description: 'Produto info',
+            description: 'Product info',
             required: true,
             schema: {
-              nome: 'X-Bacon',
-              categoria: 'Lanche',
-              preco: 22, 
-              descricao: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
+              name: 'X-Bacon',
+              category: 'Lanche',
+              price: 22, 
+              description: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
             }
         }
       */
-    const categoriasChaves = Object.keys(Categoria) as [keyof typeof Categoria];
+    const categoryKeys = Object.keys(Category) as [keyof typeof Category];
 
     const checkInBodySchema = z.object({
-      nome: z.string(),
-      categoria: z.enum(categoriasChaves),
-      preco: z.number(),
-      descricao: z.string()
+      
+      name: z.string(),
+      category: z.enum(categoryKeys),
+      price: z.number(),
+      description: z.string(),
+      
     });
-    const {id} = req.params;
-    const { nome, categoria, preco, descricao } =
+    const {id} = req.params
+    const {  name, category, price, description } =
       checkInBodySchema.parse(req.body);
 
-    const produto = await updateProdutoService.execute({
-      id,
-      nome: nome,
-      categoria: categoria as Categoria,
-      preco: preco,
-      descricao: descricao
+    const product = await updateProductService.execute({
+      id: id,
+      name: name,
+      category: category as Category,
+      price: price,
+      description: description,
+
     });
 
-    return res.json(produto);
+    return res.json(product);
   }
   //-------------------------------------------------------------------------
   async delete(req: Request, res: Response): Promise<Response> {
     /*
-        #swagger.tags = ['Produto']
-        #swagger.summary = 'mark the Produto as deleted'
+        #swagger.tags = ['Product']
+        #swagger.summary = 'mark the Product as deleted'
         #swagger.parameters['id'] = {
-            description: 'Numeric ID of the Produto to delete'
+            description: 'Numeric ID of the Product to delete'
         }
       */
     const { id } = req.params;
 
-    const produto = await deleteProdutoService.execute({
+    const product = await deleteProductService.execute({
       id,
     });
 
-    return res.json(produto);
+    return res.json(product);
   }
   //-------------------------------------------------------------------------
   async upload(req: Request, res: Response): Promise<Response> {
-
-       /*
-        #swagger.tags = ['Produto']
+    /*
+        #swagger.tags = ['Product']
         #swagger.summary = 'Upload products image'
         #swagger.consumes = ['multipart/form-data']  
         #swagger.parameters['id'] = {
@@ -190,18 +194,18 @@ class ProdutosController {
     const { id } = checkInBodySchema.parse(req.params);
     const { filename } = checkInFileSchema.parse(req.file);
 
-    const product = await findProdutoService.execute({
+    const product = await findProductService.execute({
       id,
     });
 
     //prettier-ignore
-    const response = await uploadProdutoImagemService.execute({
+    const response = await uploadProductImageService.execute({
       id: id,
-      imagem: filename
+      image: filename
     });
 
     return res.json(product);
   }
 }
 
-export const produtosController = new ProdutosController();
+export const productController = new ProductController();
