@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: lanchonete-service
 spec:
+  type: LoadBalancer
   selector:
     app: lanchonete-pod
   ports:
