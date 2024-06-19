@@ -11,6 +11,8 @@ export interface IOrder {
   status: string;
   created_at?: Date;
   canceled_at?: Date | null;
+  code:string
+  
 }
 
 export class Order extends Entity<IOrder> {
@@ -35,6 +37,12 @@ export class Order extends Entity<IOrder> {
   }
   public set status(status:string) {
     this.props.status = status;
+  }
+  public set code(code:string) {
+    this.props.code = code;
+  }
+  public get code() {
+    return this.props.code;
   }
 
   public get created_at(): Date {

@@ -1,4 +1,4 @@
-import { CreatePaymentService } from "src/core/orders/application/use-case/process-payment-use-case";
+import { ProcessPaymentService } from "src/core/orders/application/use-case/process-payment-use-case";
 import { Request, Response } from "express";
 import { FakePaymentGateway } from "src/adapters/drivens/infra/providers/fake-payment-gateway";
 import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
@@ -12,12 +12,7 @@ const orderRepository = new OrderRepository();
 const fakePaymentGateway = new FakePaymentGateway();
 const generateCodeProvider = new GenerateCodeProvider();
 
-const createPaymentService = new CreatePaymentService(
-  paymentRepository,
-  fakePaymentGateway,
-  generateCodeProvider,
-  orderRepository
-);
+
 class PaymentsController {
   async create(req: Request, res: Response): Promise<Response> {
     /*
@@ -38,27 +33,30 @@ class PaymentsController {
            }
        }
      */
-    const body = req.body
-    // const checkInBodySchema = z.object({
-    //   order_id: z.string(),
-    //   total_amount: z.number(),
-    //   card: z.object({
-    //     number: z.string(),
-    //     exp: z.string(),
-    //     cvc: z.number(),
-    //   }),
-    // });
 
-    // const { order_id, total_amount, card } = checkInBodySchema.parse(req.body);
+    
+    const checkInBodySchema = z.object({
+      amount: z.number(),
+      id: z.string(),
+      state: z.string(),
+    });
 
-    // const { payment, code } = await createPaymentService.execute({
-    //   card,
-    //   order_id,
-    //   total_amount,
-    // });
+    const { amount,id,state } = checkInBodySchema.parse(req.body);
+
+    const processPaymentService = new ProcessPaymentService(
+      paymentRepository,
+      generateCodeProvider,
+      orderRepository
+    );
+
+    const { payment, code } = await processPaymentService.execute({
+      id,
+      amount,
+      state
+    });
 
     return res.json({
-      body
+      1:1
     });
   }
 }

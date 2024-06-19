@@ -13,9 +13,10 @@ export class OrderMapping {
     products,
     status,
     canceled_at,
+    code
   }: CompleteOrderPrima) {
     return new Order(
-      { client_id, created_at, products, status, canceled_at: canceled_at },
+      { client_id, created_at, products, status, canceled_at: canceled_at,code },
       id
     );
   }
@@ -47,6 +48,7 @@ export class OrderMapping {
       status: order.status,
       id: order.id,
       client_id: order.client_id,
+      code:order.code
     };
   }
 }

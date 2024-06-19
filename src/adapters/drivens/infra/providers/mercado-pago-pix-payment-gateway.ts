@@ -23,6 +23,7 @@ export class MercadoPagoPixPaymentGateway implements IPaymentGateway {
           transaction_amount: amount,
           description: order_id,
           payment_method_id: 'pix',
+          external_reference:order_id,
           
           payer: customer ?{
               
