@@ -61,13 +61,13 @@ model Product {
 
 model Order {
   id            String @id
-  client_id     String
+  client_id     String?
   status        String   @default("Recebido")
   created_at    DateTime @default(now())
   canceled_at   DateTime?
 
 
-  client Client   @relation(fields: [client_id], references: [id])
+  client Client?   @relation(fields: [client_id], references: [id])
   products OrderProduct[]
   @@map("orders")
 }
