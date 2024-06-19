@@ -25,7 +25,5 @@ export class OrderServiceImpl implements IOrderService {
   async update(data: Order): Promise<Order> {
     return await this.orderRepository.update(data);
   }
-  async create(data: CreateOrderDTO): Promise<Order> {
-    return await this.orderRepository.create(data);
-  }
+
 }

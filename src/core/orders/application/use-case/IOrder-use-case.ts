@@ -2,7 +2,7 @@
 import {CreateOrderDTO, GetAllDTO } from "@application/orders/application/ports/repositories/dtos/order-dto"
 import { Order } from "@application/orders/domain/order-entity";
 export interface IOrderService {
-  create(data: CreateOrderDTO): Promise<Order>;
+  
   get(id: string): Promise<Order | null>;
   getAll(data: GetAllDTO): Promise<Order[] | null>;
   update(data: Order): Promise<Order>;

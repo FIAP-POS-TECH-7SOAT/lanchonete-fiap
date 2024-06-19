@@ -38,28 +38,27 @@ class PaymentsController {
            }
        }
      */
+    const body = req.body
+    // const checkInBodySchema = z.object({
+    //   order_id: z.string(),
+    //   total_amount: z.number(),
+    //   card: z.object({
+    //     number: z.string(),
+    //     exp: z.string(),
+    //     cvc: z.number(),
+    //   }),
+    // });
 
-    const checkInBodySchema = z.object({
-      order_id: z.string(),
-      total_amount: z.number(),
-      card: z.object({
-        number: z.string(),
-        exp: z.string(),
-        cvc: z.number(),
-      }),
-    });
+    // const { order_id, total_amount, card } = checkInBodySchema.parse(req.body);
 
-    const { order_id, total_amount, card } = checkInBodySchema.parse(req.body);
-
-    const { payment, code } = await createPaymentService.execute({
-      card,
-      order_id,
-      total_amount,
-    });
+    // const { payment, code } = await createPaymentService.execute({
+    //   card,
+    //   order_id,
+    //   total_amount,
+    // });
 
     return res.json({
-      payment,
-      code,
+      body
     });
   }
 }

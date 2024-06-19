@@ -1,11 +1,16 @@
 import { OrderServiceImpl } from "@application/orders/application/use-case/order-use-case";
+import { CreateOrder } from "@application/orders/application/use-case/create-order-use-case";
 import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id-use-case";
 import { Request, Response } from "express";
 import { OrderMapping } from "../mapping/order-mapping";
 import { z } from "zod";
 import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
+import ClientRepository from "src/adapters/drivens/infra/repositories/client-repository";
+import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
 
 const orderRepository = new OrderRepository();
+const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
+const clientRepository = new ClientRepository();
 const orderService = new OrderServiceImpl(orderRepository);
 
 class OrderController {
@@ -32,7 +37,7 @@ class OrderController {
      */
 
     const checkInBodySchema = z.object({
-      client_id: z.string(),
+      client_id: z.string().optional(),
       products: z.array(
         z.object({
           id: z.string(),
@@ -42,13 +47,16 @@ class OrderController {
     });
 
     const { client_id, products } = checkInBodySchema.parse(req.body);
-
-    const order = await orderService.create({
-      client_id,
+    const createOrder = new CreateOrder(orderRepository,clientRepository,mercadoPagoPixPaymentGateway)
+    const {order,payment} = await createOrder.execute({
+      client_id:client_id?client_id:null,
       products,
     });
 
-    return res.json(OrderMapping.toView(order));
+    return res.json({
+      order:OrderMapping.toView(order),
+      payment,
+    });
   }
   async update(req: Request, res: Response): Promise<Response | null> {
     /*
