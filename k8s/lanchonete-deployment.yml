@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lanchonete-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: lanchonete-pod
+      labels: 
+        app: lanchonete-pod
+    spec:
+      containers:
+        - name: lanchonete-container
+          image: tsrocha901/lanchonete_fiap:latest
+          ports:
+            - containerPort: 3333
+          env:
+          - name: DATABASE_URL
+            value: postgresql://user:password@db-service:5432/lanchonete-fiap-db
+          - name: PORT
+            value: "3333"
+          - name: APP_URL
+            value: "localhost:3333"
+  selector:
+    matchLabels:
+      app: lanchonete-pod
+      
