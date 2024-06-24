@@ -50,17 +50,7 @@ export default class OrderRepository implements IOrderRepository {
     return order;
   }
 
-  async create({ client_id, products }: CreateOrderDTO): Promise<Order> {
-    const status = "Recebido";
-    const created_at = new Date();
-    const order = new Order({
-      client_id,
-      products,
-      status,
-      created_at,
-      canceled_at: null,
-    });
-
+  async create(order: Order): Promise<Order> {
     await prisma.order.create({
       data: OrderMapping.toCreatePrisma(order),
     });

@@ -13,21 +13,23 @@ export class OrderMapping {
     products,
     status,
     canceled_at,
+    code
   }: CompleteOrderPrima) {
     return new Order(
-      { client_id, created_at, products, status, canceled_at: canceled_at },
+      { client_id, created_at, products, status, canceled_at: canceled_at,code },
       id
     );
   }
 
   static toCreatePrisma(order: Order): Prisma.OrderCreateInput {
+    const client = order.client_id?{
+      connect: {
+        id: order.client_id,
+      },
+    }:{}
     return {
       id: order.id,
-      client: {
-        connect: {
-          id: order.client_id,
-        },
-      },
+      ...client,
       created_at: order.created_at,
       status: order.status,
       canceled_at: order.canceled_at,
@@ -46,6 +48,7 @@ export class OrderMapping {
       status: order.status,
       id: order.id,
       client_id: order.client_id,
+      code:order.code
     };
   }
 }

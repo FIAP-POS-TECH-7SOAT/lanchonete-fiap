@@ -5,7 +5,7 @@ export interface CreateOrderDTO {
     id: string;
     amount: number;
   }[];
-  client_id: string;
+  client_id: string | null;
 }
 
 export interface UpdateOrderDTO {

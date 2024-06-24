@@ -4,7 +4,8 @@ export interface IPayment {
   order_id: string,
   total_amount:number;
   code:string;
-  created_at:Date;
+  status:string;
+  created_at?:Date
 }
 
 export class Payment extends Entity<IPayment>{
@@ -29,8 +30,15 @@ export class Payment extends Entity<IPayment>{
   public get code(): string {
     return this.props.code
   };
+  
   public get total_amount(): number {
     return this.props.total_amount
+  };
+  public get status(): string {
+    return this.props.status
+  };
+  public set status(status:string) {
+    this.props.status = status
   };
 
 }

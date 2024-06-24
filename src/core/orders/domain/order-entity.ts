@@ -7,10 +7,12 @@ interface IOrderProduct{
 }
 export interface IOrder {
   products: IOrderProduct[];
-  client_id: string;
+  client_id: string | null;
   status: string;
-  created_at: Date;
-  canceled_at: Date | null;
+  created_at?: Date;
+  canceled_at?: Date | null;
+  code:string
+  
 }
 
 export class Order extends Entity<IOrder> {
@@ -26,8 +28,8 @@ export class Order extends Entity<IOrder> {
     return this.props.products;
   }
 
-  public get client_id(): string {
-    return this.props.client_id;
+  public get client_id(): string |null {
+    return this.props.client_id || null;
   }
 
   public get status(): string {
@@ -35,6 +37,12 @@ export class Order extends Entity<IOrder> {
   }
   public set status(status:string) {
     this.props.status = status;
+  }
+  public set code(code:string) {
+    this.props.code = code;
+  }
+  public get code() {
+    return this.props.code;
   }
 
   public get created_at(): Date {
