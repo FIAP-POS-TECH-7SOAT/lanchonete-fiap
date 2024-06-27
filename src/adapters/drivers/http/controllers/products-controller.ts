@@ -11,6 +11,7 @@ import { UpdateProductService } from "@application/products/application/use-case
 import { DeleteProductService } from "@application/products/application/use-case/delete-product-use-case";
 import { UploadProductImageService } from "@application/products/application/use-case/upload-product-image-use-case";
 import { ProductMapping } from "src/adapters/drivers/http/mapping/product-mapping";
+import { GCPUploadFile} from "src/adapters/drivens/infra/providers/gcp-upload-file";
 
 const productRepository = new ProductRepository();
 
@@ -21,8 +22,11 @@ const findProductsByCategoryService = new FindProductsByCategoryService(
 const createProductService = new CreateProductService(productRepository);
 const updateProductService = new UpdateProductService(productRepository);
 const deleteProductService = new DeleteProductService(productRepository);
+const gcpUploadFile = new GCPUploadFile()
 const uploadProductImageService = new UploadProductImageService(
-  productRepository
+  productRepository,
+  gcpUploadFile
+  
 );
 
 interface IFile {
@@ -189,10 +193,11 @@ class ProductController {
 
     const checkInFileSchema = z.object({
       filename: z.string(),
+      destination: z.string(),
     });
 
     const { id } = checkInBodySchema.parse(req.params);
-    const { filename } = checkInFileSchema.parse(req.file);
+    const { filename, destination} = checkInFileSchema.parse(req.file);
 
     const product = await findProductService.execute({
       id,
@@ -201,7 +206,8 @@ class ProductController {
     //prettier-ignore
     const response = await uploadProductImageService.execute({
       id: id,
-      image: filename
+      image: filename,
+      filePath:destination
     });
 
     return res.json(product);

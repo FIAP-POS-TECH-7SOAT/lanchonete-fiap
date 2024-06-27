@@ -6,6 +6,11 @@ const envSchema = z.object({
   PORT: z.coerce.number(),
   APP_URL: z.string(),
   PAYMENT_GATEWAY_ACCESS_TOKEN: z.string(),
+  GCP_BUCKET_NAME:z.string(),
+  GCP_KEY_FILENAME:z.string(),
+  CGP_PROJECT_ID:z.string(),
+  GCP_BUCKET_DESTINATION:z.string().default(''),
+  APP_STORAGE_MAX_SIZE: z.number().default(2 * 1024 * 1024)
 })
 
 const _env = envSchema.safeParse(process.env)
