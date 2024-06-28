@@ -11,7 +11,8 @@ import { UpdateProductService } from "@application/products/application/use-case
 import { DeleteProductService } from "@application/products/application/use-case/delete-product-use-case";
 import { UploadProductImageService } from "@application/products/application/use-case/upload-product-image-use-case";
 import { ProductMapping } from "src/adapters/drivers/http/mapping/product-mapping";
-import { GCPUploadFile} from "src/adapters/drivens/infra/providers/gcp-upload-file";
+
+import { AWSUploadFile } from "src/adapters/drivens/infra/providers/aws-upload-file";
 
 const productRepository = new ProductRepository();
 
@@ -22,10 +23,10 @@ const findProductsByCategoryService = new FindProductsByCategoryService(
 const createProductService = new CreateProductService(productRepository);
 const updateProductService = new UpdateProductService(productRepository);
 const deleteProductService = new DeleteProductService(productRepository);
-const gcpUploadFile = new GCPUploadFile()
+const awsUploadFile = new AWSUploadFile()
 const uploadProductImageService = new UploadProductImageService(
   productRepository,
-  gcpUploadFile
+  awsUploadFile
   
 );
 
