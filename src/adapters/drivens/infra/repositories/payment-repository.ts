@@ -5,6 +5,7 @@ import { Payment } from "@application/orders/domain/payment";
 import { prisma } from "@shared/lib/prisma";
 
 export default class PaymentRepository implements IPaymentRepository {
+  
   async findByOrderId(order_id: string): Promise<Payment | null> {
     const payment = await prisma.payment.findFirst({
       where: {
@@ -20,32 +21,60 @@ export default class PaymentRepository implements IPaymentRepository {
         created_at: payment.created_at,
         order_id: payment.order_id,
         total_amount: Number(payment.total_amount),
+        status:payment.status
       },
       payment.id
     );
   }
 
-  async create({
-    order_id,
-    total_amount,
-    code,
-  }: CreatePaymentDTO): Promise<Payment> {
-    const payment = new Payment({
-      order_id,
-      total_amount,
-      code,
-      created_at: new Date(),
-    });
+  async create(payment:Payment): Promise<Payment> {
+   
     await prisma.payment.create({
       data: {
         id: payment.id,
         order_id: payment.order_id,
         total_amount: payment.total_amount,
-        code,
+        code:String(payment.code),
         created_at: payment.created_at,
+        status:payment.status
       },
     });
 
     return payment;
+  }
+
+  async update(payment: Payment): Promise<Payment> {
+    await prisma.payment.update({
+      data: {
+        
+        status:payment.status,
+        
+      },
+      where: {
+        id: payment.id,
+      },
+    });
+
+    return payment;
+  }
+  async findByCode(code: string): Promise<Payment | null> {
+    const payment = await prisma.payment.findFirst({
+      where: {
+        code,
+      },
+    });
+    if (!payment) {
+      return null;
+    }
+    return new Payment(
+      {
+        code: payment.code,
+        created_at: payment.created_at,
+        order_id: payment.order_id,
+        total_amount: Number(payment.total_amount),
+        status:payment.status
+      },
+      payment.id
+    );
   }
 }

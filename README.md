@@ -51,7 +51,7 @@ Este projeto visa construir uma API chamada lanchonete-fiap utilizando a linguag
 
 ### Rodando o container:
 
-    docker run -p <PORT>:<PORT> -e PORT=<PORT> -e DATABASE_URL=<URL_DATABASE> -e APP_URL="http://localhost:<PORT>/" -e NODE_ENV=dev lanchonete_fiap
+    docker run -p <PORT>:<PORT> -e PORT=<PORT> -e DATABASE_URL=<DATABASE_URL> -e APP_URL="http://localhost:<PORT>/" -e NODE_ENV=dev lanchonete_fiap
 
 ### Gerando docker-compose:
     docker-compose up --build
@@ -59,7 +59,7 @@ Este projeto visa construir uma API chamada lanchonete-fiap utilizando a linguag
 **Variáveis de ambiente:**
 
 - PORT - A porta em que o servidor irá rodar.
-- URL_DATABASE - A URL do banco de dados **Postgres**.
+- DATABASE_URL - A URL do banco de dados **Postgres**.
 - APP_URL - URL do Bucket de imagem.
 - NODE_ENV - Possíveis valores para definir o Ambiente: 'dev', 'test', 'production'.
 

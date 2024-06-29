@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lanchonete-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: lanchonete-pod
+      labels: 
+        app: lanchonete-pod
+    spec:
+      containers:
+        - name: lanchonete-container
+          image: tsrocha901/lanchonete_fiap:latest
+          ports:
+            - containerPort: 3333
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: PORT
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: DATABASE_URL
+            - name: APP_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: APP_URL
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: NODE_ENV
+            - name: PAYMENT_GATEWAY_ACCESS_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: PAYMENT_GATEWAY_ACCESS_TOKEN
+            - name: APP_STORAGE_PROVIDER
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: APP_STORAGE_PROVIDER
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_REGION
+            - name: AWS_BUCKET_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_BUCKET_NAME
+            - name: AWS_BUCKET_DESTINATION
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_BUCKET_DESTINATION
+            - name: AWS_SESSION_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_SESSION_TOKEN
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_SECRET_ACCESS_KEY
+
+  selector:
+    matchLabels:
+      app: lanchonete-pod
+      

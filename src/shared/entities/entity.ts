@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 type Replace<T, R> = Omit<T, keyof R> & R;
 
 interface IEntity {
-  createdAt:Date;
+  created_at:Date;
   updatedAt:Date;
 }
 export class Entity<T> {
@@ -11,7 +11,7 @@ export class Entity<T> {
   protected props: IEntity & T
 
   constructor(
-    props: Omit<Replace<T, { createdAt?: Date }>, 'updatedAt'>,
+    props: Omit<Replace<T, { created_at?: Date }>, 'updatedAt'>,
     id?: string,
   ) {
 
@@ -19,9 +19,12 @@ export class Entity<T> {
 
     this.props = {
       ...props,
-      createdAt: id ? props.createdAt : new Date(),
+      created_at: id ? props.created_at : new Date(),
       updatedAt: new Date(),
     } as IEntity & T
 
+  }
+  public get created_at():Date{
+    return this.created_at
   }
 }

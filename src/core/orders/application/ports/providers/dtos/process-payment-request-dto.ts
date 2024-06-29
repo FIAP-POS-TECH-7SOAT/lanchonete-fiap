@@ -1,9 +1,9 @@
 export interface ProcessPaymentRequest {
   amount: number,
-  card:{
-    number: string, 
-    exp: string, 
-    cvc: number
-  }
+  order_id:string;
+  customer:{
+    email:string;
+    doc_number:string
+  } | null
   
 }

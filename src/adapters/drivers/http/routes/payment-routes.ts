@@ -10,6 +10,7 @@ const paymentsRoutes = Router();
 
 paymentsRoutes.post('/', paymentsController.create);
 
+
 export {
   paymentsRoutes
 };

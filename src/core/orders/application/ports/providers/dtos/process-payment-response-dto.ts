@@ -1,5 +1,7 @@
 export interface ProcessPaymentResponse {
-  success:boolean,
-  msg:string
+  id:string;
+  qr_code:string;
+  qr_code_base64:string;
+  status:string
   
 }

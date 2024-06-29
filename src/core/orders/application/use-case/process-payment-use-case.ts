@@ -1,6 +1,6 @@
 import { Payment } from "../../domain/payment";
 
-import { IPaymentGateway } from "../ports/providers/IPayment-gateway";
+
 import { AppError } from "@shared/errors/AppError";
 import { IPaymentRepository } from "../ports/repositories/IPayment-repository";
 
@@ -8,60 +8,45 @@ import { IOrderRepository } from "../ports/repositories/order-repository";
 import { IGenerateCodeProvider } from "../ports/providers/IGenerate-code-provider";
 
 interface IRequest {
-  order_id: string;
-  total_amount: number;
-  card: {
-    number: string;
-    exp: string;
-    cvc: number;
-  };
+  amount:number
+  id:string;
+  state:string
 }
 interface IResponse {
   payment: Payment;
   code: string;
 }
 
-export class CreatePaymentService {
+export class ProcessPaymentService {
   constructor(
     private paymentRepository: IPaymentRepository,
-    private paymentGateway: IPaymentGateway,
     private generateCodeProvider: IGenerateCodeProvider,
     private orderRepository: IOrderRepository
   ) {}
 
   public async execute({
-    order_id,
-    total_amount,
-    card,
+    amount,
+    id,
+    state
   }: IRequest): Promise<IResponse> {
-    const order = await this.orderRepository.findById(order_id);
+    const payment = await this.paymentRepository.findByCode(id);
+    if (!payment) {
+      throw new AppError("Solicitação pagamento não encontrado");
+    }
+
+    const order = await this.orderRepository.findById(payment.order_id);
     if (!order) {
-      throw new AppError("Pedido não encontrado");
+      throw new AppError("Pedido nao encontrado");
     }
-
-    if (!!order.canceled_at) {
-      throw new AppError("Pedido cancelado");
-    }
-    const alreadyPaid = await this.paymentRepository.findByOrderId(order_id);
-    if (alreadyPaid) {
-      throw new AppError("Pagamento já foi efetuado");
-    }
-    const processPayment = await this.paymentGateway.processPayment({
-      amount: total_amount,
-      card,
-    });
-
-    if (!processPayment.success) {
-      throw new AppError(processPayment.msg);
-    }
+    
+    
+    
+    payment.status = state
+    await this.paymentRepository.update(payment)
+    
     const code = this.generateCodeProvider.generate();
-    const payment = await this.paymentRepository.create({
-      order_id,
-      total_amount,
-      code,
-    });
-
-    order.status = "Recebido";
+    order.code = code
+    order.status ="Em preparação"
     await this.orderRepository.update(order);
 
     return {
