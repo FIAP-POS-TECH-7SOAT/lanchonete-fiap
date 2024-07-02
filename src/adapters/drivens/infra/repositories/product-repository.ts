@@ -27,7 +27,7 @@ export default class ProductRepository implements IProductRepository {
   async findManyByCategory(category: Category): Promise<Product[]> {
     const products = await prisma.product.findMany({
       where: {
-        category: category.toString().toUpperCase() as CategoryPrisma,
+        category: category?.toString().toUpperCase() as CategoryPrisma,
       },
     });
 
