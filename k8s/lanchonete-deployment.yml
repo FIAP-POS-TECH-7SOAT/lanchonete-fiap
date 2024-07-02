@@ -78,22 +78,21 @@ spec:
                   key: AWS_SECRET_ACCESS_KEY
           livenessProbe: # Prova de vida que valida se o pod esta saudavel para receber requisição 
             httpGet: # Será feita uma requisição do verbo GET
-              path: /
+              path: /products
               port: 3333 # Porta do container
             periodSeconds: 10 # Tentativas a cada X segundos
             failureThreshold: 3 # Quantas vezes são necessarias falhar a requisição antes de deletar o pod e criar um novo
-            initalDelaySeconds: 30 # Quanto tempo o conteiner deve esperar antes do LivenessProb iniciar os testes
+            initialDelaySeconds: 20 # Quanto tempo o conteiner deve esperar antes do LivenessProb iniciar os testes
           readinessProbe:  # Testa para saber se o container está pronto para receber requisição
             httpGet:
-              path: /
+              path: /products
               port: 3333
             periodSeconds: 10
             failureThreshold: 5 # Com exemplo de 5, se na vez numero 5 ainda estiver acontencendo alguma falha ele ira liberar para o liveness iniciar os testes e dara ao conteiner o status de Pronto
-            initalDelaySeconds: 5
+            initialDelaySeconds: 15
           resources:
             requests:
               cpu: 10m
   selector:
     matchLabels:
       app: lanchonete-pod
-      
