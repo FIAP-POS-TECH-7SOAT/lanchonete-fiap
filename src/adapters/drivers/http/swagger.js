@@ -6,6 +6,21 @@ const doc = {
         title: "My API",
         description: "Some description..."
     },
+    "components": {
+        "parameters": {
+          "ContentTypeHeader": {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "application/json"
+            }
+          }
+        }
+      },
+    consumes: ['application/json'],             // by default: ['application/json']
+    produces: ['application/json'],             // by default: ['application/json']
     servers: [
         {
             url: 'http://localhost:3333'

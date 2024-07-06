@@ -27,7 +27,8 @@ export class ProcessPaymentService {
   public async execute({
     amount,
     id,
-    state
+    state,
+    
   }: IRequest): Promise<IResponse> {
     const payment = await this.paymentRepository.findByCode(id);
     if (!payment) {
@@ -41,14 +42,24 @@ export class ProcessPaymentService {
     
     
     
-    payment.status = state
-    await this.paymentRepository.update(payment)
+    // payment.status = state
+    // await this.paymentRepository.update(payment)
     
     const code = this.generateCodeProvider.generate();
-    order.code = code
-    order.status ="Em preparação"
-    await this.orderRepository.update(order);
+    // order.code = code
+    // order.status ="Em preparação"
+    // await this.orderRepository.update(order);
 
+    // Avisa a todas url que o pagamento está finalizado
+    const web_hook=[
+      'http://localhost:3000/api/user/payment/feedback',
+      // 'http://localhost:3000/api/kitchen/order',
+    ]
+    Promise.all(web_hook.map(url=> fetch(url,{
+      method:'POST',
+      body: JSON.stringify(order)
+    })))
+    
     return {
       payment,
       code,

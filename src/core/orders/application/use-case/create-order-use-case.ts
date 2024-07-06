@@ -17,6 +17,7 @@ interface IRequest {
 }
 interface IResponse {
   order:Order,
+  total_amount:number
   payment:ProcessPaymentResponse
 }
 export class CreateOrder {
@@ -60,10 +61,11 @@ export class CreateOrder {
     })
     await this.paymentRepository.create(payment)
     await this.orderRepository.create(order)
-    order.canceled_at = new Date();
+    
     
     return {
       order,
+      total_amount,
       payment:paymentProcessInt
     };
   }

@@ -18,20 +18,22 @@ class PaymentsController {
     /*
        #swagger.tags = ['Payments']
        #swagger.summary = 'Create a new payment'
-       #swagger.parameters['Payment'] = {
-           in: 'body',
+       #swagger.requestBody = {
+           
            description: 'Payment info',
            required: true,
-           schema: {
-             total_amount: 140000,
-             order_id: 'nb-order-id',
-             card:{
-                number: "123456789", 
-                exp: "12/2020", 
-                cvc: 121
+           content:{
+            "application/json":{
+              schema: {
+                amount: 140000,
+                id: 'nb-order-id',
+                state:'pago'
               }
+            }
            }
+           
        }
+ 
      */
 
     

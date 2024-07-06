@@ -14,6 +14,8 @@ export class ProductMapping {
     price,
     deleted,
   }: ProductPrisma) {
+    
+    
     return new Product(
       {
         name,
