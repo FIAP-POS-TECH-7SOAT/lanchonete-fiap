@@ -15,7 +15,7 @@ import { OrderMapping } from "../mapping/order-mapping";
 const paymentRepository = new PaymentRepository();
 
 const orderRepository = new OrderRepository();
-const fakePaymentGateway = new FakePaymentGateway();
+
 const generateCodeProvider = new GenerateCodeProvider();
 
 
@@ -41,8 +41,6 @@ class PaymentsController {
        }
  
      */
-
-       console.log('Chamou processamento',req.body);
     
     const checkInBodySchema =  z.object({
       data: z.object({
@@ -51,7 +49,7 @@ class PaymentsController {
     });
 
     const { data } = checkInBodySchema.parse(req.body);
-    console.log('Chamou processamento',data);
+    
     const response = await fetch(`https://api.mercadopago.com/v1/payments/${data.id}`,{
       headers:{
         Authorization:`Bearer ${env.PAYMENT_GATEWAY_ACCESS_TOKEN}`

@@ -72,7 +72,7 @@ class ProductController {
       description,
     });
 
-    return res.json(product);
+    return res.json(ProductMapping.toView(product));
   }
   //-------------------------------------------------------------------------
   async getById(req: Request, res: Response): Promise<Response> {

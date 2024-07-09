@@ -1,4 +1,4 @@
-import { Order } from "@application/orders/domain/order-entity";
+import { Order, TOrderStatus } from "@application/orders/domain/order-entity";
 //prettier-ignore
 import { Order as OrderPrisma, OrderProduct as OrderProductPrisma, Prisma } from "@prisma/client";
 
@@ -16,7 +16,7 @@ export class OrderMapping {
     code
   }: CompleteOrderPrima) {
     return new Order(
-      { client_id, created_at, products, status, canceled_at: canceled_at,code },
+      { client_id, created_at, products, status:status as TOrderStatus, canceled_at: canceled_at,code },
       id
     );
   }
