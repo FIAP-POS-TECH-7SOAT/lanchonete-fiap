@@ -5,10 +5,12 @@ interface IOrderProduct{
     amount:number
   
 }
+type TOrderStatus = 'Recebido' | 'Em preparação' | 'Pronto' |'Finalizado'
+
 export interface IOrder {
   products: IOrderProduct[];
   client_id: string | null;
-  status: string;
+  status: TOrderStatus;
   created_at?: Date;
   canceled_at?: Date | null;
   code:string
@@ -32,10 +34,10 @@ export class Order extends Entity<IOrder> {
     return this.props.client_id || null;
   }
 
-  public get status(): string {
+  public get status(): TOrderStatus {
     return this.props.status;
   }
-  public set status(status:string) {
+  public set status(status:TOrderStatus) {
     this.props.status = status;
   }
   public set code(code:string) {

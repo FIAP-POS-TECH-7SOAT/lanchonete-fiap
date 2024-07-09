@@ -1,4 +1,6 @@
 import { ProcessPaymentService } from "src/core/orders/application/use-case/process-payment-use-case";
+import { OrderServiceImpl } from "src/core/orders/application/use-case/order-use-case";
+import { FindPaymentByIdService } from "src/core/orders/application/use-case/find-payment-by-id-use-case";
 import { Request, Response } from "express";
 import { FakePaymentGateway } from "src/adapters/drivens/infra/providers/fake-payment-gateway";
 import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
@@ -6,8 +8,12 @@ import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-r
 import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
 
 import { z } from "zod";
+import { env } from "@shared/env";
+import { PaymentMapping } from "../mapping/payment-mapping";
+import { OrderMapping } from "../mapping/order-mapping";
 
 const paymentRepository = new PaymentRepository();
+
 const orderRepository = new OrderRepository();
 const fakePaymentGateway = new FakePaymentGateway();
 const generateCodeProvider = new GenerateCodeProvider();
@@ -36,15 +42,23 @@ class PaymentsController {
  
      */
 
+       console.log('Chamou processamento',req.body);
     
-    const checkInBodySchema = z.object({
-      amount: z.number(),
-      id: z.string(),
-      state: z.string(),
+    const checkInBodySchema =  z.object({
+      data: z.object({
+        id:z.any()
+      }),
     });
 
-    const { amount,id,state } = checkInBodySchema.parse(req.body);
+    const { data } = checkInBodySchema.parse(req.body);
+    console.log('Chamou processamento',data);
+    const response = await fetch(`https://api.mercadopago.com/v1/payments/${data.id}`,{
+      headers:{
+        Authorization:`Bearer ${env.PAYMENT_GATEWAY_ACCESS_TOKEN}`
+      }
+    })
 
+    const toJson = await response.json()
     const processPaymentService = new ProcessPaymentService(
       paymentRepository,
       generateCodeProvider,
@@ -52,13 +66,44 @@ class PaymentsController {
     );
 
     const { payment, code } = await processPaymentService.execute({
-      id,
-      amount,
-      state
+      id:String(data.id),
+      amount:toJson.transaction_amount,
+      state:toJson.status
     });
 
     return res.json({
-      1:1
+      payment,
+      code
+    });
+  }
+  async findPaymentById(req: Request, res: Response): Promise<Response> {
+    /*
+       #swagger.tags = ['Payments']
+       #swagger.summary = 'Find a payment'
+      
+ 
+     */
+
+    
+    const checkInParamsSchema = z.object({
+      id: z.string(),
+    });
+
+    const { id } = checkInParamsSchema.parse(req.params);
+
+    const findPaymentByIdService = new FindPaymentByIdService(
+      paymentRepository,
+
+    );
+
+    const { payment } = await findPaymentByIdService.execute({
+      id
+    });
+    const orderServiceImpl = new OrderServiceImpl(orderRepository);
+    const order = await orderServiceImpl.get(payment.order_id)
+    return res.json({
+      payment:PaymentMapping.toView(payment),
+      order:order?OrderMapping.toView(order):null
     });
   }
 }

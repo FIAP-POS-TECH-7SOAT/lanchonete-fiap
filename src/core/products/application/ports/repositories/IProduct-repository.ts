@@ -5,6 +5,7 @@ import { UploadProductImageDTO } from "./dtos/upload-product-imagem-dto";
 
 export interface IProductRepository {
   findById(id: string): Promise<Product | null>;
+  findByIds(ids: string[]): Promise<Product[]>;
   findManyByCategory(category: Category): Promise<Product[]>;
   create(data: CreateProductDTO): Promise<Product>;
   update(data: Product): Promise<Product>;
