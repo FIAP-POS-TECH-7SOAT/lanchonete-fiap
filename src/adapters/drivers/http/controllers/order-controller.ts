@@ -8,8 +8,11 @@ import OrderRepository from "src/adapters/drivens/infra/repositories/order-repos
 import ClientRepository from "src/adapters/drivens/infra/repositories/client-repository";
 import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
 import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
+import { PaymentMapping } from "../mapping/payment-mapping";
+import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
 
 const orderRepository = new OrderRepository();
+const productRepository = new ProductRepository();
 const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
 const clientRepository = new ClientRepository();
 const paymentRepository = new PaymentRepository();
@@ -49,15 +52,23 @@ class OrderController {
     });
 
     const { client_id, products } = checkInBodySchema.parse(req.body);
-    const createOrder = new CreateOrder(orderRepository,clientRepository,paymentRepository,mercadoPagoPixPaymentGateway)
-    const {order,payment} = await createOrder.execute({
+    const createOrder = new CreateOrder(
+      orderRepository,
+      clientRepository,
+      paymentRepository,
+      mercadoPagoPixPaymentGateway,
+      productRepository
+    )
+    const {order,payment ,payment_gateway,total_amount} = await createOrder.execute({
       client_id:client_id?client_id:null,
       products,
     });
 
     return res.json({
       order:OrderMapping.toView(order),
-      payment,
+      payment:PaymentMapping.toView(payment),
+      payment_gateway,
+      total_amount
     });
   }
   async update(req: Request, res: Response): Promise<Response | null> {

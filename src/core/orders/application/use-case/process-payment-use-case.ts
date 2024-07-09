@@ -1,4 +1,4 @@
-import { Payment } from "../../domain/payment";
+import { Payment, TPaymentStatus } from "../../domain/payment";
 
 
 import { AppError } from "@shared/errors/AppError";
@@ -10,7 +10,7 @@ import { IGenerateCodeProvider } from "../ports/providers/IGenerate-code-provide
 interface IRequest {
   amount:number
   id:string;
-  state:string
+  state:TPaymentStatus
 }
 interface IResponse {
   payment: Payment;
@@ -25,9 +25,9 @@ export class ProcessPaymentService {
   ) {}
 
   public async execute({
-    amount,
     id,
-    state
+    state,
+    
   }: IRequest): Promise<IResponse> {
     const payment = await this.paymentRepository.findByCode(id);
     if (!payment) {
@@ -43,11 +43,19 @@ export class ProcessPaymentService {
     
     payment.status = state
     await this.paymentRepository.update(payment)
+    if(payment.status !== 'approved'){
+      return {
+        payment,
+        code:"",
+      };
+    }
+    
     
     const code = this.generateCodeProvider.generate();
     order.code = code
     order.status ="Em preparação"
     await this.orderRepository.update(order);
+
 
     return {
       payment,

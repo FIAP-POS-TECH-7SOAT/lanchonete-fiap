@@ -7,6 +7,7 @@ import { IPaymentGateway } from "../ports/providers/IPayment-gateway";
 import { ProcessPaymentResponse } from "../ports/providers/dtos/process-payment-response-dto";
 import { IPaymentRepository } from "../ports/repositories/IPayment-repository";
 import { Payment } from "@application/orders/domain/payment";
+import { IProductRepository } from "@application/products/application/ports/repositories/IProduct-repository";
 
 interface IRequest {
   products: {
@@ -17,7 +18,9 @@ interface IRequest {
 }
 interface IResponse {
   order:Order,
-  payment:ProcessPaymentResponse
+  total_amount:number
+  payment_gateway:ProcessPaymentResponse
+  payment:Payment
 }
 export class CreateOrder {
   constructor(
@@ -25,6 +28,7 @@ export class CreateOrder {
     private clientRepository: IClientRepository,
     private paymentRepository: IPaymentRepository,
     private paymentGateway: IPaymentGateway,
+    private productRepository: IProductRepository,
   ) {}
   async execute({ client_id,products }: IRequest): Promise<IResponse> {
 
@@ -35,14 +39,14 @@ export class CreateOrder {
         throw new AppError('Cliente não encontrado')
       }
     }
-
+    const allProducts = await this.productRepository.findByIds(products.map(item=>item.id))
     const order = new Order({
       products,
       client_id,
       status:'Recebido',
       code:""
     })
-    const total_amount = products.reduce((acc,cur)=>acc+cur.amount,0);
+    const total_amount = allProducts.reduce((acc,cur)=>acc+cur.price,0);
     const paymentProcessInt = await this.paymentGateway.processPayment({
       amount:total_amount,
       customer:client?{
@@ -60,11 +64,13 @@ export class CreateOrder {
     })
     await this.paymentRepository.create(payment)
     await this.orderRepository.create(order)
-    order.canceled_at = new Date();
+    
     
     return {
       order,
-      payment:paymentProcessInt
+      total_amount,
+      payment_gateway:paymentProcessInt,
+      payment,
     };
   }
 }

@@ -1,6 +1,6 @@
 import { IPaymentRepository } from "@application/orders/application/ports/repositories/IPayment-repository";
 import { CreatePaymentDTO } from "@application/orders/application/ports/repositories/dtos/create-payment-dto";
-import { Payment } from "@application/orders/domain/payment";
+import { Payment, TPaymentStatus } from "@application/orders/domain/payment";
 
 import { prisma } from "@shared/lib/prisma";
 
@@ -21,7 +21,27 @@ export default class PaymentRepository implements IPaymentRepository {
         created_at: payment.created_at,
         order_id: payment.order_id,
         total_amount: Number(payment.total_amount),
-        status:payment.status
+        status:payment.status as TPaymentStatus
+      },
+      payment.id
+    );
+  }
+  async findById(id: string): Promise<Payment | null> {
+    const payment = await prisma.payment.findFirst({
+      where: {
+        id,
+      },
+    });
+    if (!payment) {
+      return null;
+    }
+    return new Payment(
+      {
+        code: payment.code,
+        created_at: payment.created_at,
+        order_id: payment.order_id,
+        total_amount: Number(payment.total_amount),
+        status:payment.status as TPaymentStatus
       },
       payment.id
     );
@@ -36,7 +56,7 @@ export default class PaymentRepository implements IPaymentRepository {
         total_amount: payment.total_amount,
         code:String(payment.code),
         created_at: payment.created_at,
-        status:payment.status
+        status:payment.status as TPaymentStatus
       },
     });
 
@@ -72,7 +92,7 @@ export default class PaymentRepository implements IPaymentRepository {
         created_at: payment.created_at,
         order_id: payment.order_id,
         total_amount: Number(payment.total_amount),
-        status:payment.status
+        status:payment.status as TPaymentStatus
       },
       payment.id
     );

@@ -18,47 +18,22 @@
         ],
         "summary": "Create a new payment",
         "description": "",
-        "parameters": [
-          {
-            "name": "Payment",
-            "in": "body",
-            "description": "Payment info",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "total_amount": {
-                  "type": "number",
-                  "example": 140000
-                },
-                "order_id": {
-                  "type": "string",
-                  "example": "nb-order-id"
-                },
-                "card": {
-                  "type": "object",
-                  "properties": {
-                    "number": {
-                      "type": "string",
-                      "example": "123456789"
-                    },
-                    "exp": {
-                      "type": "string",
-                      "example": "12/2020"
-                    },
-                    "cvc": {
-                      "type": "number",
-                      "example": 121
-                    }
-                  }
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "description": "Payment info",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "amount": 140000,
+                "id": "nb-order-id",
+                "state": "pago"
+              }
+            }
           }
         }
       }
@@ -70,38 +45,23 @@
         ],
         "summary": "Create a new Product",
         "description": "",
-        "parameters": [
-          {
-            "name": "Product",
-            "in": "body",
-            "description": "Product info",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "nome": {
-                  "type": "string",
-                  "example": "X-Bacon"
-                },
-                "category": {
-                  "type": "string",
-                  "example": "Lanche"
-                },
-                "price": {
-                  "type": "number",
-                  "example": 20.5
-                },
-                "descricao": {
-                  "type": "string",
-                  "example": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
-                }
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        },
+        "requestBody": {
+          "description": "Product info",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "name": "X-Bacon",
+                "category": "Lanche",
+                "price": 20.5,
+                "description": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
+              }
+            }
           }
         }
       },
@@ -159,7 +119,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "nome": {
+                "name": {
                   "type": "string",
                   "example": "X-Bacon"
                 },
@@ -171,7 +131,7 @@
                   "type": "number",
                   "example": 22
                 },
-                "descricao": {
+                "description": {
                   "type": "string",
                   "example": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
                 }
@@ -556,6 +516,19 @@
           "200": {
             "description": "OK"
           }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "ContentTypeHeader": {
+        "name": "Content-Type",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "application/json"
         }
       }
     }

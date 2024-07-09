@@ -29,7 +29,7 @@ export class OrderMapping {
     }:{}
     return {
       id: order.id,
-      ...client,
+      client,
       created_at: order.created_at,
       status: order.status,
       canceled_at: order.canceled_at,
