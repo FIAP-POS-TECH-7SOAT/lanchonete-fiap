@@ -2,7 +2,7 @@ import { Order } from "src/core/orders/domain/order-entity";
 
 //prettier-ignore
 export class OrderMapping {
-  static toView({ id, products, client_id, status, created_at, canceled_at,code}: Order) {
+  static toView({ id, products, client_id, status, created_at, canceled_at,code ,waitTime}: Order) {
     return {
       id,
       client_id,
@@ -10,7 +10,8 @@ export class OrderMapping {
       status,
       created_at,
       canceled_at,
-      code
+      code,
+      waitTime
     };
   }
 }

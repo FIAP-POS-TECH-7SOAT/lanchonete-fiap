@@ -53,7 +53,7 @@ export class ProcessPaymentService {
     
     const code = this.generateCodeProvider.generate();
     order.code = code
-    order.status ="Em preparação"
+    order.status ="Recebido"
     await this.orderRepository.update(order);
 
 

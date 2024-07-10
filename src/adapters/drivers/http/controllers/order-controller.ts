@@ -132,13 +132,13 @@ class OrderController {
       }
     */
     const checkInQueySchema = z.object({
-      status: z.union([z.string(), z.array(z.string())]),
+      status: z.union([z.string(), z.array(z.string())]).optional(),
     });
     const { status } = checkInQueySchema.parse(req.query);
     const myStatus = typeof status === "string" ? [status] : status;
     const orders = await orderService.getAll({
       filters: {
-        status: myStatus.map((item) => item.trim()),
+        status: myStatus? myStatus.map((item) => item.trim()):[],
       },
     });
 

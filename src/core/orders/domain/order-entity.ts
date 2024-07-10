@@ -1,11 +1,12 @@
 import { Entity } from "@shared/entities/entity";
+import { format } from "date-fns";
 
 interface IOrderProduct{
     id:string;
     amount:number
   
 }
-type TOrderStatus = 'Recebido' | 'Em preparação' | 'Pronto' |'Finalizado'
+export type TOrderStatus = 'Recebido' | 'Em preparação' | 'Pronto' |'Finalizado'
 
 export interface IOrder {
   products: IOrderProduct[];
@@ -28,6 +29,12 @@ export class Order extends Entity<IOrder> {
 
   public get products(): IOrderProduct[] {
     return this.props.products;
+  }
+  public get waitTime(): string {
+    return format(
+      new Date().getTime() - this.props.created_at.getTime(),
+      "mm:ss"
+    )
   }
 
   public get client_id(): string |null {

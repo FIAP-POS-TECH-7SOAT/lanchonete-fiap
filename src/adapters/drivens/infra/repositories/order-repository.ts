@@ -22,18 +22,30 @@ export default class OrderRepository implements IOrderRepository {
   }
 
   async getAll({ filters }: GetAllDTO): Promise<Order[]> {
+    const statusFilters = !!filters.status.length?
+    {
+      status: {
+        in:filters.status
+      }
+    }: {}
     const orders = await prisma.order.findMany({
       where: {
-        status: {
-          in: filters.status,
-        },
+        ...statusFilters,
         canceled_at: {
           equals: null,
         },
       },
       include: {
-        products: true,
+        products: {
+          include:{
+            product:true
+          }
+        },
+        client: true
       },
+      orderBy:{
+        created_at:'desc'
+      }
     });
 
     return orders.map(OrderMapping.toDomain);
