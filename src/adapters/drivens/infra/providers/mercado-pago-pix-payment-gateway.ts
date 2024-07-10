@@ -1,4 +1,5 @@
 import { Payment, MercadoPagoConfig } from 'mercadopago';
+import { randomUUID } from "crypto";
 import { IPaymentGateway } from "@application/orders/application/ports/providers/IPayment-gateway";
 import { ProcessPaymentRequest } from "@application/orders/application/ports/providers/dtos/process-payment-request-dto";
 import { ProcessPaymentResponse } from "@application/orders/application/ports/providers/dtos/process-payment-response-dto";
@@ -36,7 +37,7 @@ export class MercadoPagoPixPaymentGateway implements IPaymentGateway {
             email:'non-valid@mail.com'
           }
       },
-      requestOptions: { idempotencyKey: crypto.randomUUID() }
+      requestOptions: { idempotencyKey: randomUUID() }
     })
     return {
       id:paymentCreated.id as unknown as string,

@@ -17,10 +17,5 @@ export class ClientServiceImpl implements IClientService {
   async findByCpf(cpf: string): Promise<Client | null> {
     return await this.clientRepository.findByCpf(cpf);
   }
-  async create(data: CreateClientDTO): Promise<Client> {
-    if(!isValidCPF(data.cpf)){
-      throw new AppError('CPF invalido')
-    }
-    return await this.clientRepository.create(data);
-  }
+
 }

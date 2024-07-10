@@ -34,17 +34,22 @@ class ProductController {
     /*
         #swagger.tags = ['Product']
         #swagger.summary = 'Create a new Product'
-        #swagger.parameters['Product'] = {
-            in: 'body',
+        #swagger.requestBody  = {
             description: 'Product info',
             required: true,
-            schema: {
-              name: 'X-Bacon',
-              category: 'Lanche',
-              price: 20.5, 
-              description: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
+            content:{
+              "application/json": {
+                schema: {
+                  name: 'X-Bacon',
+                  category: 'Lanche',
+                  price: 20.5, 
+                  description: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
+                }
+              }
             }
+            
         }
+ 
       */
 
     const categoryKeys = Object.keys(Category) as [keyof typeof Category];
@@ -67,7 +72,7 @@ class ProductController {
       description,
     });
 
-    return res.json(product);
+    return res.json(ProductMapping.toView(product));
   }
   //-------------------------------------------------------------------------
   async getById(req: Request, res: Response): Promise<Response> {

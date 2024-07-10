@@ -37,7 +37,7 @@ export class Product extends Entity<IProduct> {
   }
 
   public get image(): string {
-    return env.APP_URL + "/files/" + this.props.image;
+    return this.props.image? env.APP_URL + "/" + this.props.image:"";
   }
 
   public get deleted(): boolean {
