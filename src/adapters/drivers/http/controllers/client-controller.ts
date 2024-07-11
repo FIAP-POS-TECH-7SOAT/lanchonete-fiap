@@ -3,9 +3,11 @@ import { Request, Response } from "express";
 import ClientRepository from "src/adapters/drivens/infra/repositories/client-repository";
 import { z } from "zod";
 import { ClientMapping } from "../mapping/client-mapping";
+import { CreateClientUseCase } from "@application/clients/application/use-case/create-cliente-use-case";
 
 const clientRepository = new ClientRepository();
 const clientService = new ClientServiceImpl(clientRepository);
+const createClientUseCase = new CreateClientUseCase(clientRepository);
 
 class ClientController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -33,7 +35,7 @@ class ClientController {
 
     const { name, email, cpf } = checkInBodySchema.parse(req.body);
 
-    const client = await clientService.create({ name, email, cpf });
+    const client = await createClientUseCase.execute({ name, email, cpf });
 
     return res.json(ClientMapping.toView(client));
   }

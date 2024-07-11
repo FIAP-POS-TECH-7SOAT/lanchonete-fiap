@@ -16,13 +16,83 @@ spec:
           ports:
             - containerPort: 3333
           env:
-          - name: DATABASE_URL
-            value: postgresql://user:password@db-service:5432/lanchonete-fiap-db
-          - name: PORT
-            value: "3333"
-          - name: APP_URL
-            value: "localhost:3333"
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: PORT
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: DATABASE_URL
+            - name: APP_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: APP_URL
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: NODE_ENV
+            - name: PAYMENT_GATEWAY_ACCESS_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: PAYMENT_GATEWAY_ACCESS_TOKEN
+            - name: APP_STORAGE_PROVIDER
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: APP_STORAGE_PROVIDER
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_REGION
+            - name: AWS_BUCKET_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_BUCKET_NAME
+            - name: AWS_BUCKET_DESTINATION
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_BUCKET_DESTINATION
+            - name: AWS_SESSION_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_SESSION_TOKEN
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: deployment-config-map
+                  key: AWS_SECRET_ACCESS_KEY
+          livenessProbe: # Prova de vida que valida se o pod esta saudavel para receber requisição 
+            httpGet: # Será feita uma requisição do verbo GET
+              path: /products
+              port: 3333 # Porta do container
+            periodSeconds: 10 # Tentativas a cada X segundos
+            failureThreshold: 3 # Quantas vezes são necessarias falhar a requisição antes de deletar o pod e criar um novo
+            initialDelaySeconds: 20 # Quanto tempo o conteiner deve esperar antes do LivenessProb iniciar os testes
+          readinessProbe:  # Testa para saber se o container está pronto para receber requisição
+            httpGet:
+              path: /products
+              port: 3333
+            periodSeconds: 10
+            failureThreshold: 5 # Com exemplo de 5, se na vez numero 5 ainda estiver acontencendo alguma falha ele ira liberar para o liveness iniciar os testes e dara ao conteiner o status de Pronto
+            initialDelaySeconds: 15
+          resources:
+            requests:
+              cpu: 10m
   selector:
     matchLabels:
       app: lanchonete-pod
-      

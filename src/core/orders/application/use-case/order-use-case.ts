@@ -11,16 +11,10 @@ export class OrderServiceImpl implements IOrderService {
   async get(id: string): Promise<Order | null> {
     return await this.orderRepository.findById(id);
   }
-  async getAll({ filters }: GetAllDTO): Promise<GetAllResponseDTO[]> {
+  async getAll({ filters }: GetAllDTO): Promise<Order[]> {
     const order = await this.orderRepository.getAll({ filters });
-    const myOrders = order.map((item) => ({
-      ...item,
-      waitTime: format(
-        new Date().getTime() - item.created_at.getTime(),
-        "mm:ss"
-      ),
-    })) as GetAllResponseDTO[];
-    return myOrders;
+
+    return order;
   }
   async update(data: Order): Promise<Order> {
     return await this.orderRepository.update(data);

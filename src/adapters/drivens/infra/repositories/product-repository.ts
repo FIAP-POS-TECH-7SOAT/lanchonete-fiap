@@ -10,6 +10,17 @@ import { prisma } from "@shared/lib/prisma";
 import { ProductMapping } from "./mapping/product-mapping";
 
 export default class ProductRepository implements IProductRepository {
+  async findByIds(ids: string[]): Promise<Product[]> {
+    const product = await prisma.product.findMany({
+      where: {
+        id:{
+          in:ids
+        }
+      },
+    });
+
+    return product.map(ProductMapping.toDomain);
+  }
   async findById(id: string): Promise<Product | null> {
     const product = await prisma.product.findFirst({
       where: {
@@ -27,7 +38,7 @@ export default class ProductRepository implements IProductRepository {
   async findManyByCategory(category: Category): Promise<Product[]> {
     const products = await prisma.product.findMany({
       where: {
-        category: category.toString().toUpperCase() as CategoryPrisma,
+        category: category?.toString().toUpperCase() as CategoryPrisma,
       },
     });
 
