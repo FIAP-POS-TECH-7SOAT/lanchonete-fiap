@@ -6,7 +6,9 @@ export default defineConfig({
   test: {
     setupFiles: 'test/setup.ts',
     coverage: {
-      provider: 'v8'
+      provider: 'v8',
+      reporter:['text','lcov'],
+      reportsDirectory: './coverage',
     },
   },
 })

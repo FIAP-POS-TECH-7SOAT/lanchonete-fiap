@@ -1,0 +1,27 @@
+# Required metadata
+sonar.projectKey=Lanchonete-fiap
+sonar.projectName=Lanchonete-fiap
+sonar.projectVersion=1.0
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=src
+
+# Specify the inclusions for test files
+sonar.test.inclusions=**/*.spec.ts
+
+# Encoding of the source files
+sonar.sourceEncoding=UTF-8
+
+# Language
+sonar.language=ts
+
+# Exclude node_modules directory
+sonar.exclusions=**/node_modules/**
+
+# Enable TypeScript support
+sonar.typescript.lcov.reportPaths=coverage/lcov.info
+
+sonar.host.url=http://localhost:9000
+
+sonar.token=sqp_b6a544f86a3d0a21aaaf86612e88fd79ca2189f8
+
