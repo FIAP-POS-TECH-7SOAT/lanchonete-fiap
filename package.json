@@ -11,7 +11,8 @@
     "prisma:db": "prisma db push",
     "build": "tsup src",
     "start:prod": "node dist/adapters/drivers/http/server.js",
-    "test": "vitest",
+    "test:watch": "vitest",
+    "test": "vitest --run",
     "test:coverage": "vitest run --coverage"
   },
   "author": "",
