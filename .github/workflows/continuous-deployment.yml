@@ -1,12 +1,14 @@
-name: CD -> Deploy to Kubernetes on GKE or EKS
+name: CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["CI -> Unit Tests, Docker Build and Push"]
+    types:
+      - completed
 
 jobs:
-  deploy:
+  cd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
