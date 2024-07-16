@@ -1,7 +1,7 @@
 import { Entity } from "@shared/entities/entity";
 import { format } from "date-fns";
 
-interface IOrderProduct{
+export interface IOrderProduct{
     id:string;
     amount:number
   
@@ -29,6 +29,9 @@ export class Order extends Entity<IOrder> {
 
   public get products(): IOrderProduct[] {
     return this.props.products;
+  }
+  public set products(products:IOrderProduct[]) {
+    this.props.products = products;
   }
   public get waitTime(): string {
     return format(

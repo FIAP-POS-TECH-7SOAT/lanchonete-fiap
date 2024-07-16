@@ -6,3 +6,4 @@ coverage
 package-lock.json
 example/
 fiap-lanchonete-storage.json
+sonar-project.properties
