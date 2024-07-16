@@ -30,32 +30,26 @@ const uploadProductImageService = new UploadProductImageService(
   
 );
 
-interface IFile {
-  filename: string;
-}
-
 class ProductController {
   async create(req: Request, res: Response): Promise<Response> {
     /*
         #swagger.tags = ['Product']
         #swagger.summary = 'Create a new Product'
-        #swagger.requestBody  = {
-            description: 'Product info',
-            required: true,
-            content:{
-              "application/json": {
-                schema: {
-                  name: 'X-Bacon',
-                  category: 'Lanche',
-                  price: 20.5, 
-                  description: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
-                }
-              }
-            }
-            
+        #swagger.parameters['Product']  = {
+          in: 'body',
+          description: 'Product info',
+          required: true,
+          schema:{
+            name: 'X-Bacon',
+            category: 'LANCHE',
+            price: 20.5, 
+            description: 'PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE'
+          }
         }
+    
  
       */
+     
 
     const categoryKeys = Object.keys(Category) as [keyof typeof Category];
 

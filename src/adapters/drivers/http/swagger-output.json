@@ -1,14 +1,14 @@
 {
-  "openapi": "3.0.0",
+  "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "My API",
-    "description": "Some description..."
+    "title": "Lanchonete API",
+    "description": "A API de Lanchonete é uma solução robusta para gerenciar operações de lanchonetes e restaurantes. Com funcionalidades para cadastrar produtos, pedidos e clientes, a API facilita a gestão de cardápios, o acompanhamento de pedidos e a manutenção de informações dos clientes. Além disso, oferece endpoints seguros e eficientes para integrar com sistemas externos e aplicativos móveis, garantindo uma experiência de usuário otimizada e um fluxo de trabalho mais ágil."
   },
-  "servers": [
-    {
-      "url": "http://localhost:3333"
-    }
+  "host": "localhost:3333",
+  "basePath": "/",
+  "schemes": [
+    "http"
   ],
   "paths": {
     "/payments/": {
@@ -18,22 +18,56 @@
         ],
         "summary": "Create a new payment",
         "description": "",
+        "parameters": [
+          {
+            "name": "Product",
+            "in": "body",
+            "description": "Payment info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "example": 140000
+                },
+                "id": {
+                  "type": "string",
+                  "example": "nb-order-id"
+                },
+                "state": {
+                  "type": "string",
+                  "example": "pago"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
           }
-        },
-        "requestBody": {
-          "description": "Payment info",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "amount": 140000,
-                "id": "nb-order-id",
-                "state": "pago"
-              }
-            }
+        }
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "tags": [
+          "Payments"
+        ],
+        "summary": "Find a payment",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -45,23 +79,38 @@
         ],
         "summary": "Create a new Product",
         "description": "",
+        "parameters": [
+          {
+            "name": "Product",
+            "in": "body",
+            "description": "Product info",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "X-Bacon"
+                },
+                "category": {
+                  "type": "string",
+                  "example": "LANCHE"
+                },
+                "price": {
+                  "type": "number",
+                  "example": 20.5
+                },
+                "description": {
+                  "type": "string",
+                  "example": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
-          }
-        },
-        "requestBody": {
-          "description": "Product info",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "name": "X-Bacon",
-                "category": "Lanche",
-                "price": 20.5,
-                "description": "PÃO, HAMGURGUER, MUSSARELA, BACON, ALFACE E TOMATE"
-              }
-            }
           }
         }
       },
@@ -83,9 +132,7 @@
               "Bebida",
               "Sobremesa"
             ],
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -107,9 +154,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           },
           {
             "name": "Product",
@@ -156,9 +201,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "type": "string",
             "description": "Numeric ID of the Product to get"
           }
         ],
@@ -179,9 +222,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "type": "string",
             "description": "Numeric ID of the Product to delete"
           }
         ],
@@ -199,24 +240,23 @@
         ],
         "summary": "Upload products image",
         "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "type": "string",
             "description": "Product id"
           },
           {
             "name": "image",
             "in": "formData",
+            "type": "file",
             "required": true,
-            "description": "Products image",
-            "schema": {
-              "type": "file"
-            }
+            "description": "Products image"
           }
         ],
         "responses": {
@@ -283,6 +323,7 @@
             "name": "status",
             "in": "query",
             "description": "Possiveis filtros |Pagamento Pendente | Recebido | Em Preparacao | Pronto | Finalizado",
+            "type": "array",
             "items": {
               "type": "string",
               "enum": [
@@ -292,9 +333,6 @@
                 "Pronto",
                 "Finalizado"
               ]
-            },
-            "schema": {
-              "type": "array"
             }
           }
         ],
@@ -378,9 +416,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "type": "string",
             "description": "Order ID"
           }
         ],
@@ -403,9 +439,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "type": "string",
             "description": "Order ID"
           }
         ],
@@ -428,9 +462,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "type": "string",
             "description": "Order ID"
           },
           {
@@ -443,9 +475,7 @@
               "Pronto",
               "Finalizado"
             ],
-            "schema": {
-              "type": "string"
-            }
+            "type": "string"
           }
         ],
         "responses": {
@@ -506,9 +536,7 @@
             "name": "cpf",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string"
-            },
+            "type": "string",
             "description": "Client CPF"
           }
         ],
@@ -516,19 +544,6 @@
           "200": {
             "description": "OK"
           }
-        }
-      }
-    }
-  },
-  "components": {
-    "parameters": {
-      "ContentTypeHeader": {
-        "name": "Content-Type",
-        "in": "header",
-        "required": true,
-        "schema": {
-          "type": "string",
-          "example": "application/json"
         }
       }
     }

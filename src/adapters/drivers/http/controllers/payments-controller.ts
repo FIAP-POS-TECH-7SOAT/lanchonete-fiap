@@ -24,22 +24,17 @@ class PaymentsController {
     /*
        #swagger.tags = ['Payments']
        #swagger.summary = 'Create a new payment'
-       #swagger.requestBody = {
-           
-           description: 'Payment info',
-           required: true,
-           content:{
-            "application/json":{
-              schema: {
-                amount: 140000,
-                id: 'nb-order-id',
-                state:'pago'
-              }
-            }
-           }
-           
-       }
- 
+
+        #swagger.parameters['Product']  = {
+          in: 'body',
+          description: 'Payment info',
+          required: true,
+          schema:{
+            amount: 140000,
+            id: 'nb-order-id',
+            state:'pago'
+          }
+        } 
      */
     
     const checkInBodySchema =  z.object({
