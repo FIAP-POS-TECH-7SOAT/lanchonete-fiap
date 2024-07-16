@@ -1,31 +1,15 @@
-const swaggerAutogen = require('swagger-autogen')({ openapi: '3.0.0' });
-
+const swaggerAutogen = require('swagger-autogen')({ swagger: '2.0' });
+const appInfo = require('../../../../package.json')
 const doc = {
     info: {
-        version: "1.0.0",
-        title: "My API",
-        description: "Some description..."
+        version: appInfo.version,
+        title: "Lanchonete API",
+        description: "A API de Lanchonete é uma solução robusta para gerenciar operações de lanchonetes e restaurantes. Com funcionalidades para cadastrar produtos, pedidos e clientes, a API facilita a gestão de cardápios, o acompanhamento de pedidos e a manutenção de informações dos clientes. Além disso, oferece endpoints seguros e eficientes para integrar com sistemas externos e aplicativos móveis, garantindo uma experiência de usuário otimizada e um fluxo de trabalho mais ágil."
     },
-    "components": {
-        "parameters": {
-          "ContentTypeHeader": {
-            "name": "Content-Type",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "application/json"
-            }
-          }
-        }
-      },
-    consumes: ['application/json'],             // by default: ['application/json']
-    produces: ['application/json'],             // by default: ['application/json']
-    servers: [
-        {
-            url: 'http://localhost:3333'
-        }
-    ],
+
+    host:"localhost:3333",
+
+  
 };
 
 const outputFile = './swagger-output.json';
