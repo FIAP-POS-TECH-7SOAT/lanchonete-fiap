@@ -105,7 +105,7 @@ kubectl get services
 
 ## Arquitetura do Projeto:
 
-![alt text](https://github.com/FIAP-POS-TECH-7SOAT/lanchonete-fiap/arquitetura_fiap.jpg?raw=true)
+![alt text](https://github.com/FIAP-POS-TECH-7SOAT/lanchonete-fiap/blob/main/arquitetura_fiap.jpg?raw=true)
 
 ## Árvore de diretórios:
 
