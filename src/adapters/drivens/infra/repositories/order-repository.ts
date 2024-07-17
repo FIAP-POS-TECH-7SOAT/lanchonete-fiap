@@ -27,7 +27,13 @@ export default class OrderRepository implements IOrderRepository {
       status: {
         in:filters.status
       }
-    }: {}
+    }: {
+      status: {
+        not: {
+          equals: "Finalizado"
+        }
+      }
+    }
     const orders = await prisma.order.findMany({
       where: {
         ...statusFilters,
