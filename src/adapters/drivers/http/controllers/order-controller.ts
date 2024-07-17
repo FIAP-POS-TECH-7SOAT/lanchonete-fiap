@@ -1,4 +1,4 @@
-import { OrderServiceImpl } from "@application/orders/application/use-case/order-use-case";
+
 import { CreateOrder } from "@application/orders/application/use-case/create-order-use-case";
 import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id-use-case";
 import { Request, Response } from "express";
@@ -10,13 +10,17 @@ import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/provide
 import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
 import { PaymentMapping } from "../mapping/payment-mapping";
 import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
+import { UpdateOrderById } from "@application/orders/application/use-case/update-order-by-id-use-case";
+import { TOrderStatus } from "@application/orders/domain/order-entity";
+import { ListAllOrdersByFilters } from "@application/orders/application/use-case/list-all-order-by-filters-use-case";
+import { FindOrderByIdUseCase } from "@application/orders/application/use-case/find-order-by-id-use-case";
 
 const orderRepository = new OrderRepository();
 const productRepository = new ProductRepository();
 const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
 const clientRepository = new ClientRepository();
 const paymentRepository = new PaymentRepository();
-const orderService = new OrderServiceImpl(orderRepository);
+
 
 class OrderController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -81,12 +85,10 @@ class OrderController {
            required: true,
            schema: {
                id: '975dbab0-3cee-4059-8529-2757924ca737',
-               client: 'john doe',
+               client_id: '975dbab0-3cee-4059-8529-2757924ca737',
                products: [{
-                 Lanche: 'Hamburguer',
-                 Acompanhamento: 'Batata Frita',
-                 Bebida: 'Suco de Laranja',
-                 Sobremesa: 'Pudim'
+                id:'975dbab0-3cee-4059-8529-2757924ca737',
+                amount:3
                }],
                status: 'Recebido'
              
@@ -96,7 +98,7 @@ class OrderController {
 
     const checkInBodySchema = z.object({
       id: z.string(),
-      products: z.string(),
+      products: z.array(z.any()),
       status: z.string(),
       client_id: z.string(),
     });
@@ -104,15 +106,14 @@ class OrderController {
     const { id, products, status, client_id } = checkInBodySchema.parse(
       req.body
     );
+    const updateOrderById = new UpdateOrderById(orderRepository);
+    const {order} = await updateOrderById.execute({
+      id,
+      products,
+      status:status as TOrderStatus,
+    });
 
-    // const orderUpdated = await orderService.update({
-    //   id,
-    //   products,
-    //   status,
-    //   client_id,
-    // });
-
-    return res.json({});
+    return res.json(OrderMapping.toView(order));
   }
   async getAll(req: Request, res: Response): Promise<Response> {
     /*
@@ -136,7 +137,9 @@ class OrderController {
     });
     const { status } = checkInQueySchema.parse(req.query);
     const myStatus = typeof status === "string" ? [status] : status;
-    const orders = await orderService.getAll({
+
+    const listAllOrdersByFilters = new ListAllOrdersByFilters(orderRepository)
+    const {orders} = await listAllOrdersByFilters.execute({
       filters: {
         status: myStatus? myStatus.map((item) => item.trim()):[],
       },
@@ -158,11 +161,9 @@ class OrderController {
 
     const { id } = req.params;
 
-    const order = await orderService.get(id);
+    const findOrderByIdUseCase  = new FindOrderByIdUseCase(orderRepository)
+    const {order} = await findOrderByIdUseCase.execute({id});
 
-    if (!order) {
-      return res.json({});
-    }
 
     return res.json(OrderMapping.toView(order));
   }
