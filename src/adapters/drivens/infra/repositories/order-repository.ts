@@ -1,5 +1,5 @@
 import { IOrderRepository } from "@application/orders/application/ports/repositories/order-repository";
-import { Order } from "@application/orders/domain/order-entity";
+import { Order, TOrderStatus } from "@application/orders/domain/order-entity";
 //prettier-ignore
 import { CreateOrderDTO, GetAllDTO } from "@application/orders/application/ports/repositories/dtos/order-dto";
 import { prisma } from "@shared/lib/prisma";
@@ -48,7 +48,15 @@ export default class OrderRepository implements IOrderRepository {
       }
     });
 
-    return orders.map(OrderMapping.toDomain);
+    // Sort the orders based on the custom status order "statusOrder"
+    // Pronto > Em preparação > Recebido
+    const sortedOrders = orders.sort((a, b) => {
+      const statusOrder: TOrderStatus[] = ['Pronto', 'Em preparação', 'Recebido', 'Finalizado'];
+      
+      return statusOrder.indexOf(a.status as TOrderStatus) - statusOrder.indexOf(b.status as TOrderStatus);
+    });
+
+    return sortedOrders.map(OrderMapping.toDomain);
   }
 
   async update(order: Order): Promise<Order> {
