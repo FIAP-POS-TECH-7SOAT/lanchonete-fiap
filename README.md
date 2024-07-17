@@ -68,27 +68,44 @@ Este projeto visa construir uma API chamada lanchonete-fiap utilizando a linguag
 - Garanta ter uma conta na AWS
 - Faça o download do AWS CLI e o instale
 - Instale o kubectl
-- Com o linux, instale também o minikube
 - Crie um cluster no EC2 dentro do console da AWS
 - Utilize o comando abaixo
-  aws configure
+
+```
+aws configure
+```
 
 - Com o comando acima, abrirá um arquivo json. Nele preecha corretamente com as informações da sua conta AWS
 - Agora utilizando o seu aws cli digite os comandos abaixo
-  aws eks update-kubeconfig --name (nome do cluster)
-  kubectl apply -f config-map.yaml
-  kubectl apply -f deployment.yaml
-  kubectl -f service.yaml
+
+```
+aws eks update-kubeconfig --name (nome do cluster)
+kubectl apply -f config-map.yaml
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+```
 
 - Utilize o comando abaixo para verificar se os pods e serviços estarão prontos
-  kubectl get pods --watch
+
+```
+kubectl get all --watch
+```
 
 - Utilize o comando abaixo para conseguir o ip externo para o uso da aplicação
-  kutctl get svc app-service (ou) kubectl get services
+
+```
+kutctl get svc app-service
+```
+
+ou
+
+```
+kubectl get services
+```
 
 ## Arquitetura do Projeto:
 
-![alt text](https://github.com/FIAP-POS-TECH-7SOAT/blob/readme_arquitetura/arquitetura_fiap.jpg?raw=true)
+![alt text](https://github.com/FIAP-POS-TECH-7SOAT/lanchonete-fiap/arquitetura_fiap.jpg?raw=true)
 
 ## Árvore de diretórios:
 
