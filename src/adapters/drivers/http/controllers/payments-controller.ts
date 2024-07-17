@@ -1,8 +1,8 @@
 import { ProcessPaymentService } from "src/core/orders/application/use-case/process-payment-use-case";
-import { OrderServiceImpl } from "src/core/orders/application/use-case/order-use-case";
+
 import { FindPaymentByIdService } from "src/core/orders/application/use-case/find-payment-by-id-use-case";
 import { Request, Response } from "express";
-import { FakePaymentGateway } from "src/adapters/drivens/infra/providers/fake-payment-gateway";
+
 import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
 import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
 import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
@@ -11,6 +11,7 @@ import { z } from "zod";
 import { env } from "@shared/env";
 import { PaymentMapping } from "../mapping/payment-mapping";
 import { OrderMapping } from "../mapping/order-mapping";
+import { FindOrderByIdUseCase } from "@application/orders/application/use-case/find-order-by-id-use-case";
 
 const paymentRepository = new PaymentRepository();
 
@@ -24,22 +25,17 @@ class PaymentsController {
     /*
        #swagger.tags = ['Payments']
        #swagger.summary = 'Create a new payment'
-       #swagger.requestBody = {
-           
-           description: 'Payment info',
-           required: true,
-           content:{
-            "application/json":{
-              schema: {
-                amount: 140000,
-                id: 'nb-order-id',
-                state:'pago'
-              }
-            }
-           }
-           
-       }
- 
+
+        #swagger.parameters['Product']  = {
+          in: 'body',
+          description: 'Payment info',
+          required: true,
+          schema:{
+            amount: 140000,
+            id: 'nb-order-id',
+            state:'pago'
+          }
+        } 
      */
     
     const checkInBodySchema =  z.object({
@@ -97,8 +93,8 @@ class PaymentsController {
     const { payment } = await findPaymentByIdService.execute({
       id
     });
-    const orderServiceImpl = new OrderServiceImpl(orderRepository);
-    const order = await orderServiceImpl.get(payment.order_id)
+    const findOrderByIdUseCase = new FindOrderByIdUseCase(orderRepository);
+    const {order} = await findOrderByIdUseCase.execute({id:payment.order_id})
     return res.json({
       payment:PaymentMapping.toView(payment),
       order:order?OrderMapping.toView(order):null

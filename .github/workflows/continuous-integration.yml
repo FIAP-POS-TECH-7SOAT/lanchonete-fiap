@@ -23,7 +23,11 @@ jobs:
         working-directory: .
 
       - name: Run tests
-        run: npm test
+        run: npm run test
+        working-directory: .
+
+      - name: Run documentation
+        run: npm run doc
         working-directory: .
 
       - name: Build Docker Image
