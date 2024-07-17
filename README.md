@@ -88,7 +88,7 @@ Este projeto visa construir uma API chamada lanchonete-fiap utilizando a linguag
 
 ## Arquitetura do Projeto:
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![alt text](https://github.com/FIAP-POS-TECH-7SOAT/blob/readme_arquitetura/arquitetura_fiap.jpg?raw=true)
 
 ## Árvore de diretórios:
 
