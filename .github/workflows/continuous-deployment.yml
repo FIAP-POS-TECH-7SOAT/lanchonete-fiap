@@ -36,7 +36,10 @@ jobs:
 
           - name: Deploy to GKE
             run: |
-              kubectl apply -f k8s/
+              kubectl apply -f k8s/lanchonete-deployment.yml
+              kubectl apply -f k8s/lanchonete-service.yml
+              kubectl apply -f k8s/metrics-component.yml
+              kubectl apply -f k8s/lanchonete-hpa.yml
 
       - name: Deploy to AWS EKS
         if: env.DEPLOY_TARGET == 'EKS'
@@ -54,4 +57,7 @@ jobs:
 
           - name: Deploy to EKS
             run: |
-              kubectl apply -f k8s/
+              kubectl apply -f k8s/lanchonete-deployment.yml
+              kubectl apply -f k8s/lanchonete-service.yml
+              kubectl apply -f k8s/metrics-component.yml
+              kubectl apply -f k8s/lanchonete-hpa.yml
