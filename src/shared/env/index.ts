@@ -17,6 +17,12 @@ const envSchema = z.object({
   AWS_ACCESS_KEY_ID:z.string(),
   AWS_SECRET_ACCESS_KEY:z.string(),
 
+
+  CGP_PROJECT_ID:z.string().default(''),
+  GCP_KEY_FILENAME:z.string().default(''),
+  GCP_BUCKET_NAME:z.string().default(''),
+  GCP_BUCKET_DESTINATION:z.string().default(''),
+
 })
 
 const _env = envSchema.safeParse(process.env)
