@@ -47,7 +47,7 @@ export class OrderMapping {
       created_at: order.created_at,
       status: order.status,
       id: order.id,
-      client_id: order.client_id,
+      client_id: order.client_id ?? undefined,
       code:order.code
     };
   }
