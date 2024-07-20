@@ -81,8 +81,10 @@ aws configure
 ```
 aws eks update-kubeconfig --name (nome do cluster)
 kubectl apply -f config-map.yaml
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
+kubectl apply -f lanchonete-deployment.yaml
+kubectl apply -f lanchonete-service.yaml
+kubectl apply -f lanchonete-hpa.yaml
+kubectl apply -f metrics-component.yaml
 ```
 
 - Utilize o comando abaixo para verificar se os pods e serviços estarão prontos
@@ -102,6 +104,11 @@ ou
 ```
 kubectl get services
 ```
+
+## Webhook do MercadoPago
+
+- Na aplicação, implementamos a comunicação com o MercadoPago para servir como gateway de pagamento (https://api.mercadopago.com/v1/payments/)
+- O endpoint {{base_url}}/payments da aplicação serve para receber a confirmação/recusa de pagamentos dos produtos após o checkout
 
 ## Arquitetura do Projeto:
 

@@ -361,30 +361,22 @@
                   "type": "string",
                   "example": "975dbab0-3cee-4059-8529-2757924ca737"
                 },
-                "client": {
+                "client_id": {
                   "type": "string",
-                  "example": "john doe"
+                  "example": "975dbab0-3cee-4059-8529-2757924ca737"
                 },
                 "products": {
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "Lanche": {
+                      "id": {
                         "type": "string",
-                        "example": "Hamburguer"
+                        "example": "975dbab0-3cee-4059-8529-2757924ca737"
                       },
-                      "Acompanhamento": {
-                        "type": "string",
-                        "example": "Batata Frita"
-                      },
-                      "Bebida": {
-                        "type": "string",
-                        "example": "Suco de Laranja"
-                      },
-                      "Sobremesa": {
-                        "type": "string",
-                        "example": "Pudim"
+                      "amount": {
+                        "type": "number",
+                        "example": 3
                       }
                     }
                   }
