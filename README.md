@@ -107,8 +107,8 @@ kubectl get services
 
 ## Webhook do MercadoPago
 
-- Na aplicação, estamos usando o webhook do MercadoPago para criação de pagamentos (https://api.mercadopago.com/v1/payments/)
-- O endpoint {{base_url}}/payments da aplicação serve para criação de pagamentos dos produtos após o checkout
+- Na aplicação, implementamos a comunicação com o MercadoPago para servir como gateway de pagamento (https://api.mercadopago.com/v1/payments/)
+- O endpoint {{base_url}}/payments da aplicação serve para receber a confirmação/recusa de pagamentos dos produtos após o checkout
 
 ## Arquitetura do Projeto:
 
