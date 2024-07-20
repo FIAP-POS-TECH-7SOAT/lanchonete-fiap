@@ -20,8 +20,9 @@ export default class OrderRepository implements IOrderRepository {
     }
     return OrderMapping.toDomain(order);
   }
-
+  
   async getAll({ filters }: GetAllDTO): Promise<Order[]> {
+    const statusOrder: TOrderStatus[] = ['Pronto', 'Em preparação', 'Recebido'];
     const statusFilters = !!filters.status.length?
     {
       status: {
@@ -29,9 +30,7 @@ export default class OrderRepository implements IOrderRepository {
       }
     }: {
       status: {
-        not: {
-          equals: "Finalizado"
-        }
+        in: statusOrder,
       }
     }
     const orders = await prisma.order.findMany({
@@ -50,14 +49,13 @@ export default class OrderRepository implements IOrderRepository {
         client: true
       },
       orderBy:{
-        created_at:'desc'
+        created_at:'asc'
       }
     });
 
     // Sort the orders based on the custom status order "statusOrder"
     // Pronto > Em preparação > Recebido
     const sortedOrders = orders.sort((a, b) => {
-      const statusOrder: TOrderStatus[] = ['Pronto', 'Em preparação', 'Recebido', 'Finalizado'];
       
       return statusOrder.indexOf(a.status as TOrderStatus) - statusOrder.indexOf(b.status as TOrderStatus);
     });
