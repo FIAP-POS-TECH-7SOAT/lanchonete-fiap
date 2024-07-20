@@ -19,45 +19,45 @@ jobs:
         id: set-deploy-target
         run: echo "DEPLOY_TARGET=${{ secrets.DEPLOY_TARGET }}" >> $GITHUB_ENV
 
+      - name: Set up Google Cloud SDK
+        if: env.DEPLOY_TARGET == 'GKE'
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          version: 'latest'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Configure kubectl
+        if: env.DEPLOY_TARGET == 'GKE'
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
+
       - name: Deploy to GKE
         if: env.DEPLOY_TARGET == 'GKE'
-        steps:
-          - name: Set up Google Cloud SDK
-            uses: google-github-actions/setup-gcloud@v1
-            with:
-              version: 'latest'
-              service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-              service_account_key: ${{ secrets.GCP_SA_KEY }}
-              project_id: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          kubectl apply -f k8s/lanchonete-deployment.yml
+          kubectl apply -f k8s/lanchonete-service.yml
+          kubectl apply -f k8s/metrics-component.yml
+          kubectl apply -f k8s/lanchonete-hpa.yml
 
-          - name: Configure kubectl
-            run: |
-              gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER_NAME }} --zone ${{ secrets.GKE_CLUSTER_ZONE }} --project ${{ secrets.GCP_PROJECT_ID }}
-
-          - name: Deploy to GKE
-            run: |
-              kubectl apply -f k8s/lanchonete-deployment.yml
-              kubectl apply -f k8s/lanchonete-service.yml
-              kubectl apply -f k8s/metrics-component.yml
-              kubectl apply -f k8s/lanchonete-hpa.yml
-
-      - name: Deploy to AWS EKS
+      - name: Configure AWS credentials
         if: env.DEPLOY_TARGET == 'EKS'
-        steps:
-          - name: Configure AWS credentials
-            uses: aws-actions/configure-aws-credentials@v1
-            with:
-              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-              aws-region: ${{ secrets.AWS_REGION }}
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-          - name: Update kubeconfig
-            run: |
-              aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+      - name: Update kubeconfig
+        if: env.DEPLOY_TARGET == 'EKS'
+        run: |
+          aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
-          - name: Deploy to EKS
-            run: |
-              kubectl apply -f k8s/lanchonete-deployment.yml
-              kubectl apply -f k8s/lanchonete-service.yml
-              kubectl apply -f k8s/metrics-component.yml
-              kubectl apply -f k8s/lanchonete-hpa.yml
+      - name: Deploy to EKS
+        if: env.DEPLOY_TARGET == 'EKS'
+        run: |
+          kubectl apply -f k8s/lanchonete-deployment.yml
+          kubectl apply -f k8s/lanchonete-service.yml
+          kubectl apply -f k8s/metrics-component.yml
+          kubectl apply -f k8s/lanchonete-hpa.yml
