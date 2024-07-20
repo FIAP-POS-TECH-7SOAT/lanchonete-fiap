@@ -69,13 +69,15 @@ Este projeto visa construir uma API chamada lanchonete-fiap utilizando a linguag
 - Faça o download do AWS CLI e o instale
 - Instale o kubectl
 - Crie um cluster no EC2 dentro do console da AWS
+- Crie um bucket S3 no console da AWS
 - Utilize o comando abaixo
 
 ```
 aws configure
 ```
 
-- Com o comando acima, abrirá um arquivo json. Nele preecha corretamente com as informações da sua conta AWS
+- Dentro da pasta k8s possui um arquivo de exemplo para o config-map
+- Com o comando acima, abrirá um arquivo json. Nele preecha corretamente com as informações da sua conta AWS dentro do config-map de exemplo
 - Agora utilizando o seu aws cli digite os comandos abaixo
 
 ```
