@@ -47,8 +47,16 @@ export class OrderMapping {
       created_at: order.created_at,
       status: order.status,
       id: order.id,
-      client_id: order.client_id ?? undefined,
-      code:order.code
+      client_id: order.client_id ?? null,
+      code:order.code,
+      products:{
+        createMany:{
+          data:order.products.map(item=>({
+            amount:item.amount,
+            product_id:item.id,
+          }))
+        }
+      }
     };
   }
 }

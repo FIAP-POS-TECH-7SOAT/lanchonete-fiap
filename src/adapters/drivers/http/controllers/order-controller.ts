@@ -14,8 +14,10 @@ import { UpdateOrderById } from "@application/orders/application/use-case/update
 import { TOrderStatus } from "@application/orders/domain/order-entity";
 import { ListAllOrdersByFilters } from "@application/orders/application/use-case/list-all-order-by-filters-use-case";
 import { FindOrderByIdUseCase } from "@application/orders/application/use-case/find-order-by-id-use-case";
+import OrderProductRepository from "src/adapters/drivens/infra/repositories/order-product-repository";
 
 const orderRepository = new OrderRepository();
+const orderProductRepository = new OrderProductRepository();
 const productRepository = new ProductRepository();
 const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
 const clientRepository = new ClientRepository();
@@ -103,14 +105,13 @@ class OrderController {
       client_id: z.string(),
     });
 
-    const { id, products, status, client_id } = checkInBodySchema.parse(
+    const { id, products } = checkInBodySchema.parse(
       req.body
     );
-    const updateOrderById = new UpdateOrderById(orderRepository);
+    const updateOrderById = new UpdateOrderById(orderRepository,orderProductRepository);
     const {order} = await updateOrderById.execute({
       id,
       products,
-      status:status as TOrderStatus,
     });
 
     return res.json(OrderMapping.toView(order));

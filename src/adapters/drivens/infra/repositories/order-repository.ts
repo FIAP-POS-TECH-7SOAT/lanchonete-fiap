@@ -1,7 +1,7 @@
 import { IOrderRepository } from "@application/orders/application/ports/repositories/order-repository";
 import { Order, TOrderStatus } from "@application/orders/domain/order-entity";
 //prettier-ignore
-import { CreateOrderDTO, GetAllDTO } from "@application/orders/application/ports/repositories/dtos/order-dto";
+import { GetAllDTO } from "@application/orders/application/ports/repositories/dtos/order-dto";
 import { prisma } from "@shared/lib/prisma";
 import { OrderMapping } from "./mapping/orders-mapping";
 
@@ -68,7 +68,7 @@ export default class OrderRepository implements IOrderRepository {
       where: {
         id: order.id,
       },
-      data: OrderMapping.toPrisma(order),
+      data: OrderMapping.toPrisma(order)
     });
 
     return order;
