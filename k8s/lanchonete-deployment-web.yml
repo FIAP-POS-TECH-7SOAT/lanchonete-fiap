@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lanchonete-deployment_web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lanchonete-deployment_web
+  template:
+    metadata:
+      labels:
+        app: lanchonete-deployment_web
+    spec:
+      containers:
+      - name: lanchonete-deployment_web
+        image: tsrocha901/lanchonete-deployment_web:latest
+        ports:
+        - containerPort: 3000
