@@ -17,3 +17,6 @@ spec:
         image: tsrocha901/lanchonete-deployment_web:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: NEXT_PUBLIC_APP_URL
+          value: "lanchonete-service"
