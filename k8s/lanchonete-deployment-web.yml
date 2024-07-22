@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lanchonete-deployment_web
+  name: lanchonete-deployment-web
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: lanchonete-deployment_web
+      app: lanchonete-deployment-web
   template:
     metadata:
       labels:
-        app: lanchonete-deployment_web
+        app: lanchonete-deployment-web
     spec:
       containers:
-      - name: lanchonete-deployment_web
-        image: tsrocha901/lanchonete-deployment_web:latest
+      - name: lanchonete-deployment-web
+        image: tsrocha901/lanchonete_fiap_web:latest
         ports:
         - containerPort: 3000
         env:
