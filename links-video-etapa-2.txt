@@ -1,0 +1,5 @@
+Entrega Etapa 2 - Deploy Aplicação no EKS na AWS:
+https://youtu.be/k2IRR12CWWo
+
+Extras - CI/CD:
+https://youtu.be/NR2DWS-O1_s
