@@ -1,13 +1,13 @@
 import { Order } from "@application/orders/domain/order-entity";
 import { IOrderRepository } from "../ports/repositories/order-repository";
 import { AppError } from "@shared/errors/AppError";
-import { IClientRepository } from "@application/clients/application/ports/repositories/client-repository";
 
 import { IPaymentGateway } from "../ports/providers/IPayment-gateway";
 import { ProcessPaymentResponse } from "../ports/providers/dtos/process-payment-response-dto";
 import { IPaymentRepository } from "../ports/repositories/IPayment-repository";
 import { Payment } from "@application/orders/domain/payment";
 import { IProductRepository } from "@application/products/application/ports/repositories/IProduct-repository";
+import { isValidEmail } from "@brazilian-utils/brazilian-utils";
 
 interface IRequest {
   products: {
@@ -25,7 +25,6 @@ interface IResponse {
 export class CreateOrder {
   constructor(
     private orderRepository: IOrderRepository,
-    private clientRepository: IClientRepository,
     private paymentRepository: IPaymentRepository,
     private paymentGateway: IPaymentGateway,
     private productRepository: IProductRepository,
@@ -34,7 +33,12 @@ export class CreateOrder {
 
     let client = null;
     if(client_id){
-      client = await this.clientRepository.findById(client_id)
+      //to-do pegar nome, cpf e email do JWT token
+      client = { 
+        cpf: '13243254312',
+        email: 'email@gmail.com'
+      }
+
       if(!client){
         throw new AppError('Cliente não encontrado')
       }

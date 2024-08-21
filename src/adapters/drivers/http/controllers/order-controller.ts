@@ -5,7 +5,6 @@ import { Request, Response } from "express";
 import { OrderMapping } from "../mapping/order-mapping";
 import { z } from "zod";
 import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
-import ClientRepository from "src/adapters/drivens/infra/repositories/client-repository";
 import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
 import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
 import { PaymentMapping } from "../mapping/payment-mapping";
@@ -20,7 +19,6 @@ const orderRepository = new OrderRepository();
 const orderProductRepository = new OrderProductRepository();
 const productRepository = new ProductRepository();
 const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
-const clientRepository = new ClientRepository();
 const paymentRepository = new PaymentRepository();
 
 
@@ -60,7 +58,6 @@ class OrderController {
     const { client_id, products } = checkInBodySchema.parse(req.body);
     const createOrder = new CreateOrder(
       orderRepository,
-      clientRepository,
       paymentRepository,
       mercadoPagoPixPaymentGateway,
       productRepository
