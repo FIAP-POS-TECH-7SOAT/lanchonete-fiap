@@ -1,15 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
 import { JWTCognitoAWSValidator } from '@adapters/drivens/infra/providers/jwt-cognito-aws-validator';
 
-
 const jwtValidator = new JWTCognitoAWSValidator();
+
+interface DecodedToken {
+  sub: string;
+  username?: string;
+  email?: string;
+  cpf?: string;
+}
 
 export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     req.user ={
-      id:null
+      id:null,
+      name:null,
+      email:null,
+      cpf:null
     };
     return next();
   }
@@ -17,9 +26,12 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
   const token = authHeader.split(' ')[1];
 
   try {
-    const decodedToken = await jwtValidator.validateToken(token);
-    req.user ={
-      id: decodedToken.sub as string
+    const decodedToken = await jwtValidator.validateToken(token) as DecodedToken;
+    req.user = {
+      id: decodedToken.sub as string,
+      name: decodedToken.username as string,
+      email: decodedToken.email as string,
+      cpf: decodedToken.cpf as string
     }; 
     return next();
   } catch (error) {
