@@ -5,9 +5,10 @@ import { AppError } from "@shared/errors/AppError";
 import { IPaymentGateway } from "../ports/providers/IPayment-gateway";
 import { ProcessPaymentResponse } from "../ports/providers/dtos/process-payment-response-dto";
 import { IPaymentRepository } from "../ports/repositories/IPayment-repository";
-import { Payment } from "@application/orders/domain/payment";
+import { Payment, TPaymentStatus } from "@application/orders/domain/payment";
 import { IProductRepository } from "@application/products/application/ports/repositories/IProduct-repository";
 import { isValidEmail } from "@brazilian-utils/brazilian-utils";
+import { request } from "http";
 
 interface IRequest {
   products: {
@@ -15,6 +16,8 @@ interface IRequest {
     amount: number;
   }[];
   client_id: string | null;
+  cpf: string | null;
+  email: string | null;
 }
 interface IResponse {
   order:Order,
@@ -29,14 +32,13 @@ export class CreateOrder {
     private paymentGateway: IPaymentGateway,
     private productRepository: IProductRepository,
   ) {}
-  async execute({ client_id,products }: IRequest): Promise<IResponse> {
+  async execute({ client_id, cpf, email, products }: IRequest): Promise<IResponse> {
 
     let client = null;
     if(client_id){
-      //to-do pegar nome, cpf e email do JWT token
       client = { 
-        cpf: '13243254312',
-        email: 'email@gmail.com'
+        cpf: cpf,
+        email: email
       }
 
       if(!client){
@@ -64,7 +66,7 @@ export class CreateOrder {
       code:paymentProcessInt.id,
       order_id:order.id,
       total_amount,
-      status:paymentProcessInt.status
+      status:paymentProcessInt.status as TPaymentStatus
     })
     await this.paymentRepository.create(payment)
     await this.orderRepository.create(order)

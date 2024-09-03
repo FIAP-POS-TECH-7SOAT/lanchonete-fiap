@@ -63,7 +63,9 @@ class OrderController {
       productRepository
     )
     const {order,payment ,payment_gateway,total_amount} = await createOrder.execute({
-      client_id:client_id?client_id:null,
+      client_id:req.user.id?req.user.id:null,
+      cpf:req.user.cpf?req.user.cpf:null,
+      email:req.user.email?req.user.email:null,
       products,
     });
 
