@@ -40,11 +40,12 @@ export class CreateOrder {
         cpf: cpf,
         email: email
       }
-
-      if(!client){
-        throw new AppError('Cliente não encontrado')
-      }
     }
+
+    if(!client){
+      throw new AppError('Cliente não encontrado')
+    }
+    
     const allProducts = await this.productRepository.findByIds(products.map(item=>item.id))
     const order = new Order({
       products,
@@ -56,8 +57,8 @@ export class CreateOrder {
     const paymentProcessInt = await this.paymentGateway.processPayment({
       amount:total_amount,
       customer:client?{
-        doc_number:client?.cpf,
-        email:client?.email
+        doc_number:client.cpf,
+        email:client.email
       }:null,
       order_id:order.id
     })
