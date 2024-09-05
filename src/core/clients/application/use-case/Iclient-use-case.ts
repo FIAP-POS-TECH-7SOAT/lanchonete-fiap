@@ -3,7 +3,5 @@ import { CreateClientDTO } from "@application/clients/application/ports/reposito
 
 export interface IClientService {
   findById(id: string): Promise<Client | null>;
-  findByEmail(email: string): Promise<Client | null>;
   findByCpf(cpf: string): Promise<Client | null>;
-  
 }

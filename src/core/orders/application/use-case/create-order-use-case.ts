@@ -1,5 +1,7 @@
 import { Order } from "@application/orders/domain/order-entity";
 import { IOrderRepository } from "../ports/repositories/order-repository";
+import { IClientRepository } from "../../../clients/application/ports/repositories/Iclient-repository";
+
 import { AppError } from "@shared/errors/AppError";
 
 import { IPaymentGateway } from "../ports/providers/IPayment-gateway";
@@ -31,12 +33,14 @@ export class CreateOrder {
     private paymentRepository: IPaymentRepository,
     private paymentGateway: IPaymentGateway,
     private productRepository: IProductRepository,
+    private clientRepository: IClientRepository
   ) {}
   async execute({ client_id, cpf, email, products }: IRequest): Promise<IResponse> {
 
     let client = null;
     if(client_id){
       client = { 
+        id: client_id,
         cpf: cpf,
         email: email
       }
@@ -71,7 +75,8 @@ export class CreateOrder {
     })
     await this.paymentRepository.create(payment)
     await this.orderRepository.create(order)
-    
+    //Creating a client in our database to avoid making calls to AWS Cognito for retrieving client properties.
+    await this.clientRepository.create(client)
     
     return {
       order,

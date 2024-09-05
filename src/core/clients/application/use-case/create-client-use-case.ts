@@ -1,6 +1,6 @@
 
 import { isValidCPF } from "@brazilian-utils/brazilian-utils";
-import { IClientRepository } from "../ports/repositories/client-repository";
+import { IClientRepository } from "../ports/repositories/Iclient-repository";
 
 import { AppError } from "@shared/errors/AppError";
 import { Client } from "@application/clients/domain/client-entity";
