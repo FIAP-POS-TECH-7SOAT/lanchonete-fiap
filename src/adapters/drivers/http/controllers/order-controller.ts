@@ -14,13 +14,15 @@ import { TOrderStatus } from "@application/orders/domain/order-entity";
 import { ListAllOrdersByFilters } from "@application/orders/application/use-case/list-all-order-by-filters-use-case";
 import { FindOrderByIdUseCase } from "@application/orders/application/use-case/find-order-by-id-use-case";
 import OrderProductRepository from "src/adapters/drivens/infra/repositories/order-product-repository";
+import ClientRepository from "@adapters/drivens/infra/repositories/client-repository";
+import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
 
 const orderRepository = new OrderRepository();
 const orderProductRepository = new OrderProductRepository();
 const productRepository = new ProductRepository();
 const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
 const paymentRepository = new PaymentRepository();
-
+const clientRepository = new ClientRepository();
 
 class OrderController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -60,12 +62,28 @@ class OrderController {
       orderRepository,
       paymentRepository,
       mercadoPagoPixPaymentGateway,
-      productRepository
+      productRepository,
+      clientRepository
     )
+
+    let client: CreateClientDTO | null;
+
+    if (req.user.id){
+      client = {
+        id: req.user.id,
+        email: req.user.email??"",
+        cpf: req.user.cpf??"",
+        name: req.user.name??""
+      }
+      clientRepository.create(client);
+    }else{
+      client = null;
+    }
+
     const {order,payment ,payment_gateway,total_amount} = await createOrder.execute({
-      client_id:req.user.id?req.user.id:null,
-      cpf:req.user.cpf?req.user.cpf:null,
-      email:req.user.email?req.user.email:null,
+      client_id:client?client.id:null,
+      email:client?client.email:null,
+      cpf:client?client.cpf:null,
       products,
     });
 

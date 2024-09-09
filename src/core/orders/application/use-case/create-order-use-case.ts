@@ -9,17 +9,15 @@ import { ProcessPaymentResponse } from "../ports/providers/dtos/process-payment-
 import { IPaymentRepository } from "../ports/repositories/IPayment-repository";
 import { Payment, TPaymentStatus } from "@application/orders/domain/payment";
 import { IProductRepository } from "@application/products/application/ports/repositories/IProduct-repository";
-import { isValidEmail } from "@brazilian-utils/brazilian-utils";
-import { request } from "http";
 
 interface IRequest {
   products: {
     id: string;
     amount: number;
   }[];
-  client_id: string | null;
-  cpf: string | null;
-  email: string | null;
+  client_id: string | null,
+  cpf: string | null,
+  email: string | null
 }
 interface IResponse {
   order:Order,
@@ -38,15 +36,16 @@ export class CreateOrder {
   async execute({ client_id, cpf, email, products }: IRequest): Promise<IResponse> {
 
     let client = null;
-    if(client_id){
-      client = { 
+
+    if (client_id){
+      client = {
         id: client_id,
         cpf: cpf,
         email: email
       }
     }
 
-    if(!client){
+    if(!client_id){
       throw new AppError('Cliente não encontrado')
     }
     
@@ -75,8 +74,6 @@ export class CreateOrder {
     })
     await this.paymentRepository.create(payment)
     await this.orderRepository.create(order)
-    //Creating a client in our database to avoid making calls to AWS Cognito for retrieving client properties.
-    await this.clientRepository.create(client)
     
     return {
       order,

@@ -1,4 +1,4 @@
-import { IClientRepository } from "@application/clients/application/ports/repositories/client-repository";
+import { IClientRepository } from "@application/clients/application/ports/repositories/Iclient-repository";
 import { Client } from "@application/clients/domain/client-entity";
 import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
 
@@ -43,8 +43,9 @@ export default class ClientRepository implements IClientRepository {
     }
   }
 
-  async create({ name, email, cpf }: CreateClientDTO): Promise<Client> {
+  async create({ id, name, email, cpf }: CreateClientDTO): Promise<Client> {
     const client = new Client({
+      id,
       name,
       email,
       cpf,

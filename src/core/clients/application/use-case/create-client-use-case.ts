@@ -6,6 +6,7 @@ import { AppError } from "@shared/errors/AppError";
 import { Client } from "@application/clients/domain/client-entity";
 
 interface IRequest {
+  id:string,
   name:string, 
   email:string, 
   cpf:string
@@ -16,6 +17,7 @@ export class CreateClientUseCase {
   constructor(private clientRepository: IClientRepository) {}
 
   public async execute({
+    id,
     cpf,
     email,
     name
@@ -29,9 +31,10 @@ export class CreateClientUseCase {
     }
 
     client = await this.clientRepository.create({
+      id,
       cpf,
-      email,
-      name
+      name,
+      email
     });
 
     return client;
