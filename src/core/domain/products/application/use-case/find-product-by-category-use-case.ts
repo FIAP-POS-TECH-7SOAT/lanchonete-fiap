@@ -14,12 +14,6 @@ export class FindProductsByCategoryService {
   public async execute({ category }: IRequest): Promise<IResponse> {
     const product = await this.productRepository.findManyByCategory(category);
 
-    if (!product || !product.length) {
-      throw new AppError(
-        "Products not find by Category: " + category.toString()
-      );
-    }
-
     return product;
   }
 }
