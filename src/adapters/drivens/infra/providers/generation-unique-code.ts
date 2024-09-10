@@ -1,4 +1,4 @@
-import { IGenerateCodeProvider } from "@application/orders/application/ports/providers/IGenerate-code-provider";
+import { IGenerateCodeProvider } from "@application/domain/orders/application/ports/providers/IGenerate-code-provider";
 
 export class GenerateCodeProvider implements IGenerateCodeProvider {
   generate(): string {

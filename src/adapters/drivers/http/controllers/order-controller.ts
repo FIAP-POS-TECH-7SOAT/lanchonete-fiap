@@ -1,6 +1,6 @@
 
-import { CreateOrder } from "@application/orders/application/use-case/create-order-use-case";
-import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id-use-case";
+import { CreateOrder } from "@application/domain/orders/application/use-case/create-order-use-case";
+import { CancelOrderById } from "@application/domain/orders/application/use-case/cancel-order-by-id-use-case";
 import { Request, Response } from "express";
 import { OrderMapping } from "../mapping/order-mapping";
 import { z } from "zod";
@@ -9,10 +9,10 @@ import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/provide
 import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
 import { PaymentMapping } from "../mapping/payment-mapping";
 import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
-import { UpdateOrderById } from "@application/orders/application/use-case/update-order-by-id-use-case";
-import { TOrderStatus } from "@application/orders/domain/order-entity";
-import { ListAllOrdersByFilters } from "@application/orders/application/use-case/list-all-order-by-filters-use-case";
-import { FindOrderByIdUseCase } from "@application/orders/application/use-case/find-order-by-id-use-case";
+import { UpdateOrderById } from "@application/domain/orders/application/use-case/update-order-by-id-use-case";
+import { TOrderStatus } from "@application/domain/orders/entities/order-entity";
+import { ListAllOrdersByFilters } from "@application/domain/orders/application/use-case/list-all-order-by-filters-use-case";
+import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
 import OrderProductRepository from "src/adapters/drivens/infra/repositories/order-product-repository";
 
 const orderRepository = new OrderRepository();

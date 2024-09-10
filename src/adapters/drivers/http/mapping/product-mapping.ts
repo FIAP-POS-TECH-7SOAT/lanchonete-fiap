@@ -1,4 +1,4 @@
-import { Product } from "@application/products/domain/product";
+import { Product } from "@application/domain/products/entities/product";
 
 export class ProductMapping {
   static toView(product: Product) {

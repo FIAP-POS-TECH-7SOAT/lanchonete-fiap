@@ -1,9 +1,9 @@
-import { IProductRepository } from "@application/products/application/ports/repositories/IProduct-repository";
-import { CreateProductDTO } from "@application/products/application/ports/repositories/dtos/create-product-dto";
-import { UploadProductImageDTO } from "@application/products/application/ports/repositories/dtos/upload-product-imagem-dto";
+import { IProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
+import { CreateProductDTO } from "@application/domain/products/application/ports/repositories/dtos/create-product-dto";
+import { UploadProductImageDTO } from "@application/domain/products/application/ports/repositories/dtos/upload-product-imagem-dto";
 
-import { Product } from "@application/products/domain/product";
-import { Category } from "@application/categories/domain/category";
+import { Product } from "@application/domain/products/entities/product";
+import { Category } from "@application/domain/categories/entities/category";
 import { Category as CategoryPrisma } from "@prisma/client";
 
 import { prisma } from "@shared/lib/prisma";

@@ -1,4 +1,4 @@
-import { UpdateOrderStatusById } from "@application/orders/application/use-case/update-order-status-by-id-use-case";
+import { UpdateOrderStatusById } from "@application/domain/orders/application/use-case/update-order-status-by-id-use-case";
 import { Request, Response } from "express";
 
 import { z } from "zod";

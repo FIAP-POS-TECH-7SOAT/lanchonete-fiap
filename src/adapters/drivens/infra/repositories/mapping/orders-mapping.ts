@@ -1,4 +1,4 @@
-import { Order, TOrderStatus } from "@application/orders/domain/order-entity";
+import { Order, TOrderStatus } from "@application/domain/orders/entities/order-entity";
 //prettier-ignore
 import { Order as OrderPrisma, OrderProduct as OrderProductPrisma, Prisma } from "@prisma/client";
 

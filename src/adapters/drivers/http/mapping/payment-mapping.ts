@@ -1,5 +1,5 @@
-import { Order } from "src/core/orders/domain/order-entity";
-import { Payment } from "src/core/orders/domain/payment";
+import { Order } from "src/core/orders/entities/order-entity";
+import { Payment } from "src/core/orders/entities/payment";
 
 //prettier-ignore
 export class PaymentMapping {

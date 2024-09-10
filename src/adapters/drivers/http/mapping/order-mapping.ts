@@ -1,4 +1,4 @@
-import { Order } from "src/core/orders/domain/order-entity";
+import { Order } from "src/core/orders/entities/order-entity";
 
 //prettier-ignore
 export class OrderMapping {

@@ -1,15 +1,15 @@
-import { CreateProductService } from "@application/products/application/use-case/create-product-use-case";
-import { FindProductService } from "@application/products/application/use-case/find-product-use-case";
-import { FindProductsByCategoryService } from "@application/products/application/use-case/find-product-by-category-use-case";
+import { CreateProductService } from "@application/domain/products/application/use-case/create-product-use-case";
+import { FindProductService } from "@application/domain/products/application/use-case/find-product-use-case";
+import { FindProductsByCategoryService } from "@application/domain/products/application/use-case/find-product-by-category-use-case";
 
 import { Request, Response } from "express";
 import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
-import { Category } from "@application/categories/domain/category";
+import { Category } from "@application/domain/categories/entities/category";
 
 import { z } from "zod";
-import { UpdateProductService } from "@application/products/application/use-case/update-product-use-case";
-import { DeleteProductService } from "@application/products/application/use-case/delete-product-use-case";
-import { UploadProductImageService } from "@application/products/application/use-case/upload-product-image-use-case";
+import { UpdateProductService } from "@application/domain/products/application/use-case/update-product-use-case";
+import { DeleteProductService } from "@application/domain/products/application/use-case/delete-product-use-case";
+import { UploadProductImageService } from "@application/domain/products/application/use-case/upload-product-image-use-case";
 import { ProductMapping } from "src/adapters/drivers/http/mapping/product-mapping";
 
 import { AWSUploadFile } from "src/adapters/drivens/infra/providers/aws-upload-file";

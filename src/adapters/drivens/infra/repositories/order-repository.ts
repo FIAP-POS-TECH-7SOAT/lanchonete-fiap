@@ -1,7 +1,7 @@
-import { IOrderRepository } from "@application/orders/application/ports/repositories/order-repository";
-import { Order, TOrderStatus } from "@application/orders/domain/order-entity";
+import { IOrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
+import { Order, TOrderStatus } from "@application/domain/orders/entities/order-entity";
 //prettier-ignore
-import { GetAllDTO } from "@application/orders/application/ports/repositories/dtos/order-dto";
+import { GetAllDTO } from "@application/domain/orders/application/ports/repositories/dtos/order-dto";
 import { prisma } from "@shared/lib/prisma";
 import { OrderMapping } from "./mapping/orders-mapping";
 

@@ -1,6 +1,6 @@
-import { IPaymentRepository } from "@application/orders/application/ports/repositories/IPayment-repository";
-import { CreatePaymentDTO } from "@application/orders/application/ports/repositories/dtos/create-payment-dto";
-import { Payment, TPaymentStatus } from "@application/orders/domain/payment";
+import { IPaymentRepository } from "@application/domain/orders/application/ports/repositories/IPayment-repository";
+
+import { Payment, TPaymentStatus } from "@application/domain/orders/entities/payment";
 
 import { prisma } from "@shared/lib/prisma";
 

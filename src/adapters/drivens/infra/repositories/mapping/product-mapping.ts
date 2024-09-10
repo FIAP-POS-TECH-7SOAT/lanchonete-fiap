@@ -1,5 +1,5 @@
-import { Category } from "@application/categories/domain/category";
-import { Product } from "@application/products/domain/product";
+import { Category } from "@application/domain/categories/entities/category";
+import { Product } from "@application/domain/products/entities/product";
 //prettier-ignore
 import { Product as ProductPrisma, Category as CategoryPrisma, Prisma } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";

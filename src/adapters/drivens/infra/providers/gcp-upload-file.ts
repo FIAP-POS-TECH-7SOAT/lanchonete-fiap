@@ -1,7 +1,7 @@
 import { Storage,Bucket } from '@google-cloud/storage'
 import fs from 'fs'
 
-import { IUploadFile, UploadFileProps } from "@application/products/application/ports/providers/upload-file-interface";
+import { IUploadFile, UploadFileProps } from "@application/domain/products/application/ports/providers/upload-file-interface";
 import { env } from '@shared/env';
 import path from 'path';
 

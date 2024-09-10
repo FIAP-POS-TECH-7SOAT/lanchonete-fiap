@@ -1,6 +1,6 @@
-import { ProcessPaymentService } from "src/core/orders/application/use-case/process-payment-use-case";
 
-import { FindPaymentByIdService } from "src/core/orders/application/use-case/find-payment-by-id-use-case";
+
+import { FindPaymentByIdService } from "@application/domain/orders/application/use-case/find-payment-by-id-use-case";
 import { Request, Response } from "express";
 
 import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
@@ -11,7 +11,8 @@ import { z } from "zod";
 import { env } from "@shared/env";
 import { PaymentMapping } from "../mapping/payment-mapping";
 import { OrderMapping } from "../mapping/order-mapping";
-import { FindOrderByIdUseCase } from "@application/orders/application/use-case/find-order-by-id-use-case";
+import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
+import { ProcessPaymentService } from "@application/domain/orders/application/use-case/process-payment-use-case";
 
 const paymentRepository = new PaymentRepository();
 
