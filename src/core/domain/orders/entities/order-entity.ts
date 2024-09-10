@@ -1,4 +1,6 @@
 import { Entity } from "@application/common/entities/entity";
+import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
+import { Optional } from "@prisma/client/runtime/library";
 import { format } from "date-fns";
 
 export interface IOrderProduct{
@@ -8,25 +10,37 @@ export interface IOrderProduct{
 }
 export type TOrderStatus = 'Recebido' | 'Em preparação' | 'Pronto' |'Finalizado'
 
-export interface IOrder {
+export interface OrderProps {
   products: IOrderProduct[];
   client_id: string | null;
   status: TOrderStatus;
-  created_at?: Date;
+  created_at: Date;
   canceled_at?: Date | null;
   code:string
   
 }
 
-export class Order extends Entity<IOrder> {
-  constructor(props: IOrder, id?: string) {
+export class Order extends Entity<OrderProps> {
+  constructor(props: OrderProps, id?: UniqueEntityID) {
+    props.created_at ?? new Date()
     super(props, id);
   }
 
-  public get id(): string {
-    return this._id;
+  static create(
+    props: Optional<OrderProps, 'created_at'|'canceled_at'>,
+    id?: UniqueEntityID,
+  ) {
+    const order = new Order(
+      {
+        ...props,
+        created_at: props.created_at ?? new Date(),
+        canceled_at: props.canceled_at ?? null,
+        
+      },
+      id,
+    )
+    return order
   }
-
   public get products(): IOrderProduct[] {
     return this.props.products;
   }

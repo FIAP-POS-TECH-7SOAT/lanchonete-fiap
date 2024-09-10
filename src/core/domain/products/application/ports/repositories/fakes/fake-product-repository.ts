@@ -15,12 +15,12 @@ export default class FakeProductRepository implements IProductRepository {
 
   private repository:Product[] = [];
   async findByIds(ids: string[]): Promise<Product[]> {
-    const products = this.repository.filter(product=>ids.includes(product.id));
+    const products = this.repository.filter(product=>ids.includes(product.id.toString()));
     return products;
   }
 
   async findById(id: string): Promise<Product | null> {
-    const product = this.repository.find(product=> id ===product.id);
+    const product = this.repository.find(product=> id ===product.id.toString());
     if(!product){
       throw new AppError('Product not found')
     }
@@ -39,7 +39,7 @@ export default class FakeProductRepository implements IProductRepository {
     price,
     description,
   }: CreateProductDTO): Promise<Product> {
-    const product = new Product({
+    const product = Product.create({
       name,
       category,
       price,
@@ -59,7 +59,7 @@ export default class FakeProductRepository implements IProductRepository {
     return product;
   }
   async delete(id: string): Promise<Product | null> {
-    const productIndex = this.repository.findIndex(item=> item.id ===id);
+    const productIndex = this.repository.findIndex(item=> item.id.toString() ===id);
     const product = this.repository[productIndex];
     this.repository.splice(productIndex,1);
 
@@ -68,7 +68,7 @@ export default class FakeProductRepository implements IProductRepository {
   }
 
   async patchImage({ id, image }: UploadProductImageDTO): Promise<string> {
-    const productIndex = this.repository.findIndex(item=> item.id ===id);
+    const productIndex = this.repository.findIndex(item=> item.id.toString() ===id);
     this.repository[productIndex].image = image
 
     return image;

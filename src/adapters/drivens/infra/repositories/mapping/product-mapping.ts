@@ -1,3 +1,4 @@
+import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 import { Category } from "@application/domain/categories/entities/category";
 import { Product } from "@application/domain/products/entities/product";
 //prettier-ignore
@@ -16,7 +17,7 @@ export class ProductMapping {
   }: ProductPrisma) {
     
     
-    return new Product(
+    return Product.create(
       {
         name,
         category: Category[category],
@@ -25,13 +26,13 @@ export class ProductMapping {
         image,
         deleted,
       },
-      id
+      new UniqueEntityID(id)
     );
   }
 
   static toPrisma(product: Product) {
     return {
-      id: product.id,
+      id: product.id.toString(),
       name: product.name,
       category: product.category.toString().toUpperCase() as CategoryPrisma,
       description: product.description,

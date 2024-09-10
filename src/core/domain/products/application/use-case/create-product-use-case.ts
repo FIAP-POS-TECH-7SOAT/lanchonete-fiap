@@ -19,12 +19,13 @@ export class CreateProductService {
     price,
     description,
   }: IRequest): Promise<IResponse> {
-    const product = await this.productRepository.create({
+    const product = Product.create({
       name,
       category,
       price,
-      description,
-    });
+      description
+    })
+    await this.productRepository.create(product);
 
     return product;
   }

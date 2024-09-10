@@ -49,20 +49,8 @@ export default class ProductRepository implements IProductRepository {
     return domainProducts;
   }
 
-  async create({
-    name,
-    category,
-    price,
-    description,
-  }: CreateProductDTO): Promise<Product> {
-    const product = new Product({
-      name,
-      category,
-      price,
-      description,
-      image: "", //remover e talvez criar um entity de imagem.
-      deleted: false,
-    });
+  async create(product: Product): Promise<Product> {
+ 
 
     await prisma.product.create({
       data: ProductMapping.toPrisma(product),
@@ -74,7 +62,7 @@ export default class ProductRepository implements IProductRepository {
     await prisma.product.update({
       data: ProductMapping.toPrisma(product),
       where: {
-        id: product.id,
+        id: product.id.toString(),
       },
     });
 

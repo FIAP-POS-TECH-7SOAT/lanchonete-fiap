@@ -1,4 +1,5 @@
 import { Entity } from "@application/common/entities/entity";
+import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 
 export interface IClient {
   name: string;
@@ -9,12 +10,8 @@ export interface IClient {
 }
 
 export class Client extends Entity<IClient> {
-  constructor(props: IClient, id?: string) {
+  constructor(props: IClient, id?: UniqueEntityID) {
     super(props, id);
-  }
-
-  public get id(): string {
-    return this._id;
   }
 
   public get name(): string {

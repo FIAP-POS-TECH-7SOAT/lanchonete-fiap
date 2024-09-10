@@ -46,11 +46,13 @@ export class CreateOrder {
       }
     }
     const allProducts = await this.productRepository.findByIds(products.map(item=>item.id))
-    const order = new Order({
+    const order = Order.create({
       products,
       client_id,
       status:'Recebido',
-      code:""
+      code:"",
+      
+      
     })
     const total_amount = allProducts.reduce((acc,cur)=>acc+cur.price,0);
     const paymentProcessInt = await this.paymentGateway.processPayment({
@@ -59,10 +61,10 @@ export class CreateOrder {
         doc_number:client?.cpf,
         email:client?.email
       }:null,
-      order_id:order.id
+      order_id:order.id.toString()
     })
  
-    const payment = new Payment({
+    const payment = Payment.create({
       code:paymentProcessInt.id,
       order_id:order.id,
       total_amount,

@@ -34,7 +34,7 @@ export class ProcessPaymentService {
       throw new AppError("Solicitação pagamento não encontrado");
     }
 
-    const order = await this.orderRepository.findById(payment.order_id);
+    const order = await this.orderRepository.findById(payment.order_id.toString());
     if (!order) {
       throw new AppError("Pedido nao encontrado");
     }

@@ -1,8 +1,10 @@
 import { Category } from "@application/domain/categories/entities/category";
 import { Entity } from "@application/common/entities/entity";
 import { env } from "@shared/env";
+import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
+import { Optional } from "@application/common/entities/optional";
 
-export interface IProduct {
+export interface ProductProps {
   name: string;
   category: Category;
   price: number;
@@ -11,16 +13,25 @@ export interface IProduct {
   deleted: boolean;
 }
 
-export class Product extends Entity<IProduct> {
-  constructor(props: IProduct, id?: string) {
+export class Product extends Entity<ProductProps> {
+  constructor(props: ProductProps, id?: UniqueEntityID) {
     super(props, id);
   }
 
-  //getters
-  public get id(): string {
-    return this._id;
+  static create(
+    props: Optional<ProductProps,'deleted'|'image'>,
+    id?: UniqueEntityID,
+  ) {
+    const product = new Product(
+      {
+        ...props,
+        deleted:false,
+        image:''
+      },
+      id,
+    )
+    return product
   }
-
   public get name(): string {
     return this.props.name;
   }

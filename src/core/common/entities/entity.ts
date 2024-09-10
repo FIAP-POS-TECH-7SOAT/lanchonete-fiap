@@ -1,30 +1,37 @@
-import { randomUUID } from "crypto";
+
+import { UniqueEntityID } from "./unique-entity-id";
 
 type Replace<T, R> = Omit<T, keyof R> & R;
 
-interface IEntity {
-  created_at:Date;
-  updatedAt:Date;
-}
-export class Entity<T> {
-  protected _id: string;
-  protected props: IEntity & T
+
+export class Entity<Props> {
+  protected _id: UniqueEntityID;
+  protected props: Props
 
   constructor(
-    props: Omit<Replace<T, { created_at?: Date }>, 'updatedAt'>,
-    id?: string,
+    props: Props,
+    id?: UniqueEntityID,
   ) {
 
-    this._id = id ?? randomUUID();
+    this._id = id ?? new UniqueEntityID();
 
-    this.props = {
-      ...props,
-      created_at: id ? props.created_at : new Date(),
-      updatedAt: new Date(),
-    } as IEntity & T
+    this.props = props
 
   }
-  public get created_at():Date{
-    return this.created_at
+
+  public get id (){
+    return this._id;
+  }
+
+  public equals(entity: Entity<any>) {
+    if (entity === this) {
+      return true
+    }
+
+    if (entity.id === this._id) {
+      return true
+    }
+
+    return false
   }
 }
