@@ -9,6 +9,7 @@ import { ProcessPaymentResponse } from "../ports/providers/dtos/process-payment-
 import { IPaymentRepository } from "../ports/repositories/IPayment-repository";
 import { Payment, TPaymentStatus } from "@application/orders/domain/payment";
 import { IProductRepository } from "@application/products/application/ports/repositories/IProduct-repository";
+import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
 
 interface IRequest {
   products: {
@@ -17,7 +18,8 @@ interface IRequest {
   }[];
   client_id: string | null,
   cpf: string | null,
-  email: string | null
+  email: string | null,
+  name: string | null
 }
 interface IResponse {
   order:Order,
@@ -33,20 +35,22 @@ export class CreateOrder {
     private productRepository: IProductRepository,
     private clientRepository: IClientRepository
   ) {}
-  async execute({ client_id, cpf, email, products }: IRequest): Promise<IResponse> {
+  async execute({ client_id, cpf, email, name, products }: IRequest): Promise<IResponse> {
 
     let client = null;
 
     if (client_id){
-      client = {
-        id: client_id,
-        cpf: cpf,
-        email: email
-      }
-    }
+      client = await this.clientRepository.findById(client_id);
 
-    if(!client_id){
-      throw new AppError('Cliente não encontrado')
+      if(!client) {
+        const client:CreateClientDTO = {
+          id: client_id,
+          cpf: cpf,
+          email: email,
+          name: name
+        }
+        this.clientRepository.create(client);
+      }
     }
     
     const allProducts = await this.productRepository.findByIds(products.map(item=>item.id))

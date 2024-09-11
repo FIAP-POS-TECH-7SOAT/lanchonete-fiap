@@ -75,7 +75,6 @@ class OrderController {
         cpf: req.user.cpf??"",
         name: req.user.name??""
       }
-      clientRepository.create(client);
     }else{
       client = null;
     }
@@ -84,6 +83,7 @@ class OrderController {
       client_id:client?client.id:null,
       email:client?client.email:null,
       cpf:client?client.cpf:null,
+      name:client?client.name:null,
       products,
     });
 
