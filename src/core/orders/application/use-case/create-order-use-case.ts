@@ -49,7 +49,7 @@ export class CreateOrder {
           email: email,
           name: name
         }
-        this.clientRepository.create(client);
+        await this.clientRepository.create(client);
       }
     }
     
@@ -76,8 +76,11 @@ export class CreateOrder {
       total_amount,
       status:paymentProcessInt.status as TPaymentStatus
     })
-    await this.paymentRepository.create(payment)
-    await this.orderRepository.create(order)
+
+    await Promise.all([
+      this.paymentRepository.create(payment), 
+      this.orderRepository.create(order)
+    ]);
     
     return {
       order,
