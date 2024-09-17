@@ -2,6 +2,7 @@ import { Entity } from "@application/common/entities/entity";
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 
 export interface IClient {
+  id: string;
   name: string;
   email: string;
   cpf: string;
@@ -17,11 +18,11 @@ export class Client extends Entity<IClient> {
   public get name(): string {
     return this.props.name;
   }
-  public get email(): string {
+  public get email(): string{
     return this.props.email;
   }
 
-  public get cpf(): string {
+  public get cpf(): string{
     return this.props.cpf;
   }
 

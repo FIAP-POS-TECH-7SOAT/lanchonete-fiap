@@ -8,19 +8,22 @@ import OrderRepository from "@adapters/drivens/infra/database/prisma/repositorie
 import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
 import PaymentRepository from "@adapters/drivens/infra/database/prisma/repositories/payment-repository";
 import { PaymentMapping } from "../mapping/payment-mapping";
-import ProductRepository from "@adapters/drivens/infra/database/prisma/repositories/product-repository";
-import { UpdateOrderById } from "@application/domain/orders/application/use-case/update-order-by-id-use-case";
-import { TOrderStatus } from "@application/domain/orders/entities/order-entity";
-import { ListAllOrdersByFilters } from "@application/domain/orders/application/use-case/list-all-order-by-filters-use-case";
-import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
+
+
+import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
 import OrderProductRepository from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
+import ClientRepository from "@adapters/drivens/infra/database/prisma/repositories/client-repository";
+import ProductRepository from "@adapters/drivens/infra/database/prisma/repositories/product-repository";
+import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
+import { ListAllOrdersByFilters } from "@application/domain/orders/application/use-case/list-all-order-by-filters-use-case";
+import { UpdateOrderById } from "@application/domain/orders/application/use-case/update-order-by-id-use-case";
 
 const orderRepository = new OrderRepository();
 const orderProductRepository = new OrderProductRepository();
 const productRepository = new ProductRepository();
 const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
 const paymentRepository = new PaymentRepository();
-
+const clientRepository = new ClientRepository();
 
 class OrderController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -60,12 +63,28 @@ class OrderController {
       orderRepository,
       paymentRepository,
       mercadoPagoPixPaymentGateway,
-      productRepository
+      productRepository,
+      clientRepository
     )
+
+    let client: CreateClientDTO | null;
+
+    if (req.user.id){
+      client = {
+        id: req.user.id,
+        email: req.user.email??"",
+        cpf: req.user.cpf??"",
+        name: req.user.name??""
+      }
+    }else{
+      client = null;
+    }
+
     const {order,payment ,payment_gateway,total_amount} = await createOrder.execute({
-      client_id:req.user.id?req.user.id:null,
-      cpf:req.user.cpf?req.user.cpf:null,
-      email:req.user.email?req.user.email:null,
+      client_id:client?client.id:null,
+      email:client?client.email:null,
+      cpf:client?client.cpf:null,
+      name:client?client.name:null,
       products,
     });
 
