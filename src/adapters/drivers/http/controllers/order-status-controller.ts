@@ -2,7 +2,7 @@ import { UpdateOrderStatusById } from "@application/domain/orders/application/us
 import { Request, Response } from "express";
 
 import { z } from "zod";
-import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
+import OrderRepository from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
 
 const orderRepository = new OrderRepository();
 

@@ -1,4 +1,4 @@
-import { prisma } from "@shared/lib/prisma";
+import { prisma } from "../prisma-client";
 
 import { IOrderProductRepository } from "@application/domain/orders/application/ports/repositories/IOrderProduct-repository";
 

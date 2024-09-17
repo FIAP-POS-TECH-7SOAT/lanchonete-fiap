@@ -1,6 +1,6 @@
 import { Category } from "@application/domain/categories/entities/category";
 import { Entity } from "@application/common/entities/entity";
-import { env } from "@shared/env";
+import { env } from "@adapters/drivens/infra/env";
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 import { Optional } from "@application/common/entities/optional";
 

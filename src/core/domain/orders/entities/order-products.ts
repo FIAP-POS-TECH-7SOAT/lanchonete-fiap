@@ -1,7 +1,7 @@
 import { Entity } from "@application/common/entities/entity";
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 
-export interface IOrderProduct {
+export interface OrderProductProps {
   order_id: string;
   product_id: string;
   amount: number;
@@ -9,8 +9,8 @@ export interface IOrderProduct {
   
 }
 
-export class OrderProduct extends Entity<IOrderProduct> {
-  constructor(props: IOrderProduct, id?: UniqueEntityID) {
+export class OrderProduct extends Entity<OrderProductProps> {
+  constructor(props: OrderProductProps, id?: UniqueEntityID) {
     props.created_at ?? new Date()
     super(props, id);
   }

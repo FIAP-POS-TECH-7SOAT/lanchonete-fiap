@@ -47,7 +47,7 @@ export class OrderMapping {
       canceled_at: order.canceled_at,
       created_at: order.created_at,
       status: order.status,
-      id: order.id,
+      id: order.id.toString(),
       client_id: order.client_id ?? null,
       code:order.code,
       products:{

@@ -7,8 +7,7 @@ import { ProcessPaymentResponse } from "../ports/providers/dtos/process-payment-
 import { IPaymentRepository } from "../ports/repositories/IPayment-repository";
 import { Payment, TPaymentStatus } from "@application/domain/orders/entities/payment";
 import { IProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
-import { isValidEmail } from "@brazilian-utils/brazilian-utils";
-import { request } from "http";
+
 
 interface IRequest {
   products: {

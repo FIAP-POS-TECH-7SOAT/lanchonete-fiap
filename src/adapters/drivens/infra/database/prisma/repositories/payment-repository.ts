@@ -2,7 +2,9 @@ import { IPaymentRepository } from "@application/domain/orders/application/ports
 
 import { Payment, TPaymentStatus } from "@application/domain/orders/entities/payment";
 
-import { prisma } from "@shared/lib/prisma";
+
+import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
+import { prisma } from "../prisma-client";
 
 export default class PaymentRepository implements IPaymentRepository {
   
@@ -19,11 +21,11 @@ export default class PaymentRepository implements IPaymentRepository {
       {
         code: payment.code,
         created_at: payment.created_at,
-        order_id: payment.order_id,
+        order_id: new UniqueEntityID(payment.order_id),
         total_amount: Number(payment.total_amount),
         status:payment.status as TPaymentStatus
       },
-      payment.id
+      new UniqueEntityID(payment.id)
     );
   }
   async findById(id: string): Promise<Payment | null> {
@@ -39,11 +41,11 @@ export default class PaymentRepository implements IPaymentRepository {
       {
         code: payment.code,
         created_at: payment.created_at,
-        order_id: payment.order_id,
+        order_id: new UniqueEntityID(payment.order_id),
         total_amount: Number(payment.total_amount),
         status:payment.status as TPaymentStatus
       },
-      payment.id
+      new UniqueEntityID(payment.id)
     );
   }
 
@@ -51,8 +53,8 @@ export default class PaymentRepository implements IPaymentRepository {
    
     await prisma.payment.create({
       data: {
-        id: payment.id,
-        order_id: payment.order_id,
+        id: payment.id.toString(),
+        order_id: payment.order_id.toString(),
         total_amount: payment.total_amount,
         code:String(payment.code),
         created_at: payment.created_at,
@@ -71,7 +73,7 @@ export default class PaymentRepository implements IPaymentRepository {
         
       },
       where: {
-        id: payment.id,
+        id: payment.id.toString(),
       },
     });
 
@@ -90,11 +92,11 @@ export default class PaymentRepository implements IPaymentRepository {
       {
         code: payment.code,
         created_at: payment.created_at,
-        order_id: payment.order_id,
+        order_id: new UniqueEntityID(payment.order_id),
         total_amount: Number(payment.total_amount),
         status:payment.status as TPaymentStatus
       },
-      payment.id
+      new UniqueEntityID(payment.id)
     );
   }
 }

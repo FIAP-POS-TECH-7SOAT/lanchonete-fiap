@@ -4,16 +4,16 @@ import { CancelOrderById } from "@application/domain/orders/application/use-case
 import { Request, Response } from "express";
 import { OrderMapping } from "../mapping/order-mapping";
 import { z } from "zod";
-import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
+import OrderRepository from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
 import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
-import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
+import PaymentRepository from "@adapters/drivens/infra/database/prisma/repositories/payment-repository";
 import { PaymentMapping } from "../mapping/payment-mapping";
-import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
+import ProductRepository from "@adapters/drivens/infra/database/prisma/repositories/product-repository";
 import { UpdateOrderById } from "@application/domain/orders/application/use-case/update-order-by-id-use-case";
 import { TOrderStatus } from "@application/domain/orders/entities/order-entity";
 import { ListAllOrdersByFilters } from "@application/domain/orders/application/use-case/list-all-order-by-filters-use-case";
 import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
-import OrderProductRepository from "src/adapters/drivens/infra/repositories/order-product-repository";
+import OrderProductRepository from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
 
 const orderRepository = new OrderRepository();
 const orderProductRepository = new OrderProductRepository();

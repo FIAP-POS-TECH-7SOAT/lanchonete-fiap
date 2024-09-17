@@ -3,7 +3,7 @@ import { FindProductService } from "@application/domain/products/application/use
 import { FindProductsByCategoryService } from "@application/domain/products/application/use-case/find-product-by-category-use-case";
 
 import { Request, Response } from "express";
-import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
+import ProductRepository from "@adapters/drivens/infra/database/prisma/repositories/product-repository";
 import { Category } from "@application/domain/categories/entities/category";
 
 import { z } from "zod";

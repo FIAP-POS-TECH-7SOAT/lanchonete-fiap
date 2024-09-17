@@ -2,7 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import jwksClient from 'jwks-rsa';
 
 import { JWTValidatorInterface } from "@application/domain/clients/application/ports/providers/jwt-validator.interface";
-import { env } from '@shared/env';
+import { env } from '@adapters/drivens/infra/env';
 
 export class JWTCognitoAWSValidator implements JWTValidatorInterface {
 

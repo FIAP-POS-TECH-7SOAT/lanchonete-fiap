@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 import { IPaymentGateway } from "@application/domain/orders/application/ports/providers/IPayment-gateway";
 import { ProcessPaymentRequest } from "@application/domain/orders/application/ports/providers/dtos/process-payment-request-dto";
 import { ProcessPaymentResponse } from "@application/domain/orders/application/ports/providers/dtos/process-payment-response-dto";
-import { env } from '@shared/env';
+import { env } from '@adapters/drivens/infra/env';
 import { AppError } from '@shared/errors/AppError';
 
 export class MercadoPagoPixPaymentGateway implements IPaymentGateway {

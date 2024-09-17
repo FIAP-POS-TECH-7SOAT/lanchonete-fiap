@@ -2,7 +2,7 @@ import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import fs from 'fs'
 
 import { IUploadFile, UploadFileProps } from "@application/domain/products/application/ports/providers/upload-file-interface";
-import { env } from '@shared/env';
+import { env } from '@adapters/drivens/infra/env';
 import path, { extname } from 'path';
 
 export class AWSUploadFile implements IUploadFile{

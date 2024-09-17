@@ -2,7 +2,7 @@ import { Storage,Bucket } from '@google-cloud/storage'
 import fs from 'fs'
 
 import { IUploadFile, UploadFileProps } from "@application/domain/products/application/ports/providers/upload-file-interface";
-import { env } from '@shared/env';
+import { env } from '@adapters/drivens/infra/env';
 import path from 'path';
 
 export class GCPUploadFile implements IUploadFile{

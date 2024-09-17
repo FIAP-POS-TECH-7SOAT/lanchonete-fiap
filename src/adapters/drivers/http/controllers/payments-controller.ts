@@ -4,11 +4,11 @@ import { FindPaymentByIdService } from "@application/domain/orders/application/u
 import { Request, Response } from "express";
 
 import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
-import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
-import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
+import PaymentRepository from "@adapters/drivens/infra/database/prisma/repositories/payment-repository";
+import OrderRepository from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
 
 import { z } from "zod";
-import { env } from "@shared/env";
+import { env } from "@adapters/drivens/infra/env";
 import { PaymentMapping } from "../mapping/payment-mapping";
 import { OrderMapping } from "../mapping/order-mapping";
 import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";

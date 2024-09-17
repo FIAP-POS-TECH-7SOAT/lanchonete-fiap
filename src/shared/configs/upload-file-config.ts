@@ -1,6 +1,6 @@
 import multer from "multer";
 import { extname, resolve } from "path";
-import { env } from "@shared/env";
+import { env } from "@adapters/drivens/infra/env";
 
 const destination = resolve(__dirname,'..','..','shared','tmp', 'uploads');
 const multerObj = {

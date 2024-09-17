@@ -1,8 +1,8 @@
 import { IOrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
 import { Order, TOrderStatus } from "@application/domain/orders/entities/order-entity";
-//prettier-ignore
+
 import { GetAllDTO } from "@application/domain/orders/application/ports/repositories/dtos/order-dto";
-import { prisma } from "@shared/lib/prisma";
+import { prisma } from "../prisma-client";
 import { OrderMapping } from "./mapping/orders-mapping";
 
 export default class OrderRepository implements IOrderRepository {
@@ -66,7 +66,7 @@ export default class OrderRepository implements IOrderRepository {
   async update(order: Order): Promise<Order> {
     await prisma.order.update({
       where: {
-        id: order.id,
+        id: order.id.toString(),
       },
       data: OrderMapping.toPrisma(order)
     });

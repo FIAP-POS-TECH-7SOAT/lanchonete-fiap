@@ -4,7 +4,7 @@ import 'express-async-errors';
 import cors from 'cors'
 import { routers } from './routes';
 import { AppError } from '@shared/errors/AppError';
-import { env } from '@shared/env';
+import { env } from '@adapters/drivens/infra/env';
 import swaggerUi from 'swagger-ui-express';
 import { resolve } from 'path';
 

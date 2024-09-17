@@ -1,12 +1,12 @@
 import { IProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
-import { CreateProductDTO } from "@application/domain/products/application/ports/repositories/dtos/create-product-dto";
+
 import { UploadProductImageDTO } from "@application/domain/products/application/ports/repositories/dtos/upload-product-imagem-dto";
 
 import { Product } from "@application/domain/products/entities/product";
 import { Category } from "@application/domain/categories/entities/category";
 import { Category as CategoryPrisma } from "@prisma/client";
 
-import { prisma } from "@shared/lib/prisma";
+import { prisma } from "../prisma-client";
 import { ProductMapping } from "./mapping/product-mapping";
 
 export default class ProductRepository implements IProductRepository {

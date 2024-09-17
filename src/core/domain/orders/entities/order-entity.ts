@@ -1,4 +1,4 @@
-import { Entity } from "@application/common/entities/entity";
+import { AggregateRoot } from "@application/common/entities/aggregate-root";
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 import { Optional } from "@prisma/client/runtime/library";
 import { format } from "date-fns";
@@ -17,10 +17,9 @@ export interface OrderProps {
   created_at: Date;
   canceled_at?: Date | null;
   code:string
-  
 }
 
-export class Order extends Entity<OrderProps> {
+export class Order extends AggregateRoot<OrderProps> {
   constructor(props: OrderProps, id?: UniqueEntityID) {
     props.created_at ?? new Date()
     super(props, id);
