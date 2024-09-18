@@ -1,9 +1,11 @@
 
 import { isValidCPF } from "@brazilian-utils/brazilian-utils";
-import { IClientRepository } from "../ports/repositories/Iclient-repository";
+
 
 import { AppError } from "@shared/errors/AppError";
-import { Client } from "@application/clients/domain/client-entity";
+import { Client } from "../../entities/client-entity";
+import { IClientRepository } from "../ports/repositories/Iclient-repository";
+
 
 interface IRequest {
   id:string,

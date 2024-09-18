@@ -1,9 +1,9 @@
-import { Client } from "@application/clients/domain/client-entity";
-import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
-import { IClientRepository } from "../ports/repositories/Iclient-repository";
-import { IClientService } from "@application/clients/application/use-case/Iclient-use-case";
+
+import { IClientService } from "@application/domain/clients/application/use-case/Iclient-use-case";
 import { AppError } from "@shared/errors/AppError";
 import { isValidCPF } from "@brazilian-utils/brazilian-utils";
+import { IClientRepository } from "../ports/repositories/Iclient-repository";
+import { Client } from "../../entities/client-entity";
 
 export class ClientServiceImpl implements IClientService {
   constructor(private clientRepository: IClientRepository) {}
