@@ -5,7 +5,8 @@ import { Request, Response } from "express";
 
 import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
 import PaymentRepository from "@adapters/drivens/infra/database/prisma/repositories/payment-repository";
-import OrderRepository from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
+import {PrismaOrderRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
+import {PrismaOrderProductRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
 
 import { z } from "zod";
 import { env } from "@adapters/drivens/infra/env";
@@ -16,7 +17,8 @@ import { ProcessPaymentService } from "@application/domain/orders/application/us
 
 const paymentRepository = new PaymentRepository();
 
-const orderRepository = new OrderRepository();
+const orderProductRepository = new PrismaOrderProductRepository();
+const orderRepository = new PrismaOrderRepository(orderProductRepository);
 
 const generateCodeProvider = new GenerateCodeProvider();
 
@@ -95,7 +97,7 @@ class PaymentsController {
       id
     });
     const findOrderByIdUseCase = new FindOrderByIdUseCase(orderRepository);
-    const {order} = await findOrderByIdUseCase.execute({id:payment.order_id})
+    const {order} = await findOrderByIdUseCase.execute({id:payment.order_id.toString()})
     return res.json({
       payment:PaymentMapping.toView(payment),
       order:order?OrderMapping.toView(order):null

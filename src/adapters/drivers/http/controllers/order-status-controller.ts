@@ -2,9 +2,11 @@ import { UpdateOrderStatusById } from "@application/domain/orders/application/us
 import { Request, Response } from "express";
 
 import { z } from "zod";
-import OrderRepository from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
+import {PrismaOrderProductRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
+import {PrismaOrderRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
 
-const orderRepository = new OrderRepository();
+const orderProductRepository = new PrismaOrderProductRepository();
+const orderRepository = new PrismaOrderRepository(orderProductRepository);
 
 class OrderStatusController {
   async update(req: Request, res: Response): Promise<Response> {
@@ -34,7 +36,7 @@ class OrderStatusController {
     const updateOrderStatusById = new UpdateOrderStatusById(orderRepository);
     const order = await updateOrderStatusById.execute({
       id,
-      status: status?.toString(),
+      status: status?.toString() as any,
     });
 
     return res.json(order);

@@ -11,13 +11,12 @@ export class OrderMapping {
     client_id,
     created_at,
     id,
-    products,
     status,
     canceled_at,
     code
   }: CompleteOrderPrima) {
     return Order.create(
-      { client_id, created_at, products, status:status as TOrderStatus, canceled_at: canceled_at,code },
+      { client_id, created_at, status:status as TOrderStatus, canceled_at: canceled_at,code },
       new UniqueEntityID(id)
     );
   }
@@ -34,12 +33,7 @@ export class OrderMapping {
       created_at: order.created_at,
       status: order.status,
       canceled_at: order.canceled_at,
-      products: {
-        create: order.products.map((item) => ({
-          amount: item.amount,
-          product_id: item.id,
-        })),
-      },
+   
     };
   }
   static toPrisma(order: Order) {
@@ -50,14 +44,6 @@ export class OrderMapping {
       id: order.id.toString(),
       client_id: order.client_id ?? null,
       code:order.code,
-      products:{
-        createMany:{
-          data:order.products.map(item=>({
-            amount:item.amount,
-            product_id:item.id,
-          }))
-        }
-      }
     };
   }
 }

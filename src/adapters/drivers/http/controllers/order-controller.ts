@@ -4,22 +4,23 @@ import { CancelOrderById } from "@application/domain/orders/application/use-case
 import { Request, Response } from "express";
 import { OrderMapping } from "../mapping/order-mapping";
 import { z } from "zod";
-import OrderRepository from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
+import {PrismaOrderRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
 import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
 import PaymentRepository from "@adapters/drivens/infra/database/prisma/repositories/payment-repository";
 import { PaymentMapping } from "../mapping/payment-mapping";
 
 
-import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
-import OrderProductRepository from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
+
+import {PrismaOrderProductRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
 import ClientRepository from "@adapters/drivens/infra/database/prisma/repositories/client-repository";
 import ProductRepository from "@adapters/drivens/infra/database/prisma/repositories/product-repository";
 import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
 import { ListAllOrdersByFilters } from "@application/domain/orders/application/use-case/list-all-order-by-filters-use-case";
 import { UpdateOrderById } from "@application/domain/orders/application/use-case/update-order-by-id-use-case";
+import { CreateClientDTO } from "@application/domain/clients/application/ports/repositories/dtos/client-dto";
 
-const orderRepository = new OrderRepository();
-const orderProductRepository = new OrderProductRepository();
+const orderProductRepository = new PrismaOrderProductRepository();
+const orderRepository = new PrismaOrderRepository(orderProductRepository);
 const productRepository = new ProductRepository();
 const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
 const paymentRepository = new PaymentRepository();
@@ -115,15 +116,14 @@ class OrderController {
            }
        }
      */
-
+    const {id} = req.params
     const checkInBodySchema = z.object({
-      id: z.string(),
       products: z.array(z.any()),
-      status: z.string(),
-      client_id: z.string(),
+      // status: z.string(),
+      // client_id: z.string(),
     });
 
-    const { id, products } = checkInBodySchema.parse(
+    const { products } = checkInBodySchema.parse(
       req.body
     );
     const updateOrderById = new UpdateOrderById(orderRepository,orderProductRepository);

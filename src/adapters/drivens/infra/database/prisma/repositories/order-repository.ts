@@ -5,7 +5,15 @@ import { GetAllDTO } from "@application/domain/orders/application/ports/reposito
 import { prisma } from "../prisma-client";
 import { OrderMapping } from "./mapping/orders-mapping";
 
-export default class OrderRepository implements IOrderRepository {
+import { OrderProductRepository } from "@application/domain/orders/application/ports/repositories/order-product-repository";
+
+export class PrismaOrderRepository implements IOrderRepository {
+
+  constructor(
+
+    private orderProductRepository: OrderProductRepository,
+  ) {}
+
   async findById(id: string): Promise<Order | null> {
     const order = await prisma.order.findUnique({
       where: {
@@ -64,20 +72,26 @@ export default class OrderRepository implements IOrderRepository {
   }
 
   async update(order: Order): Promise<Order> {
-    await prisma.order.update({
-      where: {
-        id: order.id.toString(),
-      },
-      data: OrderMapping.toPrisma(order)
-    });
+    await Promise.all([
+      prisma.order.update({
+        where: {
+          id: order.id.toString(),
+        },
+        data: OrderMapping.toPrisma(order)
+      }),
+      this.orderProductRepository.createMany(order.products.getNewItems()),
+      this.orderProductRepository.deleteMany(order.products.getRemovedItems())
+    ])
 
     return order;
   }
 
   async create(order: Order): Promise<Order> {
+
     await prisma.order.create({
       data: OrderMapping.toCreatePrisma(order),
     });
+    await this.orderProductRepository.createMany(order.products.getItems());
     return order;
   }
 }
