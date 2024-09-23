@@ -1,33 +1,37 @@
-import { IPaymentRepository } from "@application/domain/orders/application/ports/repositories/IPayment-repository";
 
-import { Payment, TPaymentStatus } from "@application/domain/orders/entities/payment";
+
+
 
 
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 import { prisma } from "../prisma-client";
+import { DomainEvents } from "@application/common/events/domain-events";
+import { PaymentRepository } from "@application/domain/payments/application/ports/repositories/payment-repository";
+import { Payment, TPaymentStatus } from "@application/domain/payments/entities/payment";
 
-export default class PaymentRepository implements IPaymentRepository {
+
+export  class PrismaPaymentRepository implements PaymentRepository {
   
-  async findByOrderId(order_id: string): Promise<Payment | null> {
-    const payment = await prisma.payment.findFirst({
-      where: {
-        order_id,
-      },
-    });
-    if (!payment) {
-      return null;
-    }
-    return new Payment(
-      {
-        code: payment.code,
-        created_at: payment.created_at,
-        order_id: new UniqueEntityID(payment.order_id),
-        total_amount: Number(payment.total_amount),
-        status:payment.status as TPaymentStatus
-      },
-      new UniqueEntityID(payment.id)
-    );
+async findByOrderId(order_id: string): Promise<Payment | null> {
+  const payment = await prisma.payment.findFirst({
+    where: {
+      order_id,
+    },
+  });
+  if (!payment) {
+    return null;
   }
+  return new Payment(
+    {
+      code: payment.code,
+      created_at: payment.created_at,
+      order_id: new UniqueEntityID(payment.order_id),
+      total_amount: Number(payment.total_amount),
+      status:payment.status as TPaymentStatus
+    },
+    new UniqueEntityID(payment.id)
+  );
+}
   async findById(id: string): Promise<Payment | null> {
     const payment = await prisma.payment.findFirst({
       where: {
@@ -61,7 +65,7 @@ export default class PaymentRepository implements IPaymentRepository {
         status:payment.status as TPaymentStatus
       },
     });
-
+    DomainEvents.dispatchEventsForAggregate(payment.id)
     return payment;
   }
 

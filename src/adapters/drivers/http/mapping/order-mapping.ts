@@ -5,7 +5,10 @@ export class OrderMapping {
     return {
       id:id.toString(),
       client_id,
-      products,
+      products:products.currentItems.map(product=>({
+        id:product.id.toString(),
+        amount: product.amount
+      })),
       status,
       created_at,
       canceled_at,

@@ -1,10 +1,10 @@
 
 
-import { FindPaymentByIdService } from "@application/domain/orders/application/use-case/find-payment-by-id-use-case";
+
 import { Request, Response } from "express";
 
 import { GenerateCodeProvider } from "src/adapters/drivens/infra/providers/generation-unique-code";
-import PaymentRepository from "@adapters/drivens/infra/database/prisma/repositories/payment-repository";
+import { PrismaPaymentRepository } from "@adapters/drivens/infra/database/prisma/repositories/payment-repository";
 import {PrismaOrderRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
 import {PrismaOrderProductRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
 
@@ -13,18 +13,69 @@ import { env } from "@adapters/drivens/infra/env";
 import { PaymentMapping } from "../mapping/payment-mapping";
 import { OrderMapping } from "../mapping/order-mapping";
 import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
-import { ProcessPaymentService } from "@application/domain/orders/application/use-case/process-payment-use-case";
+import { ProcessPaymentService } from "@application/domain/payments/application/use-case/process-payment-use-case";
+import { FindPaymentByIdService } from "@application/domain/payments/application/use-case/find-payment-by-id-use-case";
+import { CreatePaymentUseCase } from "@application/domain/payments/application/use-case/create-payment-use-case";
+import { MercadoPagoPixPaymentGateway } from "@adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
+import ClientRepository from "@adapters/drivens/infra/database/prisma/repositories/client-repository";
 
-const paymentRepository = new PaymentRepository();
+
+const paymentRepository = new PrismaPaymentRepository();
 
 const orderProductRepository = new PrismaOrderProductRepository();
 const orderRepository = new PrismaOrderRepository(orderProductRepository);
 
 const generateCodeProvider = new GenerateCodeProvider();
-
+const clientRepository = new ClientRepository();
 
 class PaymentsController {
   async create(req: Request, res: Response): Promise<Response> {
+    /*
+       #swagger.tags = ['Payments']
+       #swagger.summary = 'Create a new payment'
+
+        #swagger.parameters['Product']  = {
+          in: 'body',
+          description: 'Payment info',
+          required: true,
+          schema:{
+            amount: 140000,
+            id: 'nb-order-id',
+            state:'pago'
+          }
+        } 
+     */
+    
+    const checkInBodySchema =  z.object({
+      recipient_id:z.string()
+    });
+
+    const { recipient_id } = checkInBodySchema.parse(req.body);
+    
+ 
+    const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway()
+    
+    const createPaymentUseCase = new CreatePaymentUseCase(
+      paymentRepository,
+      clientRepository,
+      orderRepository,
+      mercadoPagoPixPaymentGateway,
+    );
+
+    const { payment, total_amount,payment_gateway } = await createPaymentUseCase.execute({
+      client_id:req.user.id,
+      order_id:recipient_id,
+       
+    });
+
+    return res.json({
+      payment,
+      total_amount,
+      payment_gateway
+
+    });
+  }
+  async process(req: Request, res: Response): Promise<Response> {
     /*
        #swagger.tags = ['Payments']
        #swagger.summary = 'Create a new payment'

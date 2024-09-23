@@ -11,7 +11,7 @@ export interface IOrderProduct{
     amount:number
   
 }
-export type TOrderStatus = 'Recebido' | 'Em preparação' | 'Pronto' |'Finalizado'
+export type TOrderStatus = 'Pendente'|'Recebido' | 'Em preparação' | 'Pronto' |'Finalizado'
 
 export interface OrderProps {
   products: OrderProductList;
@@ -79,5 +79,8 @@ export class Order extends AggregateRoot<OrderProps> {
   }
   public set canceled_at(canceled_at:Date) {
     this.props.canceled_at = canceled_at;
+  }
+  public get total_amount(): number {
+    return 50;
   }
 }

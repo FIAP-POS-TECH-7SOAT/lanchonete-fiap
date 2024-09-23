@@ -2,15 +2,18 @@
 import express,{  Request, Response, NextFunction } from 'express'
 import 'express-async-errors';
 import cors from 'cors'
-import { routers } from './routes';
-import { AppError } from '@shared/errors/AppError';
-import { env } from '@adapters/drivens/infra/env';
 import swaggerUi from 'swagger-ui-express';
 import { resolve } from 'path';
+import { ZodError } from 'zod';
 
+
+import '@adapters/drivens/infra/events';
+
+import { env } from '@adapters/drivens/infra/env';
+import { AppError } from '@shared/errors/AppError';
+import { routers } from './routes';
 
 import swaggerFile from './swagger-output.json';
-import { ZodError } from 'zod';
 
 
 const app = express();

@@ -1,6 +1,7 @@
-import { Entity } from "@application/common/entities/entity"
 import { Optional } from "@application/common/entities/optional";
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
+import { PaymentCreatedEvent } from "../application/events/payment-created-event";
+import { AggregateRoot } from "@application/common/entities/aggregate-root";
 
 export type TPaymentStatus = 'pending' | 'approved'| 'cancelled'
 export interface PaymentProps {
@@ -11,14 +12,7 @@ export interface PaymentProps {
   created_at:Date
 }
 
-export class Payment extends Entity<PaymentProps>{
-  constructor(
-    props: PaymentProps,
-    id?: UniqueEntityID,
-  ) {
-    props.created_at ?? new Date()
-    super(props, id)
-  }
+export class Payment extends AggregateRoot<PaymentProps>{
 
   static create(
     props: Optional<PaymentProps, 'created_at'>,
@@ -32,6 +26,13 @@ export class Payment extends Entity<PaymentProps>{
       },
       id,
     )
+
+    const isNew = !id
+
+    if (isNew) {
+      payment.addDomainEvent(new PaymentCreatedEvent(payment))
+    }
+
     return payment
   }
 

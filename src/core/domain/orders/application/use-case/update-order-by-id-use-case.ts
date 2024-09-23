@@ -1,5 +1,5 @@
 import {  Order } from "@application/domain/orders/entities/order-entity";
-import { IOrderRepository } from "../ports/repositories/order-repository";
+import { OrderRepository } from "../ports/repositories/order-repository";
 import { AppError } from "@shared/errors/AppError";
 import { OrderProductRepository } from "../ports/repositories/order-product-repository";
 import { OrderProductList } from "../../entities/order-products-list";
@@ -20,7 +20,7 @@ interface IResponse {
 }
 export class UpdateOrderById {
   constructor(
-    private orderRepository: IOrderRepository,
+    private orderRepository: OrderRepository,
     private orderProductRepository: OrderProductRepository,
   ) {}
   async execute({ id, products }: IRequest): Promise<IResponse> {
@@ -33,7 +33,7 @@ export class UpdateOrderById {
     const orderProducts = products.map(item=>OrderProduct.create({order_id:new UniqueEntityID(id),amount:item.amount,product_id:new UniqueEntityID(item.id)}))
     orderProductList.update(orderProducts)
     order.products = orderProductList
-  
+    
     await this.orderRepository.update(order);
     return {order};
   }

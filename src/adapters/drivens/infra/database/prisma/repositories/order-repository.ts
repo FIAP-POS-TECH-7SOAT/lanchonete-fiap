@@ -1,4 +1,4 @@
-import { IOrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
+import { OrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
 import { Order, TOrderStatus } from "@application/domain/orders/entities/order-entity";
 
 import { GetAllDTO } from "@application/domain/orders/application/ports/repositories/dtos/order-dto";
@@ -7,7 +7,7 @@ import { OrderMapping } from "./mapping/orders-mapping";
 
 import { OrderProductRepository } from "@application/domain/orders/application/ports/repositories/order-product-repository";
 
-export class PrismaOrderRepository implements IOrderRepository {
+export class PrismaOrderRepository implements OrderRepository {
 
   constructor(
 

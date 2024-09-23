@@ -1,20 +1,18 @@
-import { Order } from "@application/domain/orders/entities/order-entity";
-
-
-
 import { Payment, TPaymentStatus } from "../../entities/payment";
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 import { Client } from "@application/domain/clients/entities/client-entity";
-import { PaymentRepository } from "../ports/repositories/IPayment-repository";
+import { PaymentRepository } from "../ports/repositories/payment-repository";
 import { PaymentGateway } from "../ports/providers/payment-gateway";
 import { ProcessPaymentResponse } from "../ports/providers/dtos/process-payment-response-dto";
+import { IClientRepository } from "@application/domain/clients/application/ports/repositories/Iclient-repository";
+import { AppError } from "@shared/errors/AppError";
+import { OrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
 
 
 
 interface IRequest {
   order_id:string;
-  total_amount:number;
-  client: Client| null ,
+  client_id: string | null ,
 
 }
 interface IResponse {
@@ -25,16 +23,29 @@ interface IResponse {
 }
 export class CreatePaymentUseCase {
   constructor(
-
     private paymentRepository: PaymentRepository,
+    private clientRepository: IClientRepository,
+    private orderRepository: OrderRepository,
     private paymentGateway: PaymentGateway,
 
   ) {}
-  async execute({ client, total_amount,order_id }: IRequest): Promise<IResponse> {
+  async execute({ client_id,order_id }: IRequest): Promise<IResponse> {
+    let client:Client|null= null
 
-
+    if (client_id){
+      client = await this.clientRepository.findById(client_id);
+      if(!client){
+        throw new AppError('Cliente nao encontrado')
+      }
+    
+    }
+    const order = await this.orderRepository.findById(order_id);
+    if(!order){
+      throw new AppError('pedido nao encontrado')
+    }
+    
     const paymentProcessInt = await this.paymentGateway.processPayment({
-      amount:total_amount,
+      amount:order.total_amount,
       customer:client?{
         doc_number:client.cpf,
         email:client.email
@@ -45,7 +56,7 @@ export class CreatePaymentUseCase {
     const payment = Payment.create({
       code:paymentProcessInt.id,
       order_id:new UniqueEntityID(order_id),
-      total_amount,
+      total_amount:order.total_amount,
       status:paymentProcessInt.status as TPaymentStatus
     })
 
@@ -53,7 +64,7 @@ export class CreatePaymentUseCase {
     
     
     return {
-      total_amount,
+      total_amount:order.total_amount,
       payment_gateway: paymentProcessInt,
       payment,
     };

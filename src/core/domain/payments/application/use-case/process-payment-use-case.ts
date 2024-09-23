@@ -1,6 +1,6 @@
 import { IGenerateCodeProvider } from "@application/domain/orders/application/ports/providers/IGenerate-code-provider";
 import { IPaymentRepository } from "@application/domain/orders/application/ports/repositories/IPayment-repository";
-import { IOrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
+import { OrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
 import { Payment, TPaymentStatus } from "../../entities/payment";
 
 
@@ -21,7 +21,7 @@ export class ProcessPaymentService {
   constructor(
     private paymentRepository: IPaymentRepository,
     private generateCodeProvider: IGenerateCodeProvider,
-    private orderRepository: IOrderRepository
+    private orderRepository: OrderRepository
   ) {}
 
   public async execute({

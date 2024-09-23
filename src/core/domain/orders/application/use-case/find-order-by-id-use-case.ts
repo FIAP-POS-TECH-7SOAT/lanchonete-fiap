@@ -2,7 +2,7 @@
 
 import { AppError } from "@shared/errors/AppError";
 
-import { IOrderRepository } from "../ports/repositories/order-repository";
+import { OrderRepository } from "../ports/repositories/order-repository";
 import { Order } from "@application/domain/orders/entities/order-entity";
 
 interface IRequest {
@@ -16,7 +16,7 @@ interface IResponse {
 
 export class FindOrderByIdUseCase {
   constructor(
-    private orderRepository: IOrderRepository,
+    private orderRepository: OrderRepository,
   ) {}
 
   public async execute({

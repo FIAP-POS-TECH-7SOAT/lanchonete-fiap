@@ -1,5 +1,5 @@
 import { Order, TOrderStatus } from "@application/domain/orders/entities/order-entity";
-import { IOrderRepository } from "../ports/repositories/order-repository";
+import { OrderRepository } from "../ports/repositories/order-repository";
 import { AppError } from "@shared/errors/AppError";
 
 interface IRequest {
@@ -8,7 +8,7 @@ interface IRequest {
 }
 interface IResponse extends Order {}
 export class UpdateOrderStatusById {
-  constructor(private orderRepository: IOrderRepository) {}
+  constructor(private orderRepository: OrderRepository) {}
   async execute({ id, status }: IRequest): Promise<IResponse> {
     const order = await this.orderRepository.findById(id);
     if (!order) {
