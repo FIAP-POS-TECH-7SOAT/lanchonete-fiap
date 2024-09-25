@@ -1,5 +1,5 @@
 import { Product } from "@application/domain/products/entities/product";
-import { IProductRepository } from "../ports/repositories/IProduct-repository";
+import { ProductRepository } from "../ports/repositories/IProduct-repository";
 import { Category } from "@application/domain/categories/entities/category";
 
 interface IRequest {
@@ -12,7 +12,7 @@ interface IRequest {
 interface IResponse extends Product {}
 
 export class UpdateProductService {
-  constructor(private productRepository: IProductRepository) {}
+  constructor(private productRepository: ProductRepository) {}
 
   public async execute({
     id,

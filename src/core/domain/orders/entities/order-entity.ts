@@ -20,6 +20,7 @@ export interface OrderProps {
   created_at: Date;
   canceled_at?: Date | null;
   code:string
+  total_amount:number
 }
 
 export class Order extends AggregateRoot<OrderProps> {
@@ -81,6 +82,6 @@ export class Order extends AggregateRoot<OrderProps> {
     this.props.canceled_at = canceled_at;
   }
   public get total_amount(): number {
-    return 50;
+    return this.props.total_amount
   }
 }

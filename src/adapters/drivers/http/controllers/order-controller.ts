@@ -61,14 +61,13 @@ class OrderController {
 
   
 
-    const {order,total_amount} = await createOrderUseCase.execute({
-      client_id:req.user.id,
+    const {order} = await createOrderUseCase.execute({
+      client:req.user,
       products,
     });
 
     return res.json({
       order:OrderMapping.toView(order),
-      total_amount
     });
   }
   async update(req: Request, res: Response): Promise<Response | null> {
@@ -101,13 +100,15 @@ class OrderController {
     const { products } = checkInBodySchema.parse(
       req.body
     );
-    const updateOrderById = new UpdateOrderById(orderRepository,orderProductRepository);
+    const updateOrderById = new UpdateOrderById(orderRepository,orderProductRepository,productRepository);
     const {order} = await updateOrderById.execute({
       id,
       products,
     });
-
-    return res.json(OrderMapping.toView(order));
+    
+    return res.json({
+      order:OrderMapping.toView(order)
+    });
   }
   async getAll(req: Request, res: Response): Promise<Response> {
     /*

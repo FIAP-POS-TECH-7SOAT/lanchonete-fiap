@@ -1,4 +1,4 @@
-import { IProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
+import { ProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
 import { CreateProductDTO } from "@application/domain/products/application/ports/repositories/dtos/create-product-dto";
 import { UploadProductImageDTO } from "@application/domain/products/application/ports/repositories/dtos/upload-product-imagem-dto";
 
@@ -11,7 +11,7 @@ import { AppError } from "@shared/errors/AppError";
 import { Product } from "@application/domain/products/entities/product";
 
 
-export default class FakeProductRepository implements IProductRepository {
+export default class FakeProductRepository implements ProductRepository {
 
   private repository:Product[] = [];
   async findByIds(ids: string[]): Promise<Product[]> {

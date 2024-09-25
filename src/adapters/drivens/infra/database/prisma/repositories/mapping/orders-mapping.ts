@@ -13,15 +13,17 @@ export class OrderMapping {
     id,
     status,
     canceled_at,
+    total_amount,
     code
   }: CompleteOrderPrima) {
     return Order.create(
-      { client_id, created_at, status:status as TOrderStatus, canceled_at: canceled_at,code },
+      { client_id, created_at, status:status as TOrderStatus, canceled_at: canceled_at,code,total_amount:Number(total_amount) },
       new UniqueEntityID(id)
     );
   }
 
   static toCreatePrisma(order: Order): Prisma.OrderCreateInput {
+        
     const client = order.client_id?{
       connect: {
         id: order.client_id,
@@ -33,6 +35,7 @@ export class OrderMapping {
       created_at: order.created_at,
       status: order.status,
       canceled_at: order.canceled_at,
+      total_amount:order.total_amount,
    
     };
   }
@@ -44,6 +47,7 @@ export class OrderMapping {
       id: order.id.toString(),
       client_id: order.client_id ?? null,
       code:order.code,
+      total_amount:order.total_amount
     };
   }
 }

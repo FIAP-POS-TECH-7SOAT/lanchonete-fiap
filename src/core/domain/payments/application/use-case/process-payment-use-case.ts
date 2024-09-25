@@ -1,10 +1,11 @@
 import { IGenerateCodeProvider } from "@application/domain/orders/application/ports/providers/IGenerate-code-provider";
-import { IPaymentRepository } from "@application/domain/orders/application/ports/repositories/IPayment-repository";
+
 import { OrderRepository } from "@application/domain/orders/application/ports/repositories/order-repository";
 import { Payment, TPaymentStatus } from "../../entities/payment";
 
 
 import { AppError } from "@shared/errors/AppError";
+import { PaymentRepository } from "../ports/repositories/payment-repository";
 
 
 interface IRequest {
@@ -19,7 +20,7 @@ interface IResponse {
 
 export class ProcessPaymentService {
   constructor(
-    private paymentRepository: IPaymentRepository,
+    private paymentRepository: PaymentRepository,
     private generateCodeProvider: IGenerateCodeProvider,
     private orderRepository: OrderRepository
   ) {}

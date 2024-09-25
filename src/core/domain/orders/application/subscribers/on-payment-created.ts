@@ -1,6 +1,7 @@
 import { DomainEvents } from "@application/common/events/domain-events"
 import { EventHandler } from "@application/common/events/event-handler"
-import { PaymentCreatedEvent } from "@application/domain/payments/application/events/payment-created-event"
+import { DomainEvent } from "@application/common/events/domain-event";
+import { EventMap } from "@application/common/events/events-registered";
 
 import { AddCodeToOrderByIdUseCase } from "../use-case/add-code-to-order-by-id-use-case";
 
@@ -16,14 +17,14 @@ export class OnPaymentCreated implements EventHandler {
   setupSubscriptions(): void {
     DomainEvents.register(
       this.sendPaymentCreatedNotification.bind(this),
-      PaymentCreatedEvent.name,
+      EventMap.PaymentCreatedEvent.key,
     )
   }
 
-  private async sendPaymentCreatedNotification({ payment }: PaymentCreatedEvent) {
-
+  private async sendPaymentCreatedNotification({ data }: DomainEvent<typeof EventMap['PaymentCreatedEvent']['type']>) {
+    
     await this.addCodeToOrderByIdUseCase.execute({
-      id:payment.order_id.toString()
+      id:data.order_id.toString()
     })
     
     

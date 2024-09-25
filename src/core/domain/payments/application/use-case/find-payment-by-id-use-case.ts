@@ -1,6 +1,7 @@
-import { IPaymentRepository } from "@application/domain/orders/application/ports/repositories/IPayment-repository";
+
 import { Payment } from "../../entities/payment";
 import { AppError } from "@shared/errors/AppError";
+import { PaymentRepository } from "../ports/repositories/payment-repository";
 
 
 
@@ -15,7 +16,7 @@ interface IResponse {
 
 export class FindPaymentByIdService {
   constructor(
-    private paymentRepository: IPaymentRepository,
+    private paymentRepository: PaymentRepository,
   ) {}
 
   public async execute({

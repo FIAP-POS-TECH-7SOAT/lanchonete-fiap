@@ -5,6 +5,7 @@ export interface OrderProductProps {
   order_id: UniqueEntityID;
   product_id: UniqueEntityID;
   amount: number;
+  unit_price:number
  
 }
 
@@ -22,6 +23,9 @@ export class OrderProduct extends Entity<OrderProductProps> {
 
   public get amount() {
     return this.props.amount;
+  }
+  public get unit_price() {
+    return this.props.unit_price;
   }
   static create(props: OrderProductProps, id?: UniqueEntityID) {
     const orderProduct = new OrderProduct(props, id)

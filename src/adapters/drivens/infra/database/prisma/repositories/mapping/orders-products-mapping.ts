@@ -10,10 +10,11 @@ export class OrderProductsMapping {
     amount,
     id,
     order_id,
-    product_id
+    product_id,
+    unit_price
   }: OrderProductPrisma) {
     return OrderProduct.create(
-      { amount, order_id:new UniqueEntityID(order_id), product_id:new UniqueEntityID(product_id) },
+      { amount, order_id:new UniqueEntityID(order_id), product_id:new UniqueEntityID(product_id),unit_price:Number(unit_price) },
       new UniqueEntityID(id)
     );
   }
@@ -27,6 +28,7 @@ export class OrderProductsMapping {
       amount:item.amount,
       order_id:item.order_id.toString(),
       product_id:item.product_id.toString(),
+      unit_price:item.unit_price
     }))
 
     return {

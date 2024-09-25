@@ -1,5 +1,5 @@
 import { Product } from "@application/domain/products/entities/product";
-import { IProductRepository } from "../ports/repositories/IProduct-repository";
+import { ProductRepository } from "../ports/repositories/IProduct-repository";
 import { IUploadFile } from "../ports/providers/upload-file-interface";
 
 interface IRequest {
@@ -11,7 +11,7 @@ interface IResponse extends Product {}
 
 export class UploadProductImageService {
   constructor(
-    private productRepository: IProductRepository,
+    private productRepository: ProductRepository,
     private uploadFile:IUploadFile
   ) {}
 

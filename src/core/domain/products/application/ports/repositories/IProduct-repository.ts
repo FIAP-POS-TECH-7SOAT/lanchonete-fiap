@@ -3,7 +3,7 @@ import { Category } from "@application/domain/categories/entities/category";
 import { Product } from "../../../entities/product";
 import { UploadProductImageDTO } from "./dtos/upload-product-imagem-dto";
 
-export interface IProductRepository {
+export interface ProductRepository {
   findById(id: string): Promise<Product | null>;
   findByIds(ids: string[]): Promise<Product[]>;
   findManyByCategory(category: Category): Promise<Product[]>;

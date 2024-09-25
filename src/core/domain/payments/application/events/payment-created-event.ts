@@ -6,14 +6,15 @@ import { Payment } from "../../entities/payment"
 
 export class PaymentCreatedEvent implements DomainEvent {
   public ocurredAt: Date
-  public payment: Payment
+  public data: Payment
 
   constructor(payment: Payment) {
-    this.payment = payment
+    this.data = payment
     this.ocurredAt = new Date()
   }
 
   getAggregateId(): UniqueEntityID {
-    return this.payment.id
+    return this.data.id
   }
+  
 }

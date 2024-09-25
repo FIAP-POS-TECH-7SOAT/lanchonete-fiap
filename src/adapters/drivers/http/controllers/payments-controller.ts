@@ -63,7 +63,7 @@ class PaymentsController {
     );
 
     const { payment, total_amount,payment_gateway } = await createPaymentUseCase.execute({
-      client_id:req.user.id,
+      client_id:req.user? req.user.id:null,
       order_id:recipient_id,
        
     });

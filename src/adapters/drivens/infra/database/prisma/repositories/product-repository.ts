@@ -1,4 +1,4 @@
-import { IProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
+import { ProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
 
 import { UploadProductImageDTO } from "@application/domain/products/application/ports/repositories/dtos/upload-product-imagem-dto";
 
@@ -9,7 +9,7 @@ import { Category as CategoryPrisma } from "@prisma/client";
 import { prisma } from "../prisma-client";
 import { ProductMapping } from "./mapping/product-mapping";
 
-export default class ProductRepository implements IProductRepository {
+export default class ProductRepository implements ProductRepository {
   async findByIds(ids: string[]): Promise<Product[]> {
     const product = await prisma.product.findMany({
       where: {

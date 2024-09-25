@@ -1,8 +1,8 @@
 import { Entity } from "@application/common/entities/entity";
+import { Optional } from "@application/common/entities/optional";
 import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
 
-export interface IClient {
-  id: string;
+export interface ClientProps {
   name: string;
   email: string;
   cpf: string;
@@ -10,11 +10,22 @@ export interface IClient {
   created_at: Date;
 }
 
-export class Client extends Entity<IClient> {
-  constructor(props: IClient, id?: UniqueEntityID) {
-    super(props, id);
+export class Client extends Entity<ClientProps> {
+  
+  static create(
+    props: Optional<ClientProps, 'created_at'>,
+    id?: UniqueEntityID,
+  ) {
+    const client = new Client(
+      {
+        ...props,
+        created_at: props.created_at ?? new Date(),
+        
+      },
+      id,
+    )
+    return client
   }
-
   public get name(): string {
     return this.props.name;
   }
