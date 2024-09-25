@@ -1,6 +1,6 @@
-//prettier-ignore
-import {GetAllDTO } from "@application/domain/orders/application/ports/repositories/dtos/order-dto"
-import { Order } from "@application/domain/orders/entities/order-entity";
+//
+import { GetAllDTO } from '@application/domain/orders/application/ports/repositories/dtos/order-dto';
+import { Order } from '@application/domain/orders/entities/order-entity';
 
 export interface OrderRepository {
   create(data: Order): Promise<Order>;

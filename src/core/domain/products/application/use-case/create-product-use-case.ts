@@ -1,6 +1,6 @@
-import { Product } from "@application/domain/products/entities/product";
-import { ProductRepository } from "../ports/repositories/IProduct-repository";
-import { Category } from "@application/domain/categories/entities/category";
+import { Product } from '@application/domain/products/entities/product';
+import { ProductRepository } from '../ports/repositories/IProduct-repository';
+import { Category } from '@application/domain/categories/entities/category';
 
 interface IRequest {
   name: string;
@@ -23,8 +23,8 @@ export class CreateProductService {
       name,
       category,
       price,
-      description
-    })
+      description,
+    });
     await this.productRepository.create(product);
 
     return product;

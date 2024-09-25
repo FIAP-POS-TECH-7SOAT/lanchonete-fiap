@@ -1,4 +1,4 @@
-import { Order } from "@application/domain/orders/entities/order-entity";
+import { Order } from '@application/domain/orders/entities/order-entity';
 
 export interface CreateOrderDTO {
   products: {

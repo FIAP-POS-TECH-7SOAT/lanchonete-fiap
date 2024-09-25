@@ -1,4 +1,4 @@
-import { OrderProduct } from "@application/domain/orders/entities/order-products";
+import { OrderProduct } from '@application/domain/orders/entities/order-products';
 
 export interface OrderProductRepository {
   deleteByOrderId(order_id: string): Promise<void>;

@@ -1,6 +1,6 @@
-import { Product } from "@application/domain/products/entities/product";
-import { ProductRepository } from "../ports/repositories/IProduct-repository";
-import { AppError } from "@shared/errors/AppError";
+import { Product } from '@application/domain/products/entities/product';
+import { ProductRepository } from '../ports/repositories/IProduct-repository';
+import { AppError } from '@shared/errors/AppError';
 
 interface IRequest {
   id: string;
@@ -14,7 +14,7 @@ export class FindProductService {
     const product = await this.productRepository.findById(id);
 
     if (!product) {
-      throw new AppError("Product not find.");
+      throw new AppError('Product not find.');
     }
 
     return product;

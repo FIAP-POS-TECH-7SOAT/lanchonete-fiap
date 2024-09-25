@@ -1,21 +1,20 @@
-import { ProductRepository } from "@application/domain/products/application/ports/repositories/IProduct-repository";
+import { UploadProductImageDTO } from '@application/domain/products/application/ports/repositories/dtos/upload-product-imagem-dto';
 
-import { UploadProductImageDTO } from "@application/domain/products/application/ports/repositories/dtos/upload-product-imagem-dto";
+import { Product } from '@application/domain/products/entities/product';
+import { Category } from '@application/domain/categories/entities/category';
+import { Category as CategoryPrisma } from '@prisma/client';
 
-import { Product } from "@application/domain/products/entities/product";
-import { Category } from "@application/domain/categories/entities/category";
-import { Category as CategoryPrisma } from "@prisma/client";
+import { prisma } from '../prisma-client';
+import { ProductMapping } from './mapping/product-mapping';
+import { ProductRepository } from '@application/domain/products/application/ports/repositories/IProduct-repository';
 
-import { prisma } from "../prisma-client";
-import { ProductMapping } from "./mapping/product-mapping";
-
-export default class ProductRepository implements ProductRepository {
+export class PrismaProductRepository implements ProductRepository {
   async findByIds(ids: string[]): Promise<Product[]> {
     const product = await prisma.product.findMany({
       where: {
-        id:{
-          in:ids
-        }
+        id: {
+          in: ids,
+        },
       },
     });
 
@@ -44,14 +43,12 @@ export default class ProductRepository implements ProductRepository {
 
     //Deserialize produtos to domain list of Produto's
     const domainProducts = products.map((product: any) =>
-      ProductMapping.toDomain(product)
+      ProductMapping.toDomain(product),
     );
     return domainProducts;
   }
 
   async create(product: Product): Promise<Product> {
- 
-
     await prisma.product.create({
       data: ProductMapping.toPrisma(product),
     });

@@ -1,9 +1,12 @@
-import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
-import { Category } from "@application/domain/categories/entities/category";
-import { Product } from "@application/domain/products/entities/product";
-//prettier-ignore
-import { Product as ProductPrisma, Category as CategoryPrisma, Prisma } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { UniqueEntityID } from '@application/common/entities/unique-entity-id';
+import { Category } from '@application/domain/categories/entities/category';
+import { Product } from '@application/domain/products/entities/product';
+
+import {
+  Product as ProductPrisma,
+  Category as CategoryPrisma,
+} from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 
 export class ProductMapping {
   static toDomain({
@@ -15,8 +18,6 @@ export class ProductMapping {
     price,
     deleted,
   }: ProductPrisma) {
-    
-    
     return Product.create(
       {
         name,
@@ -26,7 +27,7 @@ export class ProductMapping {
         image,
         deleted,
       },
-      new UniqueEntityID(id)
+      new UniqueEntityID(id),
     );
   }
 

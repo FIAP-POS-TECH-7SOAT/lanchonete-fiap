@@ -1,37 +1,31 @@
+import { UniqueEntityID } from './unique-entity-id';
 
-import { UniqueEntityID } from "./unique-entity-id";
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type Replace<T, R> = Omit<T, keyof R> & R;
-
 
 export class Entity<Props> {
   protected _id: UniqueEntityID;
-  protected props: Props
+  protected props: Props;
 
-  constructor(
-    props: Props,
-    id?: UniqueEntityID,
-  ) {
-
+  constructor(props: Props, id?: UniqueEntityID) {
     this._id = id ?? new UniqueEntityID();
 
-    this.props = props
-
+    this.props = props;
   }
 
-  public get id (){
+  public get id() {
     return this._id;
   }
 
   public equals(entity: Entity<any>) {
     if (entity === this) {
-      return true
+      return true;
     }
 
     if (entity.id === this._id) {
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
 }

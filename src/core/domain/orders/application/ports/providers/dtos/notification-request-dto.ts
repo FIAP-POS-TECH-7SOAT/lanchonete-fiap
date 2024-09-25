@@ -1,5 +1,5 @@
 export interface NotificationRequest {
-  destination:string
-  status: string,
-  message:string;  
+  destination: string;
+  status: string;
+  message: string;
 }

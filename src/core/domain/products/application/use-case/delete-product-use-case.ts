@@ -1,5 +1,5 @@
-import { Product } from "@application/domain/products/entities/product";
-import { ProductRepository } from "../ports/repositories/IProduct-repository";
+import { Product } from '@application/domain/products/entities/product';
+import { ProductRepository } from '../ports/repositories/IProduct-repository';
 
 interface IRequest {
   id: string;
@@ -13,7 +13,7 @@ export class DeleteProductService {
     const product = await this.productRepository.findById(id);
 
     if (!product) {
-      throw Error("O produto não foi encontrado!");
+      throw Error('O produto não foi encontrado!');
     }
 
     product.deleted = true;

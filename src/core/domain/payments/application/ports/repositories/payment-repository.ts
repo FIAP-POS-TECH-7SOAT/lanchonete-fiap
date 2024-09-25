@@ -1,5 +1,4 @@
-
-import { Payment } from "../../../entities/payment";
+import { Payment } from '../../../entities/payment';
 
 export interface PaymentRepository {
   create(data: Payment): Promise<Payment>;
@@ -7,5 +6,4 @@ export interface PaymentRepository {
   findByOrderId(order_id: string): Promise<Payment | null>;
   findById(id: string): Promise<Payment | null>;
   findByCode(code: string): Promise<Payment | null>;
-
 }

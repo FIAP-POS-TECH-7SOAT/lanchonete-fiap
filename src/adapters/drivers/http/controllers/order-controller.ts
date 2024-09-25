@@ -1,22 +1,20 @@
+import { CreateOrderUseCase } from '@application/domain/orders/application/use-case/create-order-use-case';
+import { CancelOrderById } from '@application/domain/orders/application/use-case/cancel-order-by-id-use-case';
+import { Request, Response } from 'express';
+import { OrderMapping } from '../mapping/order-mapping';
+import { z } from 'zod';
+import { PrismaOrderRepository } from '@adapters/drivens/infra/database/prisma/repositories/order-repository';
 
-import { CreateOrderUseCase } from "@application/domain/orders/application/use-case/create-order-use-case";
-import { CancelOrderById } from "@application/domain/orders/application/use-case/cancel-order-by-id-use-case";
-import { Request, Response } from "express";
-import { OrderMapping } from "../mapping/order-mapping";
-import { z } from "zod";
-import {PrismaOrderRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-repository";
-
-import {PrismaOrderProductRepository} from "@adapters/drivens/infra/database/prisma/repositories/order-product-repository";
-import ClientRepository from "@adapters/drivens/infra/database/prisma/repositories/client-repository";
-import ProductRepository from "@adapters/drivens/infra/database/prisma/repositories/product-repository";
-import { FindOrderByIdUseCase } from "@application/domain/orders/application/use-case/find-order-by-id-use-case";
-import { ListAllOrdersByFilters } from "@application/domain/orders/application/use-case/list-all-order-by-filters-use-case";
-import { UpdateOrderById } from "@application/domain/orders/application/use-case/update-order-by-id-use-case";
-
+import { PrismaOrderProductRepository } from '@adapters/drivens/infra/database/prisma/repositories/order-product-repository';
+import ClientRepository from '@adapters/drivens/infra/database/prisma/repositories/client-repository';
+import { PrismaProductRepository } from '@adapters/drivens/infra/database/prisma/repositories/product-repository';
+import { FindOrderByIdUseCase } from '@application/domain/orders/application/use-case/find-order-by-id-use-case';
+import { ListAllOrdersByFilters } from '@application/domain/orders/application/use-case/list-all-order-by-filters-use-case';
+import { UpdateOrderById } from '@application/domain/orders/application/use-case/update-order-by-id-use-case';
 
 const orderProductRepository = new PrismaOrderProductRepository();
 const orderRepository = new PrismaOrderRepository(orderProductRepository);
-const productRepository = new ProductRepository();
+const productRepository = new PrismaProductRepository();
 
 const clientRepository = new ClientRepository();
 
@@ -48,7 +46,7 @@ class OrderController {
         z.object({
           id: z.string(),
           amount: z.number(),
-        })
+        }),
       ),
     });
 
@@ -56,18 +54,16 @@ class OrderController {
     const createOrderUseCase = new CreateOrderUseCase(
       productRepository,
       orderRepository,
-      clientRepository
-    )
+      clientRepository,
+    );
 
-  
-
-    const {order} = await createOrderUseCase.execute({
-      client:req.user,
+    const { order } = await createOrderUseCase.execute({
+      client: req.user,
       products,
     });
 
     return res.json({
-      order:OrderMapping.toView(order),
+      order: OrderMapping.toView(order),
     });
   }
   async update(req: Request, res: Response): Promise<Response | null> {
@@ -90,24 +86,26 @@ class OrderController {
            }
        }
      */
-    const {id} = req.params
+    const { id } = req.params;
     const checkInBodySchema = z.object({
       products: z.array(z.any()),
       // status: z.string(),
       // client_id: z.string(),
     });
 
-    const { products } = checkInBodySchema.parse(
-      req.body
+    const { products } = checkInBodySchema.parse(req.body);
+    const updateOrderById = new UpdateOrderById(
+      orderRepository,
+      orderProductRepository,
+      productRepository,
     );
-    const updateOrderById = new UpdateOrderById(orderRepository,orderProductRepository,productRepository);
-    const {order} = await updateOrderById.execute({
+    const { order } = await updateOrderById.execute({
       id,
       products,
     });
-    
+
     return res.json({
-      order:OrderMapping.toView(order)
+      order: OrderMapping.toView(order),
     });
   }
   async getAll(req: Request, res: Response): Promise<Response> {
@@ -131,12 +129,12 @@ class OrderController {
       status: z.union([z.string(), z.array(z.string())]).optional(),
     });
     const { status } = checkInQueySchema.parse(req.query);
-    const myStatus = typeof status === "string" ? [status] : status;
+    const myStatus = typeof status === 'string' ? [status] : status;
 
-    const listAllOrdersByFilters = new ListAllOrdersByFilters(orderRepository)
-    const {orders} = await listAllOrdersByFilters.execute({
+    const listAllOrdersByFilters = new ListAllOrdersByFilters(orderRepository);
+    const { orders } = await listAllOrdersByFilters.execute({
       filters: {
-        status: myStatus? myStatus.map((item) => item.trim()):[],
+        status: myStatus ? myStatus.map((item) => item.trim()) : [],
       },
     });
 
@@ -156,9 +154,8 @@ class OrderController {
 
     const { id } = req.params;
 
-    const findOrderByIdUseCase  = new FindOrderByIdUseCase(orderRepository)
-    const {order} = await findOrderByIdUseCase.execute({id});
-
+    const findOrderByIdUseCase = new FindOrderByIdUseCase(orderRepository);
+    const { order } = await findOrderByIdUseCase.execute({ id });
 
     return res.json(OrderMapping.toView(order));
   }

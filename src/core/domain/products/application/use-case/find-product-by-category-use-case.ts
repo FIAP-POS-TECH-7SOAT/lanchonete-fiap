@@ -1,7 +1,7 @@
-import { Product } from "@application/domain/products/entities/product";
-import { ProductRepository } from "../ports/repositories/IProduct-repository";
-import { AppError } from "@shared/errors/AppError";
-import { Category } from "@application/domain/categories/entities/category";
+import { Product } from '@application/domain/products/entities/product';
+import { ProductRepository } from '../ports/repositories/IProduct-repository';
+
+import { Category } from '@application/domain/categories/entities/category';
 
 interface IRequest {
   category: Category;

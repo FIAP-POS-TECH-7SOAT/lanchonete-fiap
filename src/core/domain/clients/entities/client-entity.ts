@@ -1,6 +1,6 @@
-import { Entity } from "@application/common/entities/entity";
-import { Optional } from "@application/common/entities/optional";
-import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
+import { Entity } from '@application/common/entities/entity';
+import { Optional } from '@application/common/entities/optional';
+import { UniqueEntityID } from '@application/common/entities/unique-entity-id';
 
 export interface ClientProps {
   name: string;
@@ -11,7 +11,6 @@ export interface ClientProps {
 }
 
 export class Client extends Entity<ClientProps> {
-  
   static create(
     props: Optional<ClientProps, 'created_at'>,
     id?: UniqueEntityID,
@@ -20,20 +19,19 @@ export class Client extends Entity<ClientProps> {
       {
         ...props,
         created_at: props.created_at ?? new Date(),
-        
       },
       id,
-    )
-    return client
+    );
+    return client;
   }
   public get name(): string {
     return this.props.name;
   }
-  public get email(): string{
+  public get email(): string {
     return this.props.email;
   }
 
-  public get cpf(): string{
+  public get cpf(): string {
     return this.props.cpf;
   }
 

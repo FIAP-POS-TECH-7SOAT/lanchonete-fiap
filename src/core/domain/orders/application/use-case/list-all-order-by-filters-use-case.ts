@@ -1,8 +1,5 @@
-import { IOrderProduct, Order, TOrderStatus } from "@application/domain/orders/entities/order-entity";
-import { OrderRepository } from "../ports/repositories/order-repository";
-import { AppError } from "@shared/errors/AppError";
-
-
+import { Order } from '@application/domain/orders/entities/order-entity';
+import { OrderRepository } from '../ports/repositories/order-repository';
 
 interface IRequest {
   filters: {
@@ -10,14 +7,13 @@ interface IRequest {
   };
 }
 interface IResponse {
-  orders:Order[]
+  orders: Order[];
 }
 export class ListAllOrdersByFilters {
   constructor(private orderRepository: OrderRepository) {}
   async execute({ filters }: IRequest): Promise<IResponse> {
-    
     const orders = await this.orderRepository.getAll({ filters });
 
-    return {orders};
+    return { orders };
   }
 }

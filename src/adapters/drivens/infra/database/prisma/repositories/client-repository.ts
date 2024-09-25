@@ -1,10 +1,6 @@
-import { IClientRepository } from "@application/clients/application/ports/repositories/Iclient-repository";
-
-import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
-import { Client } from "@application/domain/clients/entities/client-entity";
-import { prisma } from "../prisma-client";
-
-
+import { Client } from '@application/domain/clients/entities/client-entity';
+import { prisma } from '../prisma-client';
+import { IClientRepository } from '@application/domain/clients/application/ports/repositories/Iclient-repository';
 
 export default class ClientRepository implements IClientRepository {
   async findById(id: string): Promise<Client | null> {
@@ -28,7 +24,7 @@ export default class ClientRepository implements IClientRepository {
 
     if (clients.length > 1) {
       console.warn(
-        `Multiple clients found with email ${email}. Returning the first one.`
+        `Multiple clients found with email ${email}. Returning the first one.`,
       );
     }
 
@@ -45,16 +41,7 @@ export default class ClientRepository implements IClientRepository {
     }
   }
 
-  async create({ id, name, email, cpf }: CreateClientDTO): Promise<Client> {
-    const client = new Client({
-      id,
-      name:name as any,
-      email:email as any,
-      cpf:cpf as any,
-      status: true,
-      created_at: new Date(),
-    });
-
+  async create(client: Client): Promise<Client> {
     await prisma.client.create({
       data: {
         name: client.name,

@@ -1,13 +1,13 @@
-import { Product } from "@application/domain/products/entities/product";
-import { ProductRepository } from "../ports/repositories/IProduct-repository";
-import { Category } from "@application/domain/categories/entities/category";
+import { Product } from '@application/domain/products/entities/product';
+import { ProductRepository } from '../ports/repositories/IProduct-repository';
+import { Category } from '@application/domain/categories/entities/category';
 
 interface IRequest {
   id: string;
   name: string;
   category: Category;
   price: number;
-  description: string;  
+  description: string;
 }
 interface IResponse extends Product {}
 
@@ -19,12 +19,12 @@ export class UpdateProductService {
     name,
     category,
     price,
-    description
+    description,
   }: IRequest): Promise<IResponse> {
     const product = await this.productRepository.findById(id);
 
     if (!product) {
-      throw Error("O produto não foi encontrado!");
+      throw Error('O produto não foi encontrado!');
     }
 
     product.name = name || product.name;

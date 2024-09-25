@@ -1,7 +1,6 @@
-
-import { Category } from "@application/domain/categories/entities/category";
-import { Product } from "../../../entities/product";
-import { UploadProductImageDTO } from "./dtos/upload-product-imagem-dto";
+import { Category } from '@application/domain/categories/entities/category';
+import { Product } from '../../../entities/product';
+import { UploadProductImageDTO } from './dtos/upload-product-imagem-dto';
 
 export interface ProductRepository {
   findById(id: string): Promise<Product | null>;

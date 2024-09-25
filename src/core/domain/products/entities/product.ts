@@ -1,8 +1,8 @@
-import { Category } from "@application/domain/categories/entities/category";
-import { Entity } from "@application/common/entities/entity";
-import { env } from "@adapters/drivens/infra/env";
-import { UniqueEntityID } from "@application/common/entities/unique-entity-id";
-import { Optional } from "@application/common/entities/optional";
+import { Category } from '@application/domain/categories/entities/category';
+import { Entity } from '@application/common/entities/entity';
+import { env } from '@adapters/drivens/infra/env';
+import { UniqueEntityID } from '@application/common/entities/unique-entity-id';
+import { Optional } from '@application/common/entities/optional';
 
 export interface ProductProps {
   name: string;
@@ -19,18 +19,18 @@ export class Product extends Entity<ProductProps> {
   }
 
   static create(
-    props: Optional<ProductProps,'deleted'|'image'>,
+    props: Optional<ProductProps, 'deleted' | 'image'>,
     id?: UniqueEntityID,
   ) {
     const product = new Product(
       {
         ...props,
-        deleted:false,
-        image:''
+        deleted: false,
+        image: '',
       },
       id,
-    )
-    return product
+    );
+    return product;
   }
   public get name(): string {
     return this.props.name;
@@ -48,7 +48,7 @@ export class Product extends Entity<ProductProps> {
   }
 
   public get image(): string {
-    return this.props.image? env.APP_URL + "/" + this.props.image:"";
+    return this.props.image ? env.APP_URL + '/' + this.props.image : '';
   }
 
   public get deleted(): boolean {

@@ -1,4 +1,3 @@
 export interface JWTValidatorInterface {
-    validateToken(token: string): Promise<any>;
+  validateToken(token: string): Promise<any>;
 }
-  
