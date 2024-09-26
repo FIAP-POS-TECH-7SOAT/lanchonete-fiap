@@ -39,7 +39,13 @@ export class UpdateOrderById {
     }
     const allProductsObj = allProducts.reduce(
       (acc, item) => {
-        acc.products[item.id.toString()] = item;
+        if (acc.products) {
+          acc.products[item.id.toString()] = item;
+        } else {
+          acc.products = {
+            [item.id.toString()]: item,
+          };
+        }
         const product = products.find((prod) => item.id.toString() === prod.id);
         acc.total_amount = product ? item.price * product.amount : 0;
 
@@ -59,7 +65,7 @@ export class UpdateOrderById {
         unit_price: allProductsObj.products[item.id].price,
       }),
     );
-
+    order.total_amount = allProductsObj.total_amount || 0;
     orderProductList.update(orderProducts);
     order.products = orderProductList;
 

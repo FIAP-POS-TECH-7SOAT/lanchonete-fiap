@@ -64,7 +64,13 @@ class PaymentsController {
       });
 
     return res.json({
-      payment,
+      payment: {
+        id: payment.id.toString(),
+        code: payment.code,
+        total_amount: payment.total_amount,
+        status: payment.status,
+        order_id: payment.order_id.toString(),
+      },
       total_amount,
       payment_gateway,
     });
@@ -142,10 +148,14 @@ class PaymentsController {
     const { payment } = await findPaymentByIdService.execute({
       id,
     });
-    const findOrderByIdUseCase = new FindOrderByIdUseCase(orderRepository);
+    const findOrderByIdUseCase = new FindOrderByIdUseCase(
+      orderRepository,
+      orderProductRepository,
+    );
     const { order } = await findOrderByIdUseCase.execute({
       id: payment.order_id.toString(),
     });
+
     return res.json({
       payment: PaymentMapping.toView(payment),
       order: order ? OrderMapping.toView(order) : null,

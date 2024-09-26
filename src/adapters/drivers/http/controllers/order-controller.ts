@@ -154,10 +154,15 @@ class OrderController {
 
     const { id } = req.params;
 
-    const findOrderByIdUseCase = new FindOrderByIdUseCase(orderRepository);
+    const findOrderByIdUseCase = new FindOrderByIdUseCase(
+      orderRepository,
+      orderProductRepository,
+    );
     const { order } = await findOrderByIdUseCase.execute({ id });
 
-    return res.json(OrderMapping.toView(order));
+    return res.json({
+      order: OrderMapping.toView(order),
+    });
   }
 
   async cancelOrder(req: Request, res: Response): Promise<Response> {

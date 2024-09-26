@@ -35,6 +35,7 @@ export class Order extends AggregateRoot<OrderProps> {
     const order = new Order(
       {
         ...props,
+        total_amount: Number(props.total_amount.toFixed(2)),
         products: props.products ?? new OrderProductList(),
         created_at: props.created_at ?? new Date(),
         canceled_at: props.canceled_at ?? null,
@@ -85,5 +86,8 @@ export class Order extends AggregateRoot<OrderProps> {
   }
   public get total_amount(): number {
     return this.props.total_amount;
+  }
+  public set total_amount(total_amount: number) {
+    this.props.total_amount = Number(total_amount.toFixed(2));
   }
 }

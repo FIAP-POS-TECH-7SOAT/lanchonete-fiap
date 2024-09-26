@@ -10,6 +10,12 @@ export class PrismaOrderProductRepository implements OrderProductRepository {
       where: {
         order_id,
       },
+      orderBy: {
+        id: 'asc',
+      },
+      include: {
+        product: true,
+      },
     });
 
     return orderProducts.map(OrderProductsMapping.toDomain);

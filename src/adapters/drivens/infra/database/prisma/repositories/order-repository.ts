@@ -41,6 +41,7 @@ export class PrismaOrderRepository implements OrderRepository {
             in: statusOrder,
           },
         };
+
     const orders = await prisma.order.findMany({
       where: {
         ...statusFilters,

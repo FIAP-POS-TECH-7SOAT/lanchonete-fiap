@@ -1,8 +1,14 @@
 import { UniqueEntityID } from '@application/common/entities/unique-entity-id';
+import { Category } from '@application/domain/categories/entities/category';
 
 import { OrderProduct } from '@application/domain/orders/entities/order-products';
+import { Product } from '@application/domain/products/entities/product';
 
-import { OrderProduct as OrderProductPrisma, Prisma } from '@prisma/client';
+import {
+  OrderProduct as OrderProductPrisma,
+  Product as ProductPrisma,
+  Prisma,
+} from '@prisma/client';
 
 export class OrderProductsMapping {
   static toDomain({
@@ -11,13 +17,24 @@ export class OrderProductsMapping {
     order_id,
     product_id,
     unit_price,
-  }: OrderProductPrisma) {
+    product,
+  }: OrderProductPrisma & { product: ProductPrisma }) {
     return OrderProduct.create(
       {
         amount,
         order_id: new UniqueEntityID(order_id),
         product_id: new UniqueEntityID(product_id),
         unit_price: Number(unit_price),
+        product: Product.create(
+          {
+            name: product.name,
+            category: Category[product.category],
+            description: product.description,
+            price: Number(product.price),
+            image: product.image,
+          },
+          new UniqueEntityID(product.id),
+        ),
       },
       new UniqueEntityID(id),
     );

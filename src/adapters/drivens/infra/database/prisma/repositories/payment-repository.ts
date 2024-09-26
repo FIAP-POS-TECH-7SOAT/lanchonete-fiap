@@ -24,6 +24,7 @@ export class PrismaPaymentRepository implements PaymentRepository {
         order_id: new UniqueEntityID(payment.order_id),
         total_amount: Number(payment.total_amount),
         status: payment.status as TPaymentStatus,
+        gateway_info: payment.gateway_info,
       },
       new UniqueEntityID(payment.id),
     );
@@ -37,6 +38,7 @@ export class PrismaPaymentRepository implements PaymentRepository {
     if (!payment) {
       return null;
     }
+
     return new Payment(
       {
         code: payment.code,
@@ -44,6 +46,7 @@ export class PrismaPaymentRepository implements PaymentRepository {
         order_id: new UniqueEntityID(payment.order_id),
         total_amount: Number(payment.total_amount),
         status: payment.status as TPaymentStatus,
+        gateway_info: payment.gateway_info,
       },
       new UniqueEntityID(payment.id),
     );
@@ -58,6 +61,7 @@ export class PrismaPaymentRepository implements PaymentRepository {
         code: String(payment.code),
         created_at: payment.created_at,
         status: payment.status as TPaymentStatus,
+        gateway_info: payment.gateway_info,
       },
     });
     DomainEvents.dispatchEventsForAggregate(payment.id);
@@ -92,6 +96,7 @@ export class PrismaPaymentRepository implements PaymentRepository {
         order_id: new UniqueEntityID(payment.order_id),
         total_amount: Number(payment.total_amount),
         status: payment.status as TPaymentStatus,
+        gateway_info: payment.gateway_info,
       },
       new UniqueEntityID(payment.id),
     );

@@ -39,6 +39,7 @@ model Payment {
   id       String @id
   order_id String
   code     String
+  gateway_info String @default("")
   total_amount Decimal
   status        String   @default("PENDENTE")
   created_at   DateTime @default(now())

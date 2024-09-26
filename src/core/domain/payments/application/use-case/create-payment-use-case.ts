@@ -54,6 +54,7 @@ export class CreatePaymentUseCase {
       order_id: new UniqueEntityID(order_id),
       total_amount: order.total_amount,
       status: paymentProcessInt.status as TPaymentStatus,
+      gateway_info: JSON.stringify(paymentProcessInt),
     });
 
     await this.paymentRepository.create(payment);

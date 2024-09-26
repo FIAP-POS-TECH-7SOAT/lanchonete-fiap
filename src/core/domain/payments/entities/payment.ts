@@ -8,6 +8,7 @@ export interface PaymentProps {
   order_id: UniqueEntityID;
   total_amount: number;
   code: string;
+  gateway_info?: string;
   status: TPaymentStatus;
   created_at: Date;
 }
@@ -52,5 +53,11 @@ export class Payment extends AggregateRoot<PaymentProps> {
   }
   public set status(status: TPaymentStatus) {
     this.props.status = status;
+  }
+  public get gateway_info(): string {
+    return this.props.gateway_info || '{}';
+  }
+  public set gateway_info(gateway_info: string) {
+    this.props.gateway_info = gateway_info;
   }
 }
