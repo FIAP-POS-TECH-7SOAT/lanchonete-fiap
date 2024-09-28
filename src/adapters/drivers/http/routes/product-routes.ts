@@ -5,10 +5,11 @@ import { uploadFileMiddleware } from '@shared/configs/upload-file-config';
 
 const productsRoutes = Router();
 
-productsRoutes.post('/', productController.create);
-productsRoutes.put('/:id', productController.update);
 productsRoutes.get('/:id', productController.getById);
 productsRoutes.get('/', productController.getManyByCategory);
+
+productsRoutes.post('/', productController.create);
+productsRoutes.put('/:id', productController.update);
 productsRoutes.delete('/:id', productController.delete);
 //
 productsRoutes.patch(
