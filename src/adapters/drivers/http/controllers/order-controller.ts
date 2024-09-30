@@ -11,12 +11,15 @@ import { PrismaProductRepository } from '@adapters/drivens/infra/database/prisma
 import { FindOrderByIdUseCase } from '@application/domain/orders/application/use-case/find-order-by-id-use-case';
 import { ListAllOrdersByFilters } from '@application/domain/orders/application/use-case/list-all-order-by-filters-use-case';
 import { UpdateOrderById } from '@application/domain/orders/application/use-case/update-order-by-id-use-case';
+import { LoggerAdapter } from '@adapters/drivens/infra/logger/loggerAdapter';
 
 const orderProductRepository = new PrismaOrderProductRepository();
 const orderRepository = new PrismaOrderRepository(orderProductRepository);
 const productRepository = new PrismaProductRepository();
 
 const clientRepository = new ClientRepository();
+
+const logger = new LoggerAdapter();
 
 class OrderController {
   async create(req: Request, res: Response): Promise<Response> {
@@ -131,7 +134,10 @@ class OrderController {
     const { status } = checkInQueySchema.parse(req.query);
     const myStatus = typeof status === 'string' ? [status] : status;
 
-    const listAllOrdersByFilters = new ListAllOrdersByFilters(orderRepository);
+    const listAllOrdersByFilters = new ListAllOrdersByFilters(
+      logger,
+      orderRepository,
+    );
     const { orders } = await listAllOrdersByFilters.execute({
       filters: {
         status: myStatus ? myStatus.map((item) => item.trim()) : [],
