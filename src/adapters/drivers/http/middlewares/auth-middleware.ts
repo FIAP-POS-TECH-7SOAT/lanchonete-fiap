@@ -18,12 +18,7 @@ export async function authMiddleware(
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    req.user = {
-      id: null,
-      name: null,
-      email: null,
-      cpf: null,
-    };
+    req.user = null;
     return next();
   }
 
