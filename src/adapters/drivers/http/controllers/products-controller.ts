@@ -1,33 +1,32 @@
-import { CreateProductService } from "@application/products/application/use-case/create-product-use-case";
-import { FindProductService } from "@application/products/application/use-case/find-product-use-case";
-import { FindProductsByCategoryService } from "@application/products/application/use-case/find-product-by-category-use-case";
+import { CreateProductService } from '@application/domain/products/application/use-case/create-product-use-case';
+import { FindProductService } from '@application/domain/products/application/use-case/find-product-use-case';
+import { FindProductsByCategoryService } from '@application/domain/products/application/use-case/find-product-by-category-use-case';
 
-import { Request, Response } from "express";
-import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
-import { Category } from "@application/categories/domain/category";
+import { Request, Response } from 'express';
+import { PrismaProductRepository } from '@adapters/drivens/infra/database/prisma/repositories/product-repository';
+import { Category } from '@application/domain/categories/entities/category';
 
-import { z } from "zod";
-import { UpdateProductService } from "@application/products/application/use-case/update-product-use-case";
-import { DeleteProductService } from "@application/products/application/use-case/delete-product-use-case";
-import { UploadProductImageService } from "@application/products/application/use-case/upload-product-image-use-case";
-import { ProductMapping } from "src/adapters/drivers/http/mapping/product-mapping";
+import { z } from 'zod';
+import { UpdateProductService } from '@application/domain/products/application/use-case/update-product-use-case';
+import { DeleteProductService } from '@application/domain/products/application/use-case/delete-product-use-case';
+import { UploadProductImageService } from '@application/domain/products/application/use-case/upload-product-image-use-case';
+import { ProductMapping } from 'src/adapters/drivers/http/mapping/product-mapping';
 
-import { AWSUploadFile } from "src/adapters/drivens/infra/providers/aws-upload-file";
+import { AWSUploadFile } from 'src/adapters/drivens/infra/providers/aws-upload-file';
 
-const productRepository = new ProductRepository();
+const productRepository = new PrismaProductRepository();
 
 const findProductService = new FindProductService(productRepository);
 const findProductsByCategoryService = new FindProductsByCategoryService(
-  productRepository
+  productRepository,
 );
 const createProductService = new CreateProductService(productRepository);
 const updateProductService = new UpdateProductService(productRepository);
 const deleteProductService = new DeleteProductService(productRepository);
-const awsUploadFile = new AWSUploadFile()
+const awsUploadFile = new AWSUploadFile();
 const uploadProductImageService = new UploadProductImageService(
   productRepository,
-  awsUploadFile
-  
+  awsUploadFile,
 );
 
 class ProductController {
@@ -49,7 +48,6 @@ class ProductController {
     
  
       */
-     
 
     const categoryKeys = Object.keys(Category) as [keyof typeof Category];
 
@@ -61,7 +59,7 @@ class ProductController {
     });
 
     const { name, category, price, description } = checkInBodySchema.parse(
-      req.body
+      req.body,
     );
 
     const product = await createProductService.execute({
@@ -131,16 +129,15 @@ class ProductController {
     const categoryKeys = Object.keys(Category) as [keyof typeof Category];
 
     const checkInBodySchema = z.object({
-      
       name: z.string(),
       category: z.enum(categoryKeys),
       price: z.number(),
       description: z.string(),
-      
     });
-    const {id} = req.params
-    const {  name, category, price, description } =
-      checkInBodySchema.parse(req.body);
+    const { id } = req.params;
+    const { name, category, price, description } = checkInBodySchema.parse(
+      req.body,
+    );
 
     const product = await updateProductService.execute({
       id: id,
@@ -148,7 +145,6 @@ class ProductController {
       category: category as Category,
       price: price,
       description: description,
-
     });
 
     return res.json(product);
@@ -197,17 +193,17 @@ class ProductController {
     });
 
     const { id } = checkInBodySchema.parse(req.params);
-    const { filename, destination} = checkInFileSchema.parse(req.file);
+    const { filename, destination } = checkInFileSchema.parse(req.file);
 
     const product = await findProductService.execute({
       id,
     });
 
-    //prettier-ignore
-    const response = await uploadProductImageService.execute({
+    //
+    await uploadProductImageService.execute({
       id: id,
       image: filename,
-      filePath:destination
+      filePath: destination,
     });
 
     return res.json(product);

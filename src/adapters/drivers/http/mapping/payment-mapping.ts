@@ -1,16 +1,15 @@
-import { Order } from "src/core/orders/domain/order-entity";
-import { Payment } from "src/core/orders/domain/payment";
+import { Payment } from '@application/domain/payments/entities/payment';
 
-//prettier-ignore
 export class PaymentMapping {
-  static toView({ code,created_at, id,order_id,status,total_amount}: Payment) {
+  static toView(payment: Payment) {
     return {
-      code,
-      created_at, 
-      id,
-      order_id,
-      status,
-      total_amount
+      order_id: payment.order_id.toString(),
+      id: payment.id.toString(),
+      code: payment.code,
+      created_at: payment.created_at,
+      status: payment.status,
+      total_amount: payment.total_amount,
+      gateway_info: JSON.parse(payment.gateway_info),
     };
   }
 }

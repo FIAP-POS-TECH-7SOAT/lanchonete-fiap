@@ -1,14 +1,14 @@
-import { Product } from "@application/products/domain/product";
+import { Product } from '@application/domain/products/entities/product';
 
 export class ProductMapping {
   static toView(product: Product) {
     return {
-      id:product.id,
-      name:product.name,
-      category:product.category,
-      description:product.description,
-      price:product.price,
-      image:product.image,
+      id: product.id.toString(),
+      name: product.name,
+      category: product.category,
+      description: product.description,
+      price: product.price,
+      image: product.image,
     };
   }
 }

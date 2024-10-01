@@ -1,27 +1,21 @@
+import { CreateOrderUseCase } from '@application/domain/orders/application/use-case/create-order-use-case';
+import { CancelOrderById } from '@application/domain/orders/application/use-case/cancel-order-by-id-use-case';
+import { Request, Response } from 'express';
+import { OrderMapping } from '../mapping/order-mapping';
+import { z } from 'zod';
+import { PrismaOrderRepository } from '@adapters/drivens/infra/database/prisma/repositories/order-repository';
 
-import { CreateOrder } from "@application/orders/application/use-case/create-order-use-case";
-import { CancelOrderById } from "@application/orders/application/use-case/cancel-order-by-id-use-case";
-import { Request, Response } from "express";
-import { OrderMapping } from "../mapping/order-mapping";
-import { z } from "zod";
-import OrderRepository from "src/adapters/drivens/infra/repositories/order-repository";
-import { MercadoPagoPixPaymentGateway } from "src/adapters/drivens/infra/providers/mercado-pago-pix-payment-gateway";
-import PaymentRepository from "src/adapters/drivens/infra/repositories/payment-repository";
-import { PaymentMapping } from "../mapping/payment-mapping";
-import ProductRepository from "src/adapters/drivens/infra/repositories/product-repository";
-import { UpdateOrderById } from "@application/orders/application/use-case/update-order-by-id-use-case";
-import { TOrderStatus } from "@application/orders/domain/order-entity";
-import { ListAllOrdersByFilters } from "@application/orders/application/use-case/list-all-order-by-filters-use-case";
-import { FindOrderByIdUseCase } from "@application/orders/application/use-case/find-order-by-id-use-case";
-import OrderProductRepository from "src/adapters/drivens/infra/repositories/order-product-repository";
-import ClientRepository from "@adapters/drivens/infra/repositories/client-repository";
-import { CreateClientDTO } from "@application/clients/application/ports/repositories/dtos/client-dto";
+import { PrismaOrderProductRepository } from '@adapters/drivens/infra/database/prisma/repositories/order-product-repository';
+import ClientRepository from '@adapters/drivens/infra/database/prisma/repositories/client-repository';
+import { PrismaProductRepository } from '@adapters/drivens/infra/database/prisma/repositories/product-repository';
+import { FindOrderByIdUseCase } from '@application/domain/orders/application/use-case/find-order-by-id-use-case';
+import { ListAllOrdersByFilters } from '@application/domain/orders/application/use-case/list-all-order-by-filters-use-case';
+import { UpdateOrderById } from '@application/domain/orders/application/use-case/update-order-by-id-use-case';
 
-const orderRepository = new OrderRepository();
-const orderProductRepository = new OrderProductRepository();
-const productRepository = new ProductRepository();
-const mercadoPagoPixPaymentGateway = new MercadoPagoPixPaymentGateway();
-const paymentRepository = new PaymentRepository();
+const orderProductRepository = new PrismaOrderProductRepository();
+const orderRepository = new PrismaOrderRepository(orderProductRepository);
+const productRepository = new PrismaProductRepository();
+
 const clientRepository = new ClientRepository();
 
 class OrderController {
@@ -48,50 +42,28 @@ class OrderController {
      */
 
     const checkInBodySchema = z.object({
-      client_id: z.string().optional(),
       products: z.array(
         z.object({
           id: z.string(),
           amount: z.number(),
-        })
+        }),
       ),
     });
 
-    const { client_id, products } = checkInBodySchema.parse(req.body);
-    const createOrder = new CreateOrder(
-      orderRepository,
-      paymentRepository,
-      mercadoPagoPixPaymentGateway,
+    const { products } = checkInBodySchema.parse(req.body);
+    const createOrderUseCase = new CreateOrderUseCase(
       productRepository,
-      clientRepository
-    )
+      orderRepository,
+      clientRepository,
+    );
 
-    let client: CreateClientDTO | null;
-
-    if (req.user.id){
-      client = {
-        id: req.user.id,
-        email: req.user.email??"",
-        cpf: req.user.cpf??"",
-        name: req.user.name??""
-      }
-    }else{
-      client = null;
-    }
-
-    const {order,payment ,payment_gateway,total_amount} = await createOrder.execute({
-      client_id:client?client.id:null,
-      email:client?client.email:null,
-      cpf:client?client.cpf:null,
-      name:client?client.name:null,
+    const { order } = await createOrderUseCase.execute({
+      client: req.user,
       products,
     });
 
     return res.json({
-      order:OrderMapping.toView(order),
-      payment:PaymentMapping.toView(payment),
-      payment_gateway,
-      total_amount
+      order: OrderMapping.toView(order),
     });
   }
   async update(req: Request, res: Response): Promise<Response | null> {
@@ -114,24 +86,27 @@ class OrderController {
            }
        }
      */
-
+    const { id } = req.params;
     const checkInBodySchema = z.object({
-      id: z.string(),
       products: z.array(z.any()),
-      status: z.string(),
-      client_id: z.string(),
+      // status: z.string(),
+      // client_id: z.string(),
     });
 
-    const { id, products } = checkInBodySchema.parse(
-      req.body
+    const { products } = checkInBodySchema.parse(req.body);
+    const updateOrderById = new UpdateOrderById(
+      orderRepository,
+      orderProductRepository,
+      productRepository,
     );
-    const updateOrderById = new UpdateOrderById(orderRepository,orderProductRepository);
-    const {order} = await updateOrderById.execute({
+    const { order } = await updateOrderById.execute({
       id,
       products,
     });
 
-    return res.json(OrderMapping.toView(order));
+    return res.json({
+      order: OrderMapping.toView(order),
+    });
   }
   async getAll(req: Request, res: Response): Promise<Response> {
     /*
@@ -154,12 +129,12 @@ class OrderController {
       status: z.union([z.string(), z.array(z.string())]).optional(),
     });
     const { status } = checkInQueySchema.parse(req.query);
-    const myStatus = typeof status === "string" ? [status] : status;
+    const myStatus = typeof status === 'string' ? [status] : status;
 
-    const listAllOrdersByFilters = new ListAllOrdersByFilters(orderRepository)
-    const {orders} = await listAllOrdersByFilters.execute({
+    const listAllOrdersByFilters = new ListAllOrdersByFilters(orderRepository);
+    const { orders } = await listAllOrdersByFilters.execute({
       filters: {
-        status: myStatus? myStatus.map((item) => item.trim()):[],
+        status: myStatus ? myStatus.map((item) => item.trim()) : [],
       },
     });
 
@@ -179,11 +154,15 @@ class OrderController {
 
     const { id } = req.params;
 
-    const findOrderByIdUseCase  = new FindOrderByIdUseCase(orderRepository)
-    const {order} = await findOrderByIdUseCase.execute({id});
+    const findOrderByIdUseCase = new FindOrderByIdUseCase(
+      orderRepository,
+      orderProductRepository,
+    );
+    const { order } = await findOrderByIdUseCase.execute({ id });
 
-
-    return res.json(OrderMapping.toView(order));
+    return res.json({
+      order: OrderMapping.toView(order),
+    });
   }
 
   async cancelOrder(req: Request, res: Response): Promise<Response> {
